@@ -1,0 +1,44 @@
+name: Publish
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    name: Release ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        platform:
+          - os: ubuntu-latest
+            name: Linux
+            ext: ""
+            arch: tar
+            runtime: linux-x64
+          - os: windows-latest
+            name: Windows
+            ext: .exe
+            arch: zip
+            runtime: win-x64
+
+    env:
+      proj: "UKingEditor"
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Install DotNET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
+
+      - name: Publish U-King Editor
+        run: dotnet publish src/${{ env.proj }}/${{ env.proj }}.csproj -r ${{ matrix.platform.runtime }} --configuration Release -p:Version=${{ github.event.release.tag_name }} --output ${{ matrix.platform.name }} --sc false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - uses: Shopify/upload-to-release@v1.0.1
+        name: Upload artifacts
+        with:
+          name: ${{ env.proj }}-${{ github.event.release.tag_name }}${{ matrix.platform.ext }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ matrix.platform.name }}/${{ env.proj }}${{ matrix.platform.ext }}
