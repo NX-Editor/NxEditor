@@ -12,8 +12,10 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <EmbeddedResource Include="Resources\**" />
     <None Remove=".gitignore" />
     <None Remove="Assets\icon.ico" />
+    <None Remove="Resources\Langs.json" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
@@ -31,6 +33,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-preview6" />
+    <PackageReference Include="AvaloniaSettingsFactory" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Serializer" Version="11.0.0-preview6" />
