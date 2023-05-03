@@ -1,6 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
 using ExKingEditor.ViewModels;
@@ -12,6 +14,7 @@ public partial class App : Application
 {
     public static string Title { get; } = "EX-King Editor";
     public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
+    public static TopLevel? VisualRoot { get; private set; }
 
     public override void Initialize()
     {
@@ -25,6 +28,8 @@ public partial class App : Application
             desktop.MainWindow = new ShellView() {
                 DataContext = ShellViewModel.Shared
             };
+
+            VisualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
 
             // Make sure settings are always set
             SettingsView settings = new();
