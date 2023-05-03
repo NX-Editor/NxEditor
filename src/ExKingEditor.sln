@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExKingEditor.Core", "ExKingEditor.Core\ExKingEditor.Core.csproj", "{716539EA-C221-45FE-B01E-6D5D6521B360}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExKingEditor", "ExKingEditor\ExKingEditor.csproj", "{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{716539EA-C221-45FE-B01E-6D5D6521B360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716539EA-C221-45FE-B01E-6D5D6521B360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716539EA-C221-45FE-B01E-6D5D6521B360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716539EA-C221-45FE-B01E-6D5D6521B360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D0AD796-5134-4289-89E8-1F1C207B814D}
+	EndGlobalSection
+EndGlobal

@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.ReactiveUI;
 using System;
 
-namespace UKingEditor;
+namespace ExKingEditor;
 
 internal class Program
 {

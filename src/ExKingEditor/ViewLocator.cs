@@ -3,7 +3,7 @@ using Avalonia.Controls.Templates;
 using ReactiveUI;
 using System;
 
-namespace UKingEditor;
+namespace ExKingEditor;
 
 public class ViewLocator : IDataTemplate
 {

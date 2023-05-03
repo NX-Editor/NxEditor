@@ -7,12 +7,10 @@
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
     <None Remove=".gitignore" />
     <None Remove="Assets\icon.ico" />
   </ItemGroup>
@@ -24,12 +22,19 @@
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.999-cibuild0029961-beta" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.999-cibuild0029961-beta" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.999-cibuild0029961-beta" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0029961-beta" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.999-cibuild0029961-beta" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
+    <PackageReference Include="Dock.Avalonia" Version="11.0.0-preview6" />
+    <PackageReference Include="FluentAvaloniaUI" Version="2.0.0-preview6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExKingEditor.Core\ExKingEditor.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="ReactiveUI" />
   </ItemGroup>
 </Project>

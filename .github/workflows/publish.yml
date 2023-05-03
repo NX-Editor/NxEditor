@@ -24,7 +24,7 @@ jobs:
             runtime: win-x64
 
     env:
-      proj: "UKingEditor"
+      proj: "ExKingEditor"
 
     steps:
       - uses: actions/checkout@master

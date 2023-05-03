@@ -1,9 +1,10 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using ExKingEditor.ViewModels;
+using ExKingEditor.Views;
 
-namespace UKingEditor;
+namespace ExKingEditor;
 
 public partial class App : Application
 {
@@ -15,8 +16,8 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.MainWindow = new Window() {
-                Title = "UKing Editor"
+            desktop.MainWindow = new ShellView() {
+                DataContext = ShellViewModel.Shared
             };
         }
 
