@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExKingEditor.Core", "ExKing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExKingEditor", "ExKingEditor\ExKingEditor.csproj", "{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{09313217-779E-4414-98E4-4560D72EA645}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cead", "..\lib\Cead\src\Cead.csproj", "{2BBD0774-0E4F-42BD-95F6-9DF36C855E00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00} = {09313217-779E-4414-98E4-4560D72EA645}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D0AD796-5134-4289-89E8-1F1C207B814D}

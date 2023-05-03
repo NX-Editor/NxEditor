@@ -1,4 +1,6 @@
-﻿using ZstdSharp;
+﻿using Cead;
+using Cead.Interop;
+using ZstdSharp;
 
 namespace ExKingEditor.Core;
 
@@ -16,13 +18,15 @@ public class TotkZstd
 
     static TotkZstd()
     {
+        DllManager.LoadCead();
+
         Span<byte> data = _commonDecompressor.Unwrap(File.ReadAllBytes(_zsDicPath));
         using Sarc sarc = Sarc.FromBinary(data);
-
+        
         _commonDecompressor.LoadDictionary(sarc["zs.zsdic"]);
         _mapDecompressor.LoadDictionary(sarc["bcett.byml.zsdic"]);
         _packDecompressor.LoadDictionary(sarc["pack.zsdic"]);
-
+        
         _commonCompressor.LoadDictionary(sarc["zs.zsdic"]);
         _mapCompressor.LoadDictionary(sarc["bcett.byml.zsdic"]);
         _packCompressor.LoadDictionary(sarc["pack.zsdic"]);
