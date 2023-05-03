@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using ExKingEditor.Generators;
+using ExKingEditor.Models;
 
 namespace ExKingEditor.Views;
 public partial class ShellView : Window
@@ -28,7 +30,7 @@ public partial class ShellView : Window
         };
 
         PointerClient.PointerMoved += (s, e) => {
-            if (IsInResizeBorder(e, out WindowEdge edge)) {
+            if (IsInResizeBorder(e, out WindowEdge edge) && !RootMenu.IsOpen) {
                 ChromeStack.IsHitTestVisible = false;
                 Cursor = new(edge switch {
                     WindowEdge.NorthWest => StandardCursorType.TopLeftCorner,
@@ -45,6 +47,8 @@ public partial class ShellView : Window
                 Cursor = new(StandardCursorType.Arrow);
             }
         };
+
+        RootMenu.ItemsSource = MenuFactory.Generate<ShellMenu>();
     }
 
     private bool IsInResizeBorder(PointerEventArgs e, out WindowEdge edge)

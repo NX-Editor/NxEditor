@@ -30,23 +30,23 @@
                 BorderBrush="Transparent"
                 BorderThickness="5" />
 
-        <Grid Name="ChromeStack" ColumnDefinitions="Auto,*">
-            <StackPanel Orientation="Horizontal">
-                <Image Width="22"
-                       Margin="4"
+        <Grid Name="ChromeStack" ColumnDefinitions="Auto,Auto,*,Auto">
+            <Image Width="22"
+                   Margin="4"
+                   IsHitTestVisible="False"
+                   Source="/Assets/icon.ico" />
+            <TextBlock Grid.ColumnSpan="4"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource Ubuntu}"
+                       FontSize="14"
                        IsHitTestVisible="False"
-                       Source="/Assets/icon.ico" />
-                <TextBlock Margin="4,0"
-                           VerticalAlignment="Center"
-                           FontFamily="{StaticResource Ubuntu}"
-                           FontSize="14"
-                           IsHitTestVisible="False"
-                           Text="{x:Static app:App.Title}" />
-                <Menu Name="RootMenu"
-                      Height="30"
-                      Margin="4,0" />
-            </StackPanel>
-            <Grid Grid.Column="1"
+                       Text="{x:Static app:App.Title}" />
+            <Menu Name="RootMenu"
+                  Grid.Column="1"
+                  Height="30"
+                  Margin="4,0" />
+            <Grid Grid.Column="3"
                   HorizontalAlignment="Right"
                   ColumnDefinitions="auto,auto">
                 <Grid.Styles>
