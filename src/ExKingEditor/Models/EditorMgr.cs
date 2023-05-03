@@ -4,13 +4,13 @@ namespace ExKingEditor.Models;
 
 public static class EditorMgr
 {
-    private static readonly Dictionary<string, string> _vms = EmbedExtension.Parse<App, Dictionary<string, string>>("Supported.json")!;
+    private static readonly Dictionary<string, string> _editors = EmbedExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
 
     public static ReactiveEditor GetEditor(string file)
     {
         string ext = GetExt(file);
-        object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_vms[ext]}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_vms[ext]}' was not found"), file);
+        object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_editors[ext]}")
+            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), file);
 
         if (instance is ReactiveEditor editor) {
             return editor;
@@ -21,7 +21,7 @@ public static class EditorMgr
 
     public static bool CanEdit(string file)
     {
-        return _vms.ContainsKey(GetExt(file));
+        return _editors.ContainsKey(GetExt(file));
     }
 
     private static string GetExt(string file)
