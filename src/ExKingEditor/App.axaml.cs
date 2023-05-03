@@ -8,6 +8,9 @@ namespace ExKingEditor;
 
 public partial class App : Application
 {
+    public static string Title { get; } = "EX-King Editor";
+    public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -16,6 +19,7 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            ShellViewModel.InitDock();
             desktop.MainWindow = new ShellView() {
                 DataContext = ShellViewModel.Shared
             };

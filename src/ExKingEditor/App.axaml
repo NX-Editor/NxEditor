@@ -8,7 +8,28 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <sty:FluentAvaloniaTheme />
+        <FluentTheme />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
+        <StyleInclude Source="/Styles/HyperlinkButton.axaml" />
+        <Style>
+            <Style.Resources>
+                <SolidColorBrush x:Key="DockApplicationAccentBrushLow"
+                                 Opacity="0.5"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentBrushMed"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemBaseHighColor}" />
+                <SolidColorBrush x:Key="DockThemeBorderLowBrush" Color="{DynamicResource SystemChromeMediumColor}" />
+                <SolidColorBrush x:Key="DockThemeBackgroundBrush" Color="{DynamicResource SystemChromeLowColor}" />
+                <SolidColorBrush x:Key="DockThemeAccentBrush" Color="{DynamicResource SystemChromeMediumColor}" />
+                <SolidColorBrush x:Key="DockThemeForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemBaseHighColor}" />
+            </Style.Resources>
+        </Style>
     </Application.Styles>
 </Application>

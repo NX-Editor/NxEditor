@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
-using System;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace ExKingEditor;
 
@@ -18,5 +19,6 @@ internal class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
+            .WithIcons(x => x.Register(new FontAwesomeIconProvider()))
             .UseReactiveUI();
 }
