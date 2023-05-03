@@ -1,4 +1,5 @@
-﻿using ExKingEditor.Models;
+﻿using Cead;
+using ExKingEditor.Models;
 
 namespace ExKingEditor.ViewModels.Editors;
 
@@ -9,15 +10,11 @@ public partial class BymlViewModel : ReactiveEditor
 
     public BymlViewModel(string file) : base(file)
     {
+        Id = Guid.NewGuid().ToString();
+
         // Load source into readonly field for diffing
-        _yaml = """
-            Yaml: key
-            Array:
-             - a: 1
-             - b: 2
-             - c: 3
-             - d: true
-            """;
+        using Byml byml = Byml.FromBinary(RawData());
+        _yaml = byml.ToText();
 
         Yaml = _yaml;
     }
