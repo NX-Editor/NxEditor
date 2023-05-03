@@ -7,6 +7,7 @@ public class HomeViewModel : Document
 {
     public HomeViewModel()
     {
+        Id = nameof(HomeViewModel);
         Title = "Home";
         CanFloat = false;
         CanClose = false;
