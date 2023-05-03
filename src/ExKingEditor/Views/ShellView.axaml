@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:idc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         Title="{x:Static app:App.Title}"
         Width="850"
         Height="550"
@@ -14,6 +15,97 @@
         d:DesignWidth="800"
         Background="{DynamicResource SystemChromeLowColor}"
         Icon="/Assets/icon.ico"
+        SystemDecorations="BorderOnly"
         mc:Ignorable="d">
-    <idc:DockControl Margin="5" Layout="{Binding Layout}" />
+    <Grid Name="PointerClient"
+          Background="Transparent"
+          RowDefinitions="30,*">
+        <Border Name="ChromeClient"
+                Background="{DynamicResource SystemChromeHighColor}"
+                IsHitTestVisible="True"
+                Opacity="0.4" />
+
+        <Border Name="ResizeClient"
+                Grid.RowSpan="2"
+                BorderBrush="Transparent"
+                BorderThickness="5" />
+
+        <Grid Name="ChromeStack" ColumnDefinitions="Auto,*">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="22"
+                       Margin="4"
+                       IsHitTestVisible="False"
+                       Source="/Assets/icon.ico" />
+                <TextBlock Margin="4,0"
+                           VerticalAlignment="Center"
+                           FontFamily="{StaticResource Ubuntu}"
+                           FontSize="14"
+                           IsHitTestVisible="False"
+                           Text="{x:Static app:App.Title}" />
+                <Menu Name="RootMenu"
+                      Height="30"
+                      Margin="4,0" />
+            </StackPanel>
+            <Grid Grid.Column="1"
+                  HorizontalAlignment="Right"
+                  ColumnDefinitions="auto,auto">
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="CornerRadius" Value="0" />
+                        <Setter Property="Width" Value="40" />
+                        <Setter Property="Height" Value="30" />
+                    </Style>
+                    <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="pi|Icon">
+                        <Setter Property="Width" Value="24" />
+                        <Setter Property="Height" Value="24" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0,1,0,0" />
+                    </Style>
+                </Grid.Styles>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="Minimize">
+                        <pi:Icon Margin="0,2,0,0" Value="fa-solid fa-minus" />
+                    </Button>
+                    <Button Name="Fullscreen">
+                        <Grid>
+                            <pi:Icon Name="ICON_Fullscreen" Value="fa-solid fa-expand" />
+                            <pi:Icon Name="ICON_Restore"
+                                     IsVisible="False"
+                                     Value="fa-solid fa-window-restore" />
+                        </Grid>
+                    </Button>
+                    <Button Name="Quit">
+                        <pi:Icon Value="fa-solid fa-xmark" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Margin="5"
+              RowDefinitions="*,auto">
+            <idc:DockControl Layout="{Binding Layout}" />
+            <StackPanel Name="ButtonStack"
+                        Grid.Row="1"
+                        Margin="5,5,5,5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        IsVisible="False"
+                        Orientation="Horizontal">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Margin" Value="5" />
+                        <Setter Property="Width" Value="80" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Styles>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
 </Window>
