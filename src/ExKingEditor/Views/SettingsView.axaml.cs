@@ -4,8 +4,8 @@ using Avalonia.SettingsFactory.Core;
 using Avalonia.SettingsFactory.ViewModels;
 using Avalonia.Styling;
 using ExKingEditor.Core;
+using ExKingEditor.Core.Extensions;
 using System.Reflection;
-using System.Text.Json;
 
 namespace ExKingEditor.Views;
 
@@ -16,14 +16,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     private static readonly SettingsFactoryOptions _options = new() {
         // AlertAction = (msg) => MessageBox.ShowDialog(msg),
         // BrowseAction = async (title) => await new BrowserDialog(BrowserMode.OpenFolder).ShowDialog(),
-        FetchResource = name => {
-            using Stream? stream = typeof(App).Assembly.GetManifestResourceStream($"{nameof(ExKingEditor)}.Resources.{name}.json");
-            if (stream != null) {
-                return JsonSerializer.Deserialize<Dictionary<string, string>?>(stream);
-            }
-
-            return null;
-        }
+        FetchResource = name => EmbedExtension.Parse<App, Dictionary<string, string>?>($"{name}.json")
     };
 
     public SettingsView()
