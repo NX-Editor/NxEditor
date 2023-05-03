@@ -48,10 +48,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
 
     public bool? ValidateString(string key, string? value)
     {
-        if (string.IsNullOrEmpty(value)) {
-            return null;
-        }
-
+        value ??= string.Empty;
         return key switch {
             "GamePath" => ExConfig.ValidatePath(value, key),
             "Theme" => ValidateTheme(value!),
