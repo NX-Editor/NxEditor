@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using ExKingEditor.Core;
+using ExKingEditor.Generators;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
 
@@ -23,6 +25,12 @@ public partial class App : Application
             desktop.MainWindow = new ShellView() {
                 DataContext = ShellViewModel.Shared
             };
+
+            // Make sure settings are always set
+            SettingsView settings = new();
+            if (ExConfig.Shared.RequiresInput || settings.ValidateSave() != null) {
+                ShellDockFactory.AddDoc<SettingsViewModel>();
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
