@@ -30,6 +30,6 @@ public static class EditorMgr
             file = file[..^3];
         }
 
-        return file[file.IndexOf('.')..];
+        return Path.GetExtension(file);
     }
 }
