@@ -1,9 +1,11 @@
-﻿using ExKingEditor.Core;
+﻿using Dock.Model.Mvvm.Controls;
+using ExKingEditor.Core;
 
 namespace ExKingEditor.Models;
 
-public abstract unsafe class ReactiveEditor : ReactiveObject
+public abstract unsafe class ReactiveEditor : Document
 {
+    protected readonly FileStream _stream;
     protected readonly string _file;
     protected readonly bool _compressed;
 
@@ -12,10 +14,13 @@ public abstract unsafe class ReactiveEditor : ReactiveObject
 
     public ReactiveEditor(string file)
     {
+        Title = Path.GetFileName(file);
+
         _file = file;
+        _stream = File.OpenRead(file);
         _compressed = file.EndsWith(".zs");
 
-        Span<byte> data = TotkZstd.Decompress(file);
+        Span<byte> data = _compressed ? TotkZstd.Decompress(file) : File.ReadAllBytes(file);
         _length = data.Length;
 
         // Store a ptr on the heap to
@@ -25,8 +30,15 @@ public abstract unsafe class ReactiveEditor : ReactiveObject
         }
     }
 
-    public abstract ReactiveEditor LoadEditor();
+    public override bool OnClose()
+    {
+        // Handle pending changes
+        return true;
+    }
+
     public abstract void SaveEditor();
+    public abstract bool HasChanged();
+    public void CloseEditor() => _stream.Close();
 
     protected Span<byte> RawData()
     {
