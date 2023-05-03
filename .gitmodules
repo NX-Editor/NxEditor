@@ -1,9 +1,0 @@
-[submodule "lib/Avalonia.Dock"]
-	path = lib/Avalonia.Dock
-	url = https://github.com/UKing-Editor/Avalonia.Dock.git
-[submodule "lib/Avalonia.SettingsFactory"]
-	path = lib/Avalonia.SettingsFactory
-	url = https://github.com/UKing-Editor/Avalonia.SettingsFactory.git
-[submodule "lib/Avalonia.Generics"]
-	path = lib/Avalonia.Generics
-	url = https://github.com/UKing-Editor/Avalonia.Generics.git
