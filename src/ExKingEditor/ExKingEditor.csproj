@@ -13,9 +13,6 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <EmbeddedResource Include="Resources\**" />
-    <None Remove=".gitignore" />
-    <None Remove="Assets\icon.ico" />
-    <None Remove="Resources\Langs.json" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.
