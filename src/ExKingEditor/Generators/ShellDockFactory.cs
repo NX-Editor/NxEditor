@@ -5,12 +5,49 @@ using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
+using DynamicData;
 using ExKingEditor.ViewModels;
 
 namespace ExKingEditor.Generators;
 
 public class ShellDockFactory : Factory
 {
+    private static IDock Root => ((ShellViewModel.Shared.Layout?.ActiveDockable as IDock)?.ActiveDockable as IDock)!;
+
+    public static void AddDoc<T>() where T : Document, new() => AddDoc(new T());
+    public static T AddDoc<T>(T doc) where T : Document
+    {
+        (var dock, var index) = CheckDockable(Root, doc.Id);
+        if (index >= 0) {
+            doc = (dock.VisibleDockables![index] as T)!;
+        }
+        else {
+            dock.VisibleDockables!.Add(doc);
+        }
+
+        dock.ActiveDockable = doc;
+        return doc;
+    }
+
+    private static (DocumentDock dock, int index) CheckDockable(IDockable root, string id)
+    {
+        DocumentDock _default = null!;
+
+        if (root is DocumentDock documentDock) {
+            return (documentDock, documentDock.VisibleDockables?.Select(x => x.Id).IndexOf(id) ?? -1);
+        }
+        else if (root is ProportionalDock proportionalDock && proportionalDock.VisibleDockables != null) {
+            foreach (var dockable in proportionalDock.VisibleDockables) {
+                (_default, var index) = CheckDockable(dockable, id);
+                if (index >= 0) {
+                    return (_default, index);
+                }
+            }
+        }
+
+        return (_default, -1);
+    }
+
     public override IRootDock CreateLayout()
     {
         DocumentDock dockLayout = new() {
