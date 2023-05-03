@@ -26,6 +26,8 @@ public class ExConfig : ISettingsBase
 
     public ISettingsBase Save()
     {
+        TotkConfig.Shared.Save();
+
         Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
         using FileStream fs = File.Create(_path);
         JsonSerializer.Serialize(fs, this);
@@ -60,7 +62,7 @@ public class ExConfig : ISettingsBase
         }
 
         return key switch {
-            "GamePath" => File.Exists(Path.Combine(path, "ActorSystem", "ActorSystemSetting","GameActor.engine__actor__ActorSystemSetting.bgyml")),
+            "GamePath" => File.Exists(Path.Combine(path, "ActorSystem", "ActorSystemSetting", "GameActor.engine__actor__ActorSystemSetting.bgyml")),
             _ => false,
         };
     }
