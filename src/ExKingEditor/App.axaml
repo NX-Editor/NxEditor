@@ -7,6 +7,11 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <FontFamily x:Key="UbuntuMono">avares://ExKingEditor/Assets/Fonts/UbuntuMono/#Ubuntu Mono</FontFamily>
+        <FontFamily x:Key="Ubuntu">avares://ExKingEditor/Assets/Fonts/Ubuntu/#Ubuntu</FontFamily>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />

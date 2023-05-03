@@ -15,7 +15,7 @@
                   Margin="10"
                   RowDefinitions="auto,*">
                 <TextBlock Margin="5"
-                           FontFamily="Ubuntu"
+                           FontFamily="{StaticResource Ubuntu}"
                            FontSize="24"
                            Foreground="{DynamicResource SystemBaseMediumColor}"
                            Text="{x:Static app:App.Title}" />
@@ -25,7 +25,7 @@
                         Classes="Hyperlink"
                         Command="{Binding VersionLink}"
                         Content="{x:Static app:App.Version}"
-                        FontFamily="Ubuntu"
+                        FontFamily="{StaticResource Ubuntu}"
                         FontSize="20"
                         Foreground="{DynamicResource SystemAccentColor}" />
                 <Border Name="DragRegion"
@@ -43,7 +43,7 @@
                                 Value="fa-regular fa-folder-open" />
                         <TextBlock Margin="5"
                                    Padding="15"
-                                   FontFamily="Ubuntu"
+                                   FontFamily="{StaticResource Ubuntu}"
                                    FontStyle="Italic"
                                    Foreground="{DynamicResource SystemBaseMediumColor}"
                                    Text="Drag and Drop a file to edit"
