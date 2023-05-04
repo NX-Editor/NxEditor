@@ -24,6 +24,7 @@ public partial class BymlView : UserControl
         base.OnDataContextChanged(e);
 
         if (DataContext is BymlViewModel vm) {
+            vm.Editor = TextEditor;
             TextEditor.Text = vm.Yaml;
             TextEditor.TextChanged += (s, e) => {
                 vm.Yaml = TextEditor.Text;
