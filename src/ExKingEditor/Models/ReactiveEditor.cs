@@ -5,22 +5,29 @@ namespace ExKingEditor.Models;
 
 public abstract unsafe class ReactiveEditor : Document
 {
-    protected readonly FileStream _stream;
     protected readonly string _file;
     protected readonly bool _compressed;
+    protected readonly FileStream _stream;
 
     private readonly byte* _data;
     private readonly int _length;
 
     public ReactiveEditor(string file)
     {
+        Id = file;
         Title = Path.GetFileName(file);
 
         _file = file;
-        _stream = File.OpenRead(file);
         _compressed = file.EndsWith(".zs");
 
-        Span<byte> data = _compressed ? TotkZstd.Decompress(file) : File.ReadAllBytes(file);
+        // keep the file open until the
+        // tab closes
+        _stream = File.Open(file, FileMode.Open);
+        Span<byte> raw = _stream.Length > 0x100000 ? new byte[_stream.Length] : stackalloc byte[(int)_stream.Length];
+        _stream.Read(raw);
+
+        // Decompress if necessary
+        Span<byte> data = _compressed ? TotkZstd.Decompress(file, raw) : raw;
         _length = data.Length;
 
         // Store a ptr on the heap to
@@ -33,12 +40,12 @@ public abstract unsafe class ReactiveEditor : Document
     public override bool OnClose()
     {
         // Handle pending changes
+        _stream.Close();
         return true;
     }
 
     public abstract void SaveEditor();
     public abstract bool HasChanged();
-    public void CloseEditor() => _stream.Close();
 
     protected Span<byte> RawData()
     {

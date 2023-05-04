@@ -15,11 +15,9 @@ public class ShellMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (EditorMgr.CanEdit(path)) {
-                ShellDockFactory.AddDoc(EditorMgr.GetEditor(path));
+            if (!EditorMgr.TryLoadEditor(path, out _)) {
+                // TODO: throw message dialog
             }
-
-            // TODO: throw message dialog
         }
     }
 
