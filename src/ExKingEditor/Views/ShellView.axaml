@@ -19,7 +19,9 @@
         mc:Ignorable="d">
     <Grid Name="PointerClient"
           Background="Transparent"
+          DragDrop.AllowDrop="True"
           RowDefinitions="30,*">
+
         <Border Name="ChromeClient"
                 Background="{DynamicResource SystemChromeHighColor}"
                 IsHitTestVisible="True"
@@ -106,6 +108,26 @@
                 </StackPanel.Styles>
             </StackPanel>
         </Grid>
+
+        <Border Name="DragFadeMask"
+                Grid.Row="1"
+                Background="Black"
+                IsHitTestVisible="False"
+                IsVisible="False"
+                Opacity="0.7">
+            <Border Padding="15"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderBrush="{DynamicResource SystemBaseHighColor}"
+                    BorderDashArray="10,10"
+                    BorderThickness="1">
+                <ContentControl FontFamily="{StaticResource Ubuntu}">
+                    <StackPanel Name="DragFadeMaskInfo"
+                                MaxHeight="450"
+                                Spacing="5" />
+                </ContentControl>
+            </Border>
+        </Border>
 
     </Grid>
 </Window>

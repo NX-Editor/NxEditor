@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using ExKingEditor.Generators;
 using ExKingEditor.Models;
 
@@ -49,6 +51,10 @@ public partial class ShellView : Window
         };
 
         RootMenu.ItemsSource = MenuFactory.Generate<ShellMenu>();
+
+        PointerClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
+        PointerClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
+        PointerClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
     }
 
     private bool IsInResizeBorder(PointerEventArgs e, out WindowEdge edge)
@@ -109,5 +115,40 @@ public partial class ShellView : Window
         }
 
         base.HandleWindowStateChanged(state);
+    }
+
+    public void DragDropEvent(object? sender, DragEventArgs e)
+    {
+        if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
+            foreach (var path in paths.Select(x => x.Path.LocalPath)) {
+                if (!EditorMgr.TryLoadEditor(path, out _)) {
+                    // TODO: throw message dialog
+                }
+            }
+        }
+
+        DragFadeMask.IsVisible = false;
+    }
+
+    public void DragEnterEvent(object? sender, DragEventArgs e)
+    {
+        DragFadeMaskInfo.Children.Clear();
+        DragFadeMask.IsVisible = true;
+
+        if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
+            foreach (var path in paths.Select(x => x.Path.LocalPath)) {
+                bool canEdit = EditorMgr.CanEdit(path, out string? editor);
+                DragFadeMaskInfo.Children.Add(new TextBlock {
+                    Text = $"{(canEdit ? editor?.Replace("ViewModel", "") : "Unsupported")}: " +
+                           Path.GetFileName(path),
+                    Foreground = canEdit ? Brushes.LightGreen : Brushes.Salmon,
+                });
+            }
+        }
+    }
+
+    public void DragLeaveEvent(object? sender, DragEventArgs e)
+    {
+        DragFadeMask.IsVisible = false;
     }
 }
