@@ -23,14 +23,18 @@ public class ShellMenu
     }
 
     [Menu("Save", "File", "Ctrl + S", "fa-solid fa-floppy-disk", IsSeparator = true)]
-    public static async Task Save()
+    public static void Save()
     {
+        EditorMgr.Current?.Save();
     }
 
     [Menu("Save As", "File", "Ctrl + Shift + S", "fa-regular fa-floppy-disk")]
     public static async Task SaveAs()
     {
-
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", "Any File:*.*", Path.GetFileName(EditorMgr.Current?.FilePath), "save-file");
+        if (await dialog.ShowDialog() is string path) {
+            EditorMgr.Current?.SaveAs(path);
+        }
     }
 
     [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
@@ -55,51 +59,51 @@ public class ShellMenu
     // Edit
 
     [Menu("Undo", "Edit", "Ctrl + Z", "fa-solid fa-arrow-rotate-left")]
-    public static async Task Undo()
+    public static void Undo()
     {
-
+        EditorMgr.Current?.Undo();
     }
 
     [Menu("Redo", "Edit", "Ctrl + Shift + Z", "fa-solid fa-arrow-rotate-right")]
-    public static async Task Redo()
+    public static void Redo()
     {
-
+        EditorMgr.Current?.Redo();
     }
 
     [Menu("Select All", "Edit", "Ctrl + A", "fa-solid fa-object-group", IsSeparator = true)]
-    public static async Task SelectAll()
+    public static void SelectAll()
     {
-
+        EditorMgr.Current?.SelectAll();
     }
 
     [Menu("Cut", "Edit", "Ctrl + X", "fa-solid fa-scissors", IsSeparator = true)]
-    public static async Task Cut()
+    public static void Cut()
     {
-
+        EditorMgr.Current?.Cut();
     }
 
     [Menu("Copy", "Edit", "Ctrl + C", "fa-solid fa-copy")]
-    public static async Task Copy()
+    public static void Copy()
     {
-
+        EditorMgr.Current?.Copy();
     }
 
     [Menu("Paste", "Edit", "Ctrl + V", "fa-solid fa-paste")]
-    public static async Task Paste()
+    public static void Paste()
     {
-
+        EditorMgr.Current?.Paste();
     }
 
     [Menu("Find", "Edit", "Ctrl + F", "fa-solid fa-magnifying-glass", IsSeparator = true)]
-    public static async Task Find()
+    public static void Find()
     {
-
+        EditorMgr.Current?.Find();
     }
 
     [Menu("Find & Replace", "Edit", "Ctrl + H", "fa-solid fa-arrows-turn-to-dots")]
-    public static async Task FindAndReplace()
+    public static void FindAndReplace()
     {
-
+        EditorMgr.Current?.FindAndReplace();
     }
 
     // 
