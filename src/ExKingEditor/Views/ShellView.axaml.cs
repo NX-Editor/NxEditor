@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
@@ -115,6 +116,16 @@ public partial class ShellView : Window
         }
 
         base.HandleWindowStateChanged(state);
+    }
+
+    protected override void OnLoaded()
+    {
+        base.OnLoaded();
+        App.NotificationManager = new(GetTopLevel(this)) {
+            Position = NotificationPosition.BottomRight,
+            MaxItems = 3,
+            Margin = new(8,3)
+        };
     }
 
     public void DragDropEvent(object? sender, DragEventArgs e)

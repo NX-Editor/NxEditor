@@ -1,4 +1,5 @@
-﻿using Dock.Model.Mvvm.Controls;
+﻿using Avalonia.Controls.Notifications;
+using Dock.Model.Mvvm.Controls;
 using ExKingEditor.Core;
 
 namespace ExKingEditor.Models;
@@ -64,5 +65,12 @@ public abstract unsafe class ReactiveEditor : Document
     protected Span<byte> RawData()
     {
         return new(_data, _length);
+    }
+
+    protected void ToastSaveSuccess(string path)
+    {
+        App.Toast(
+            $"Saved {(_compressed ? "and compressed " : "")}{Path.GetFileName(path)}", "Success",
+            NotificationType.Success, TimeSpan.FromSeconds(1.2));
     }
 }

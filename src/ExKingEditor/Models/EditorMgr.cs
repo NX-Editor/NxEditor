@@ -17,7 +17,7 @@ public static class EditorMgr
             return TryLoadEditor(path, out reactiveEditor);
         }
         catch (Exception ex) {
-            App.Log(ex.ToString());
+            App.Log(ex);
         }
 
         reactiveEditor = null;

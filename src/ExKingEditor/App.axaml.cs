@@ -1,12 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Cead.Interop;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
-using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
@@ -19,6 +19,7 @@ public partial class App : Application
     public static string Title { get; } = "EX-King Editor";
     public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
     public static TopLevel? VisualRoot { get; private set; }
+    public static WindowNotificationManager? NotificationManager { get; set; }
 
     public override void Initialize()
     {
@@ -61,8 +62,24 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    public static void Log(object message, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Toast(string message, string title = "Notice", NotificationType type = NotificationType.Information, TimeSpan? expiration = null)
     {
-        Logger.Write(message, method, filepath, lineNumber);
+        NotificationManager?.Show(
+            new Notification(title, message, type, expiration));
+    }
+
+    public static void ToastError(Exception ex)
+    {
+        NotificationManager?.Show(new Notification(
+            ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellMenu.OpenLogs));
+    }
+
+    public static void Log(object obj, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
+    {
+        if (obj is Exception ex) {
+            ToastError(ex);
+        }
+
+        Logger.Write(obj, method, filepath, lineNumber);
     }
 }

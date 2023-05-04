@@ -45,6 +45,7 @@ public partial class BymlViewModel : ReactiveEditor
         }
 
         _yaml = Yaml;
+        ToastSaveSuccess(path);
     }
 
     public override void Undo()
