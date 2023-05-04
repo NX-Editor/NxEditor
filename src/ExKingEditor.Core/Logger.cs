@@ -5,22 +5,20 @@ namespace ExKingEditor.Core;
 
 public static class Logger
 {
+    private static readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
     private static readonly string SourceRoot = Path.Combine("D:", "a", "EXKing-Editor", "src", "ExKingEditor");
 
     public static string? CurrentLog { get; set; }
+    public static string LogsPath => _path; 
 
-    public static void Initialize(TraceListener? customListener = null)
+    public static void Initialize()
     {
-        Directory.CreateDirectory("./Logs");
-        CurrentLog = $"./Logs/{DateTime.Now:yyyy-MM-dd-HH-mm}.log";
+        Directory.CreateDirectory(_path);
+        CurrentLog = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd-HH-mm}.log");
+
         TextWriterTraceListener listener = new(CurrentLog);
 
-        AddTraceListener(listener, 1);
-
-        if (customListener != null) {
-            AddTraceListener(customListener, 2);
-        }
-
+        SetTraceListener(listener, 1);
         Trace.AutoFlush = true;
     }
 
@@ -30,10 +28,10 @@ public static class Logger
         Trace.WriteLine($"{meta}{msg.ToString()?.Replace("\n", $"\n{new string(' ', meta.Length)}")}".Replace('\\', '/'));
     }
 
-    private static void AddTraceListener(TraceListener listener, int pos)
+    public static void SetTraceListener(TraceListener listener, int? pos = null)
     {
-        if (Trace.Listeners.Count > pos) {
-            Trace.Listeners[pos] = listener;
+        if (pos is int _pos && Trace.Listeners.Count > _pos) {
+            Trace.Listeners[_pos] = listener;
         }
         else {
             Trace.Listeners.Add(listener);
