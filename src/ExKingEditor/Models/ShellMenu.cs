@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 using ExKingEditor.Attributes;
+using ExKingEditor.Core;
+using ExKingEditor.Core.Extensions;
 using ExKingEditor.Generators;
 using ExKingEditor.Helpers;
 using ExKingEditor.ViewModels;
@@ -115,18 +117,40 @@ public class ShellMenu
         ShellDockFactory.AddDoc<SettingsViewModel>();
     }
 
+    [Menu("Open Logs", "Tools", "Ctrl + L", "fa-solid fa-file-circle-check", IsSeparator = true)]
+    public static void OpenLogs()
+    {
+        ShellDockFactory.AddDoc(LogsViewModel.Shared);
+    }
+
+    [Menu("Open Logs Folder", "Tools", "Ctrl + Alt + L", "fa-solid fa-arrow-up-right-from-square")]
+    public static async Task OpenLogsFolder()
+    {
+        await BrowserExtension.OpenUrl(Logger.LogsPath);
+    }
+
+    [Menu("Clear Logs Folder", "Tools", icon: "fa-solid fa-file-circle-xmark")]
+    public static void ClearLogsFolder()
+    {
+        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.log")) {
+            if (file != Logger.CurrentLog) {
+                File.Delete(file);
+            }
+        }
+    }
+
     // 
     // About
 
     [Menu("Help", "About", "F1", "fa-solid fa-handshake-angle")]
-    public static async Task Help()
+    public static void Help()
     {
-
+        throw new NotImplementedException();
     }
 
     [Menu("Credits", "About", "F12", "fa-solid fa-user-check")]
-    public static async Task Credits()
+    public static void Credits()
     {
-
+        throw new NotImplementedException();
     }
 }
