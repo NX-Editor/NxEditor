@@ -1,10 +1,12 @@
 using Avalonia;
+using Avalonia.Controls.Notifications;
 using Avalonia.SettingsFactory;
 using Avalonia.SettingsFactory.Core;
 using Avalonia.SettingsFactory.ViewModels;
 using Avalonia.Styling;
 using ExKingEditor.Core;
 using ExKingEditor.Core.Extensions;
+using ExKingEditor.Helpers;
 using System.Reflection;
 
 namespace ExKingEditor.Views;
@@ -14,8 +16,8 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     public static SettingsView? Live { get; set; } = null;
 
     private static readonly SettingsFactoryOptions _options = new() {
-        // AlertAction = (msg) => MessageBox.ShowDialog(msg),
-        // BrowseAction = async (title) => await new BrowserDialog(BrowserMode.OpenFolder).ShowDialog(),
+        AlertAction = (msg) => App.Toast(msg, "Settings", NotificationType.Warning),
+        BrowseAction = async (title) => await new BrowserDialog(BrowserMode.OpenFolder).ShowDialog(),
         FetchResource = name => ResourceExtension.Parse<App, Dictionary<string, string>?>($"{name}.json")
     };
 
@@ -26,7 +28,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
         FocusDelegate.PointerPressed += (s, e) => FocusDelegate.Focus();
         FocusDelegate2.PointerPressed += (s, e) => FocusDelegate.Focus();
 
-        // AfterSaveEvent += async () => await MessageBox.ShowDialog("Saved succefully", "Notice");
+        AfterSaveEvent += () => App.Toast("Saved succefully", "Settings", NotificationType.Success);
         InitializeSettingsFactory(new SettingsFactoryViewModel(false), this, ExConfig.Shared, _options);
 
         Live = this;
@@ -75,7 +77,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     public string? ValidateSave(Dictionary<string, bool?> validated)
     {
         if (validated["GamePath"] == false) {
-            return "The game path is invalid.\nMake sure the path points directly to the games files (not to /romfs or the title id folder).";
+            return "The game path is invalid.\nMake sure the path points directly to the game files (not a folder with romfs or the title id folder).";
         }
 
         return null;
