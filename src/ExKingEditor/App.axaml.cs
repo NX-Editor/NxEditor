@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
+using Cead.Interop;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
 using ExKingEditor.Models;
@@ -28,6 +29,7 @@ public partial class App : Application
             Logger.Initialize();
             DllManager.LoadCead();
             ShellViewModel.InitDock();
+
             desktop.MainWindow = new ShellView() {
                 DataContext = ShellViewModel.Shared
             };
