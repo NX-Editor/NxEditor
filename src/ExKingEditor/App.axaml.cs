@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using Cead.Interop;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
+using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
@@ -27,9 +28,11 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            Logger.Initialize();
             DllManager.LoadCead();
             ShellViewModel.InitDock();
+
+            Logger.Initialize();
+            Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
 
             desktop.MainWindow = new ShellView() {
                 DataContext = ShellViewModel.Shared
@@ -58,7 +61,7 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    public static void Log(string message, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Log(object message, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
     {
         Logger.Write(message, method, filepath, lineNumber);
     }
