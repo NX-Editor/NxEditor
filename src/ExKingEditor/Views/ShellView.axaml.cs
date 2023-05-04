@@ -121,7 +121,7 @@ public partial class ShellView : Window
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                if (!EditorMgr.TryLoadEditor(path, out _)) {
+                if (!EditorMgr.TryLoadEditorSafe(path, out _)) {
                     // TODO: throw message dialog
                 }
             }

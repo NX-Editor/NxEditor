@@ -11,6 +11,19 @@ public static class EditorMgr
 
     public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
 
+    public static bool TryLoadEditorSafe(string path, out ReactiveEditor? reactiveEditor)
+    {
+        try {
+            return TryLoadEditor(path, out reactiveEditor);
+        }
+        catch (Exception ex) {
+            App.Log(ex.ToString());
+        }
+
+        reactiveEditor = null;
+        return false;
+    }
+
     public static bool TryLoadEditor(string path, out ReactiveEditor? reactiveEditor)
     {
         if (!CanEdit(path)) {

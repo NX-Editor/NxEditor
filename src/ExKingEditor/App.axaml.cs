@@ -9,6 +9,7 @@ using ExKingEditor.Generators;
 using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
+using System.Runtime.CompilerServices;
 
 namespace ExKingEditor;
 
@@ -49,7 +50,7 @@ public partial class App : Application
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
-                    EditorMgr.TryLoadEditor(arg, out _);
+                    EditorMgr.TryLoadEditorSafe(arg, out _);
                 }
             }
         }
