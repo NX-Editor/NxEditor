@@ -10,8 +10,6 @@ public partial class BymlViewModel : ReactiveEditor
 
     public BymlViewModel(string file) : base(file)
     {
-        Id = Guid.NewGuid().ToString();
-
         // Load source into readonly field for diffing
         using Byml byml = Byml.FromBinary(RawData());
         _yaml = byml.ToText();
