@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-
-namespace ExKingEditor.Models;
+﻿namespace ExKingEditor.Models;
 
 public class ReactiveSingleton<T> : ReactiveObject where T : new()
 {
