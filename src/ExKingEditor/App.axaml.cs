@@ -36,6 +36,12 @@ public partial class App : Application
             if (ExConfig.Shared.RequiresInput || settings.ValidateSave() != null) {
                 ShellDockFactory.AddDoc<SettingsViewModel>();
             }
+
+            if (desktop.Args != null && desktop.Args.Length > 0) {
+                foreach (var arg in desktop.Args) {
+                    EditorMgr.TryLoadEditor(arg, out _);
+                }
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
