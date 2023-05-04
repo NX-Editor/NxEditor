@@ -32,14 +32,14 @@ public class TotkZstd
         _packCompressor.LoadDictionary(sarc["pack.zsdic"]);
     }
 
-    public static Span<byte> Decompress(string file)
+    public static Span<byte> Decompress(string file, Span<byte> raw)
     {
-        Span<byte> src = File.ReadAllBytes(file);
         return
-            file.EndsWith(".bcett.byml.zs") ? _mapDecompressor.Unwrap(src) :
-            file.EndsWith(".pack.zs") ? _packDecompressor.Unwrap(src) :
-            _commonDecompressor.Unwrap(src);
+            file.EndsWith(".bcett.byml.zs") ? _mapDecompressor.Unwrap(raw) :
+            file.EndsWith(".pack.zs") ? _packDecompressor.Unwrap(raw) :
+            _commonDecompressor.Unwrap(raw);
     }
+
     public static Span<byte> Compress(string file)
     {
         Span<byte> src = File.ReadAllBytes(file);
