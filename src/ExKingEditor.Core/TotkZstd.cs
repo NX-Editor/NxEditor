@@ -40,12 +40,11 @@ public class TotkZstd
             _commonDecompressor.Unwrap(raw);
     }
 
-    public static Span<byte> Compress(string file)
+    public static Span<byte> Compress(string file, Span<byte> raw)
     {
-        Span<byte> src = File.ReadAllBytes(file);
         return
-            file.EndsWith(".bcett.byml") ? _mapCompressor.Wrap(src) :
-            file.EndsWith(".pack") ? _packCompressor.Wrap(src) :
-            _commonCompressor.Wrap(src);
+            file.EndsWith(".bcett.byml") ? _mapCompressor.Wrap(raw) :
+            file.EndsWith(".pack") ? _packCompressor.Wrap(raw) :
+            _commonCompressor.Wrap(raw);
     }
 }
