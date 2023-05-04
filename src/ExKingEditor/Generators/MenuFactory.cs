@@ -118,7 +118,12 @@ public class MenuFactory
                 }
                 else {
                     child.Command = ReactiveCommand.Create(() => {
-                        func.Invoke(obj, Array.Empty<object>());
+                        try {
+                            func.Invoke(obj, Array.Empty<object>());
+                        }
+                        catch (Exception ex) {
+                            App.Log(ex, func.Name, "[ShellMenu]", -1);
+                        }
                     });
                 }
 
