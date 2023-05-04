@@ -124,7 +124,7 @@ public partial class ShellView : Window
         App.NotificationManager = new(GetTopLevel(this)) {
             Position = NotificationPosition.BottomRight,
             MaxItems = 3,
-            Margin = new(8,3)
+            Margin = new(0,0,4,0)
         };
     }
 
