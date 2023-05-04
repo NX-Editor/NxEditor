@@ -61,6 +61,19 @@ public class ShellDockFactory : Factory
         return (_default, -1);
     }
 
+    public static Document? Current() => Current(Root);
+    private static Document? Current(IDockable? root)
+    {
+        if (root is DocumentDock documentDock) {
+            return documentDock.ActiveDockable as Document;
+        }
+        else if (root is ProportionalDock proportionalDock && proportionalDock.VisibleDockables != null) {
+            return Current(proportionalDock.ActiveDockable);
+        }
+
+        return null;
+    }
+
     public override IRootDock CreateLayout()
     {
         DocumentDock dockLayout = new() {

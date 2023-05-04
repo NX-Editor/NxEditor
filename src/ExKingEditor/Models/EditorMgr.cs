@@ -9,6 +9,8 @@ public static class EditorMgr
 {
     private static readonly Dictionary<string, string> _editors = EmbedExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
 
+    public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
+
     public static bool TryLoadEditor(string path, out ReactiveEditor? reactiveEditor)
     {
         if (!CanEdit(path)) {
