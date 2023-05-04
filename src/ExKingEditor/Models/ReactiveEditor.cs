@@ -12,6 +12,8 @@ public abstract unsafe class ReactiveEditor : Document
     private readonly byte* _data;
     private readonly int _length;
 
+    public string FilePath => _file;
+
     public ReactiveEditor(string file)
     {
         Id = file;
@@ -44,8 +46,20 @@ public abstract unsafe class ReactiveEditor : Document
         return true;
     }
 
-    public abstract void SaveEditor();
+    public abstract void Save();
+    public abstract void SaveAs(string path);
     public abstract bool HasChanged();
+
+    public virtual void Undo() { } 
+    public virtual void Redo() { } 
+
+    public virtual void SelectAll() { }
+    public virtual void Cut() { }
+    public virtual void Copy() { }
+    public virtual void Paste() { }
+
+    public virtual void Find() { }
+    public virtual void FindAndReplace() { }
 
     protected Span<byte> RawData()
     {
