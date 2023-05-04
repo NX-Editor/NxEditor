@@ -23,7 +23,7 @@ public abstract unsafe class ReactiveEditor : Document
         // keep the file open until the
         // tab closes
         _stream = File.Open(file, FileMode.Open);
-        Span<byte> raw = _stream.Length > 0x100000 ? new byte[_stream.Length] : stackalloc byte[(int)_stream.Length];
+        Span<byte> raw = new byte[_stream.Length];
         _stream.Read(raw);
 
         // Decompress if necessary
