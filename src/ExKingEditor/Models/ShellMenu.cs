@@ -1,4 +1,5 @@
-﻿using ExKingEditor.Attributes;
+﻿using Avalonia.Controls;
+using ExKingEditor.Attributes;
 using ExKingEditor.Generators;
 using ExKingEditor.Helpers;
 using ExKingEditor.ViewModels;
@@ -24,13 +25,24 @@ public class ShellMenu
     [Menu("Save", "File", "Ctrl + S", "fa-solid fa-floppy-disk", IsSeparator = true)]
     public static async Task Save()
     {
-
     }
 
     [Menu("Save As", "File", "Ctrl + Shift + S", "fa-regular fa-floppy-disk")]
     public static async Task SaveAs()
     {
 
+    }
+
+    [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
+    public static void Recent(string path)
+    {
+        EditorMgr.TryLoadEditor(path, out _);
+    }
+
+    [Menu("Clear Recent", "File", icon: "fa-regular fa-circle-xmark")]
+    public static void ClearRecent()
+    {
+        StateMgr.Shared.Recent.Clear();
     }
 
     [Menu("Exit", "File", "Ctrl + Shift + S", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
