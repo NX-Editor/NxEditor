@@ -51,8 +51,8 @@ public class ShellMenu
         StateMgr.Shared.Recent.Clear();
     }
 
-    [Menu("Exit", "File", "Ctrl + Shift + S", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
-    public static async Task Exit()
+    [Menu("Exit", "File", "Alt + F4", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
+    public static void Exit()
     {
 
     }
