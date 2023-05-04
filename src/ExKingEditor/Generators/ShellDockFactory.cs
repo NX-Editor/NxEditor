@@ -29,6 +29,19 @@ public class ShellDockFactory : Factory
         return doc;
     }
 
+    public static bool TryFocus(string id, out IDockable? target)
+    {
+        (var dock, var index) = CheckDockable(Root, id);
+        if (index >= 0) {
+            target = dock.VisibleDockables![index];
+            dock.ActiveDockable = target;
+            return true;
+        }
+
+        target = null;
+        return false;
+    }
+
     private static (DocumentDock dock, int index) CheckDockable(IDockable root, string id)
     {
         DocumentDock _default = null!;

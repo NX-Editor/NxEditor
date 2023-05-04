@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using ExKingEditor.Attributes;
+using ExKingEditor.Models;
 using System.Reflection;
 
 namespace ExKingEditor.Generators;
@@ -80,6 +81,7 @@ public class MenuFactory
             MenuItem child;
 
             if (childData is MethodInfo func) {
+
                 var menu = func.GetCustomAttribute<MenuAttribute>()!;
                 if (menu.IsSeparator) itemsRoot.Add(new Separator());
 
@@ -91,22 +93,43 @@ public class MenuFactory
                     HotKey = shortcut,
                     InputGesture = shortcut!,
                     Height = (menu.Name ?? func.Name).StartsWith("_") ? 30 : double.NaN,
-                    Classes = MenuItemClasses,
-                    Command = ReactiveCommand.Create(() => {
-                        func.Invoke(obj, Array.Empty<object>());
-                    })
+                    Classes = MenuItemClasses
                 };
 
                 if (shortcut != null) {
                     HotKeyManager.SetHotKey(child, shortcut);
                 }
 
-                child.Classes.Add("");
+                if (func.Name == "Recent") {
+                    child.ItemsSource = StateMgr.Shared.Recent;
+                    StateMgr.Shared.Recent.CollectionChanged += (s, e) => {
+                        if (e.NewItems != null) {
+                            foreach (var item in e.NewItems) {
+                                if (item is MenuItem menuItem) {
+                                    menuItem.Command = ReactiveCommand.Create(() => {
+                                        func.Invoke(obj, new object?[] {
+                                            ToolTip.GetTip(menuItem)
+                                        });
+                                    });
+                                }
+                            }
+                        }
+                    };
+                }
+                else {
+                    child.Command = ReactiveCommand.Create(() => {
+                        func.Invoke(obj, Array.Empty<object>());
+                    });
+                }
+
+                foreach (var cls in MenuItemClasses) {
+                    child.Classes.Add(cls);
+                }
             }
             else if (childData is Dictionary<string, dynamic> dict) {
                 child = new() {
                     Header = name,
-                    Items = CollectChildItems(dict, obj),
+                    ItemsSource = CollectChildItems(dict, obj),
                     Classes = TopLevelClasses
                 };
             }
