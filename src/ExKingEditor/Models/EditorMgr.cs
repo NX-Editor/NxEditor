@@ -26,9 +26,10 @@ public static class EditorMgr
 
     public static bool TryLoadEditor(string path, out ReactiveEditor? reactiveEditor)
     {
+        App.Log($"Processing {Path.GetFileName(path)}");
+
         if (!CanEdit(path)) {
-            reactiveEditor = null;
-            return false;
+            throw new NotSupportedException($"Unsupported file type {Path.GetExtension(path)}");
         }
 
         if (ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor exEditor) {
