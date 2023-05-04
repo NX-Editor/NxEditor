@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace ExKingEditor.ViewModels;
 
-public partial class LogsViewModel : Document    
+public partial class LogsViewModel : Document
 {
     private LogsView? _view;
 

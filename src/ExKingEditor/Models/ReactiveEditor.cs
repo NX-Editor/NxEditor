@@ -51,8 +51,8 @@ public abstract unsafe class ReactiveEditor : Document
     public abstract void SaveAs(string path);
     public abstract bool HasChanged();
 
-    public virtual void Undo() { } 
-    public virtual void Redo() { } 
+    public virtual void Undo() { }
+    public virtual void Redo() { }
 
     public virtual void SelectAll() { }
     public virtual void Cut() { }
