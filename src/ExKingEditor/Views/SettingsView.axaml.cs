@@ -16,7 +16,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     private static readonly SettingsFactoryOptions _options = new() {
         // AlertAction = (msg) => MessageBox.ShowDialog(msg),
         // BrowseAction = async (title) => await new BrowserDialog(BrowserMode.OpenFolder).ShowDialog(),
-        FetchResource = name => EmbedExtension.Parse<App, Dictionary<string, string>?>($"{name}.json")
+        FetchResource = name => ResourceExtension.Parse<App, Dictionary<string, string>?>($"{name}.json")
     };
 
     public SettingsView()

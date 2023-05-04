@@ -7,7 +7,7 @@ namespace ExKingEditor.Models;
 
 public static class EditorMgr
 {
-    private static readonly Dictionary<string, string> _editors = EmbedExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
+    private static readonly Dictionary<string, string> _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
 
     public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
 
