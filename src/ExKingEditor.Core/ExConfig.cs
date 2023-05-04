@@ -9,7 +9,7 @@ public class ExConfig : ISettingsBase
     private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EX-King-Editor", "config.json");
 
     public static ExConfig Shared { get; } = Load();
-    public bool RequiresInput { get; set; } = false;
+    public bool RequiresInput { get; set; } = true;
 
     [JsonIgnore]
     [Setting("Game Path", "The absolute path to your Totk game dump\n(e.g. F:\\Games\\Totk\\RomFS)")]
@@ -27,6 +27,7 @@ public class ExConfig : ISettingsBase
     public ISettingsBase Save()
     {
         TotkConfig.Shared.Save();
+        RequiresInput = false;
 
         Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
         using FileStream fs = File.Create(_path);

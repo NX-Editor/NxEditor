@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
+using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
 
@@ -21,7 +22,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             ShellViewModel.InitDock();
@@ -35,6 +36,11 @@ public partial class App : Application
             SettingsView settings = new();
             if (ExConfig.Shared.RequiresInput || settings.ValidateSave() != null) {
                 ShellDockFactory.AddDoc<SettingsViewModel>();
+                await Task.Run(() => {
+                    while (ExConfig.Shared.RequiresInput) {
+                        // Wait for setting to save successfully
+                    }
+                });
             }
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
