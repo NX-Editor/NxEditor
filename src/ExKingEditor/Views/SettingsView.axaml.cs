@@ -7,6 +7,7 @@ using Avalonia.Styling;
 using ExKingEditor.Core;
 using ExKingEditor.Core.Extensions;
 using ExKingEditor.Helpers;
+using ExKingEditor.Models;
 using System.Reflection;
 
 namespace ExKingEditor.Views;
@@ -37,6 +38,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     public bool? ValidateBool(string key, bool value)
     {
         return key switch {
+            "LoadResourcesFromDisk" => EditorMgr.ReloadEditorsConfig(),
             _ => null
         };
     }

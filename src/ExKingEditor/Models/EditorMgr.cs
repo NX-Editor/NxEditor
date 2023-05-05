@@ -7,7 +7,7 @@ namespace ExKingEditor.Models;
 
 public static class EditorMgr
 {
-    private static readonly Dictionary<string, string> _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
+    private static Dictionary<string, string> _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
 
     public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
 
@@ -60,6 +60,12 @@ public static class EditorMgr
     public static bool CanEdit(string file)
     {
         return _editors.ContainsKey(GetExt(file));
+    }
+
+    public static bool? ReloadEditorsConfig()
+    {
+        _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
+        return null;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

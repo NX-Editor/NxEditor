@@ -21,6 +21,9 @@ public class ExConfig : ISettingsBase
     [Setting(UiType.Dropdown, "Resource:Langs", Name = "Game Region/Language")]
     public required string Lang { get; set; }
 
+    [Setting("Load Resources from Disk", "Loads a customizable copy of the resource files from disk instead of donwloading the latest version from the live server")]
+    public bool LoadResourcesFromDisk { get; set; }
+
     [Setting(UiType.Dropdown, "Dark", "Light", Category = "Appearance")]
     public string Theme { get; set; } = "Dark";
 
