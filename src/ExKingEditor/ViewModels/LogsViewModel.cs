@@ -25,9 +25,14 @@ public partial class LogsViewModel : Document
     public void AddLog(string message)
     {
         int idx = message.LastIndexOf('|');
-        string meta = message[..idx];
-        string msg = message[(idx + 1)..].Replace(new string(' ', meta.Length + 2), "");
-        LogTrace.Add(new(meta.Trim(), msg.Trim()));
+        if (idx >= 0) {
+            string meta = message[..idx];
+            string msg = message[(idx + 1)..].Replace(new string(' ', meta.Length + 2), "");
+            LogTrace.Add(new(meta.Trim(), msg.Trim()));
+        }
+        else {
+            LogTrace.Add(new(message, message));
+        }
 
         Dispatcher.UIThread.InvokeAsync(() => {
             _view?.LogsClient.ScrollIntoView(LogTrace.Count - 1);
