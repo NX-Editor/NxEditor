@@ -6,10 +6,14 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using ExKingEditor.Generators;
 using ExKingEditor.Models;
+using System.Collections.ObjectModel;
 
 namespace ExKingEditor.Views;
 public partial class ShellView : Window
 {
+    public static ObservableCollection<Control> MainMenu { get; } = MenuFactory.Generate<ShellMenu>();
+    public static int MenuOverflow { get; set; } = 0;
+
     public ShellView()
     {
         InitializeComponent();
@@ -51,11 +55,20 @@ public partial class ShellView : Window
             }
         };
 
-        RootMenu.ItemsSource = MenuFactory.Generate<ShellMenu>();
+        RootMenu.ItemsSource = MainMenu;
 
         PointerClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
         PointerClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
         PointerClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
+    }
+
+    public static void ClearOverflowMenu()
+    {
+        for (int i = 0; i < MenuOverflow; i++) {
+            MainMenu.RemoveAt(MainMenu.Count - 1);
+        }
+
+        MenuOverflow = 0;
     }
 
     private bool IsInResizeBorder(PointerEventArgs e, out WindowEdge edge)
