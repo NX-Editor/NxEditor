@@ -67,7 +67,7 @@ public class ShellDockFactory : Factory
         if (root is DocumentDock documentDock) {
             return documentDock.ActiveDockable as Document;
         }
-        else if (root is ProportionalDock proportionalDock && proportionalDock.VisibleDockables != null) {
+        else if (root is ProportionalDock proportionalDock && proportionalDock.ActiveDockable != null) {
             return Current(proportionalDock.ActiveDockable);
         }
 
@@ -76,10 +76,12 @@ public class ShellDockFactory : Factory
 
     public override IRootDock CreateLayout()
     {
-        DocumentDock dockLayout = new() {
-            Id = "Documents",
-            Title = "Documents",
-            VisibleDockables = CreateList<IDockable>(new HomeViewModel())
+        ProportionalDock dockLayout = new() {
+            VisibleDockables = CreateList<IDockable>(new DocumentDock {
+                Id = "Documents",
+                Title = "Documents",
+                VisibleDockables = CreateList<IDockable>(new HomeViewModel())
+            })
         };
 
         RootDock rootDock = new() {
