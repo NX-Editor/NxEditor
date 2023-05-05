@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using ExKingEditor.Attributes;
 using ExKingEditor.Models;
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace ExKingEditor.Generators;
@@ -26,8 +27,8 @@ public class MenuFactory
         "MenuFactor-MenuItem"
     };
 
-    public static List<Control> Generate<T>() where T : new() => Generate(new T());
-    public static List<Control> Generate<T>(T model)
+    public static ObservableCollection<Control> Generate<T>() where T : new() => Generate(new T());
+    public static ObservableCollection<Control> Generate<T>(T model)
     {
         if (model == null) {
             throw new ArgumentNullException(nameof(model), "Cannot generate menu from null object");
@@ -72,10 +73,10 @@ public class MenuFactory
         return CollectChildItems(pseudoMenu, model);
     }
 
-    private static List<Control> CollectChildItems<T>(Dictionary<string, dynamic> data, T obj)
+    private static ObservableCollection<Control> CollectChildItems<T>(Dictionary<string, dynamic> data, T obj)
     {
         // Define the root list
-        List<Control> itemsRoot = new();
+        ObservableCollection<Control> itemsRoot = new();
 
         foreach ((var name, var childData) in data) {
             MenuItem child;
