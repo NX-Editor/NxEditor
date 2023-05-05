@@ -47,7 +47,7 @@ public abstract unsafe class ReactiveEditor : Document
         return true;
     }
 
-    public abstract void Save();
+    public virtual void Save() => SaveAs(_file);
     public abstract void SaveAs(string path);
     public abstract bool HasChanged();
 

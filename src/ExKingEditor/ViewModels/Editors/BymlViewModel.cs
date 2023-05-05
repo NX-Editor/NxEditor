@@ -22,11 +22,6 @@ public partial class BymlViewModel : ReactiveEditor
         Yaml = _yaml;
     }
 
-    public override void Save()
-    {
-        SaveAs(_file);
-    }
-
     public override void SaveAs(string path)
     {
         using Byml byml = Byml.FromText(Yaml);
