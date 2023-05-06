@@ -77,18 +77,16 @@ public partial class SarcViewModel : ReactiveEditor
     private void AppendPathToView(string path, ReadOnlySpan<byte> data)
     {
         NodeMap map = _map;
-        ObservableCollection<TreeItemNode> children = _children;
-        TreeItemNode? item = null;
+        TreeItemNode item = _root;
 
         foreach (var part in path.Replace('\\', '/').Split('/')) {
             if (!map.TryGetValue(part, out var node)) {
                 map[part] = node = (new(part, item), new NodeMap());
-                children.Add(node.root);
+                item.Children.Add(node.root);
             }
 
             item = node.root;
             map = (NodeMap)node.map;
-            children = node.root.Children;
         }
 
         item?.SetData(data);
