@@ -15,7 +15,7 @@
               Margin="5"
               AutoScrollToSelectedItem="True"
               DragDrop.AllowDrop="True"
-              ItemsSource="{Binding Children}"
+              ItemsSource="{Binding Root.Children}"
               SelectedItems="{Binding Selected}">
         <TreeView.ContextMenu>
             <ContextMenu>

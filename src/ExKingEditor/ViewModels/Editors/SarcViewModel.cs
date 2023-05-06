@@ -17,7 +17,7 @@ public partial class SarcViewModel : ReactiveEditor
     private readonly NodeMap _map = new();
 
     [ObservableProperty]
-    private ObservableCollection<TreeItemNode> _children = new();
+    private TreeItemNode _root = new("__root__");
 
     [ObservableProperty]
     private ObservableCollection<TreeItemNode> _selected = new();
@@ -41,7 +41,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Remove()
     {
         foreach (var item in Selected) {
-            (item.Parent?.Children ?? Children).Remove(item);
+            (item.Parent ?? Root).Children.Remove(item);
         }
     }
 
