@@ -1,4 +1,10 @@
 {
   ".bgyml": "BymlViewModel",
-  ".byml": "BymlViewModel"
+  ".byml": "BymlViewModel",
+  ".bfarc": "SarcViewModel",
+  ".blarc": "SarcViewModel",
+  ".genvb": "SarcViewModel",
+  ".pack": "SarcViewModel",
+  ".sarc": "SarcViewModel",
+  ".ta": "SarcViewModel"
 }
