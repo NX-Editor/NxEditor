@@ -41,7 +41,7 @@ public class TotkZstd
     {
         return
             file.EndsWith(".bcett.byml") ? _mapCompressor.Wrap(raw) :
-            file.EndsWith(".pack") ? _packCompressor.Wrap(raw) :
+            file.EndsWith(".pack.zs") ? _packCompressor.Wrap(raw) :
             _commonCompressor.Wrap(raw);
     }
 }
