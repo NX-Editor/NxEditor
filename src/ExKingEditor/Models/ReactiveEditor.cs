@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls.Notifications;
 using Dock.Model.Mvvm.Controls;
 using ExKingEditor.Core;
+using ExKingEditor.Dialogs;
 
 namespace ExKingEditor.Models;
 
@@ -42,7 +43,14 @@ public abstract unsafe class ReactiveEditor : Document
 
     public override bool OnClose()
     {
-        // Handle pending changes
+        if (HasChanged() && new ContentDialog {
+            Title = "Warning",
+            Content = "You have unsaved changes.\nAre you sure you wish to exit?",
+            PrimaryButtonContent = "Yes"
+        }.ShowDialog() == ContentDialogResult.Secondary) {
+            return false;
+        }
+
         _stream.Close();
         return true;
     }
