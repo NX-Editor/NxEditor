@@ -7,7 +7,7 @@ namespace ExKingEditor.Models;
 public abstract unsafe class ReactiveEditor : Document
 {
     protected readonly string _file;
-    protected readonly bool _compressed;
+    protected bool _compressed;
     protected readonly FileStream _stream;
 
     private readonly byte* _data;

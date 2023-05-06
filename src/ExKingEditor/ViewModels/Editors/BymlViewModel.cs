@@ -27,7 +27,7 @@ public partial class BymlViewModel : ReactiveEditor
         using Byml byml = Byml.FromText(Yaml);
         using DataHandle handle = byml.ToBinary(false, version: 7);
 
-        Span<byte> data = _compressed ? TotkZstd.Compress(path, handle) : handle;
+        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
         if (path == _file) {
             _stream.Seek(0, SeekOrigin.Begin);

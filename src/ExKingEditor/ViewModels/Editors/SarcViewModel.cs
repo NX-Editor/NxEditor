@@ -52,7 +52,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         using DataHandle handle = _live.ToBinary();
 
-        Span<byte> data = _compressed ? TotkZstd.Compress(path, handle) : handle;
+        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
         if (path == _file) {
             _stream.Seek(0, SeekOrigin.Begin);
