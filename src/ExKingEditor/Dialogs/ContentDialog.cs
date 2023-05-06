@@ -44,7 +44,7 @@ public partial class ContentDialog : ObservableObject
     private object _secondaryButtonContent = "Cancel";
 
     [ObservableProperty]
-    private bool _isSecondaryButtonVisible = false;
+    private bool _isSecondaryButtonVisible = true;
 
     [ObservableProperty]
     private Func<RoutedEventArgs, Task>? _secondaryButtonAction;
