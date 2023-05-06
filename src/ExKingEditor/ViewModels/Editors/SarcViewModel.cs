@@ -101,21 +101,26 @@ public partial class SarcViewModel : ReactiveEditor
 
     public override void SaveAs(string path)
     {
-        // using DataHandle handle = _live.ToBinary();
-        // 
-        // Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
-        // 
-        // if (path == _file) {
-        //     _stream.Seek(0, SeekOrigin.Begin);
-        //     _stream.Write(data);
-        // }
-        // else {
-        //     Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-        //     using FileStream fs = File.Create(path);
-        //     fs.Write(data);
-        // }
-        // 
-        // _originalCount = _live.Count;
-        // ToastSaveSuccess(path);
+        using Sarc sarc = new();
+        foreach (var file in Root.GetFileNodes()) {
+            sarc.Add(file.GetPath(relativeTo: Root), file.GetData());
+        }
+
+        using DataHandle handle = sarc.ToBinary();
+
+        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
+
+        if (path == _file) {
+            _stream.Seek(0, SeekOrigin.Begin);
+            _stream.Write(data);
+        }
+        else {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            using FileStream fs = File.Create(path);
+            fs.Write(data);
+        }
+
+        _originalCount = sarc.Count;
+        ToastSaveSuccess(path);
     }
 }
