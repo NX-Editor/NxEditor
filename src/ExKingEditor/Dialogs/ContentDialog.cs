@@ -1,5 +1,6 @@
 ﻿using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ExKingEditor.Helpers;
 using ExKingEditor.Views.Dialogs;
 
 namespace ExKingEditor.Dialogs;
@@ -81,10 +82,12 @@ public partial class ContentDialog : ObservableObject
         _isDialogWaiting = false;
     }
 
-    public ContentDialogResult ShowDialog()
+
+    public ContentDialogResult ShowDialog() => ShowAsync().WaitSynchronously();
+    public async Task<ContentDialogResult> ShowAsync()
     {
         _dialog.Show();
-        Task.Run(() => {
+        await Task.Run(() => {
             while (_isDialogWaiting) { }
         });
 
