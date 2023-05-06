@@ -76,12 +76,15 @@ public class ShellDockFactory : Factory
 
     public override IRootDock CreateLayout()
     {
+        DocumentDock documentdock = new() {
+            Id = "Documents",
+            VisibleDockables = CreateList<IDockable>(new HomeViewModel())
+        };
+
         ProportionalDock dockLayout = new() {
-            VisibleDockables = CreateList<IDockable>(new DocumentDock {
-                Id = "Documents",
-                Title = "Documents",
-                VisibleDockables = CreateList<IDockable>(new HomeViewModel())
-            })
+            Id = "DocumentsDock",
+            ActiveDockable = documentdock,
+            VisibleDockables = CreateList<IDockable>(documentdock)
         };
 
         RootDock rootDock = new() {
