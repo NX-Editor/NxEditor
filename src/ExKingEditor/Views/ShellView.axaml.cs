@@ -60,15 +60,15 @@ public partial class ShellView : Window
 
         RootMenu.ItemsSource = MainMenu;
 
-        PointerClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
-        PointerClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
-        PointerClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
+        DropClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
+        DropClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
+        DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
     }
 
     public static void ClearOverflowMenu()
     {
         for (int i = 0; i < MenuOverflow; i++) {
-            MainMenu.RemoveAt(MainMenu.Count - 1);
+            MainMenu?.RemoveAt(MainMenu.Count - 1);
         }
 
         MenuOverflow = 0;

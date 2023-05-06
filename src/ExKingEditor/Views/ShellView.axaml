@@ -19,7 +19,6 @@
         mc:Ignorable="d">
     <Grid Name="PointerClient"
           Background="Transparent"
-          DragDrop.AllowDrop="True"
           RowDefinitions="30,*">
 
         <Border Name="ChromeClient"
@@ -88,25 +87,12 @@
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="1"
+        <Grid Name="DropClient"
+              Grid.Row="1"
               Margin="5"
+              DragDrop.AllowDrop="True"
               RowDefinitions="*,auto">
             <idc:DockControl Layout="{Binding Layout}" />
-            <StackPanel Name="ButtonStack"
-                        Grid.Row="1"
-                        Margin="5,5,5,5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        IsVisible="False"
-                        Orientation="Horizontal">
-                <StackPanel.Styles>
-                    <Style Selector="Button">
-                        <Setter Property="Margin" Value="5" />
-                        <Setter Property="Width" Value="80" />
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    </Style>
-                </StackPanel.Styles>
-            </StackPanel>
         </Grid>
 
         <Border Name="DragFadeMask"
