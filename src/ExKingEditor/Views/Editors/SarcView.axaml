@@ -13,9 +13,16 @@
     <TreeView Name="DropClient"
               Grid.Row="1"
               Margin="5"
-			  AutoScrollToSelectedItem="True"
+              AutoScrollToSelectedItem="True"
               DragDrop.AllowDrop="True"
-              ItemsSource="{Binding Children}">
+              ItemsSource="{Binding Children}"
+              SelectedItems="{Binding Selected}">
+        <TreeView.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{Binding Export}" Header="Export" />
+                <MenuItem Command="{Binding Remove}" Header="Remove" />
+            </ContextMenu>
+        </TreeView.ContextMenu>
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}">
                 <TextBlock Text="{Binding Header}" />

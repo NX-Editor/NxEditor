@@ -2,9 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using ExKingEditor.Generators;
-using ExKingEditor.Models;
 using ExKingEditor.Models.Editors;
-using System.Diagnostics;
+using ExKingEditor.ViewModels.Editors;
 
 namespace ExKingEditor.Views.Editors;
 public partial class SarcView : UserControl
@@ -36,6 +35,12 @@ public partial class SarcView : UserControl
 
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
+        if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
+            foreach (var path in paths.Select(x => x.Path.LocalPath).Where(File.Exists)) {
+                (DataContext as SarcViewModel)?.ImportFile(path, File.ReadAllBytes(path));
+            }
+        }
+
         e.Handled = true;
     }
 
