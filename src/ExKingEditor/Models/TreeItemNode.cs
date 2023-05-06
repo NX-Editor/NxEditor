@@ -20,17 +20,17 @@ public partial class TreeItemNode : ObservableObject
 
     public bool IsFile => _len != null;
 
-    public TreeItemNode(string header, TreeItemNode? parent)
+    public TreeItemNode(string header, TreeItemNode? parent = null)
     {
         _header = header;
         _parent = parent;
     }
 
-    public string GetPath()
+    public string GetPath(TreeItemNode? relativeTo = null)
     {
         Stack<string> parts = new();
         TreeItemNode? parent = _parent;
-        while (parent != null) {
+        while (parent != null && parent != relativeTo) {
             parts.Push(parent.Header);
             parent = parent.Parent;
         }
