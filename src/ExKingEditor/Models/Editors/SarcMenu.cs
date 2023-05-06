@@ -1,4 +1,5 @@
 ﻿using ExKingEditor.Attributes;
+using ExKingEditor.Helpers;
 using ExKingEditor.ViewModels.Editors;
 using ExKingEditor.Views.Editors;
 
@@ -16,15 +17,18 @@ public class SarcMenu
         _view = view;
     }
 
-    [Menu("Add File", "Sarc", "Ctrl + Shift + A", "fa-solid fa-file-circle-plus")]
-    public void AddFile()
+    [Menu("Import File", "Sarc", "Ctrl + Shift + A", "fa-solid fa-file-circle-plus")]
+    public async Task ImportFile()
     {
-        App.Log("Add File");
+        BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
+        if (await dialog.ShowDialog() is string path) {
+            Sarc.ImportFile(path, File.ReadAllBytes(path));
+        }
     }
 
-    [Menu("Add Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
-    public void AddFolder()
+    [Menu("Import Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
+    public void ImportFolder()
     {
-        App.Log("Add Folder");
+        App.Log("Import Folder");
     }
 }
