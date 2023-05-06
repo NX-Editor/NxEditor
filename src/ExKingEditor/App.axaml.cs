@@ -21,6 +21,8 @@ public partial class App : Application
     public static TopLevel? VisualRoot { get; private set; }
     public static WindowNotificationManager? NotificationManager { get; set; }
 
+    public static ShellView? Desktop { get; private set; }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -35,7 +37,7 @@ public partial class App : Application
             Logger.Initialize();
             Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
 
-            desktop.MainWindow = new ShellView() {
+            desktop.MainWindow = Desktop = new ShellView() {
                 DataContext = ShellViewModel.Shared
             };
 
