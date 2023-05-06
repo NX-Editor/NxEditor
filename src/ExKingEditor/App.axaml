@@ -17,6 +17,8 @@
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
         <StyleInclude Source="/Styles/HyperlinkButton.axaml" />
+        <StyleInclude Source="/Styles/MenuItem.axaml" />
+        <StyleInclude Source="/Styles/TreeView.axaml" />
         <Style>
             <Style.Resources>
                 <SolidColorBrush x:Key="DockApplicationAccentBrushLow"
