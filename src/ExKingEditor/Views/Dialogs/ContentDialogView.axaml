@@ -1,0 +1,52 @@
+<UserControl x:Class="ExKingEditor.Views.Dialogs.ContentDialogView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dlg="using:ExKingEditor.Dialogs"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             x:CompileBindings="True"
+             x:DataType="dlg:ContentDialog"
+             FontFamily="{StaticResource Ubuntu}"
+             mc:Ignorable="d">
+    <Grid>
+        <Border Name="FadeMask"
+                Background="{DynamicResource SystemAltHighColor}"
+                Opacity="0.3" />
+        <Border Name="DialogClient"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{DynamicResource SystemChromeLowColor}"
+                BorderBrush="{DynamicResource SystemChromeMediumColor}"
+                BorderThickness="1"
+                BoxShadow="2 2 25 1 Black"
+                CornerRadius="3">
+            <StackPanel Margin="15" Spacing="10">
+                <TextBlock FontSize="16"
+                           FontWeight="Bold"
+                           Text="{Binding Title}" />
+                <Border Height="1" Background="{DynamicResource SystemChromeMediumColor}" />
+                <ContentPresenter HorizontalAlignment="Stretch" Content="{Binding Content}" />
+                <Grid ColumnDefinitions="*,*,*" Margin="0,15,0,0">
+                    <Grid MinWidth="80" />
+                    <Button Grid.Column="1"
+                            MinWidth="80"
+                            Margin="0,0,5,0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Command="{Binding PrimaryButtonCommand}"
+                            Content="{Binding PrimaryButtonContent}"
+                            IsVisible="{Binding IsPrimaryButtonVisible}" />
+                    <Button Grid.Column="2"
+                            MinWidth="80"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Command="{Binding SecondaryButtonCommand}"
+                            Content="{Binding SecondaryButtonContent}"
+                            IsVisible="{Binding IsSecondaryButtonVisible}" />
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

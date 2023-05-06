@@ -89,15 +89,14 @@
 
         <Grid Name="DropClient"
               Grid.Row="1"
-              Margin="5"
               DragDrop.AllowDrop="True"
               RowDefinitions="*,auto">
-            <idc:DockControl Layout="{Binding Layout}" />
+            <idc:DockControl Margin="5" Layout="{Binding Layout}" />
         </Grid>
 
         <Border Name="DragFadeMask"
                 Grid.Row="1"
-                Background="Black"
+                Background="{DynamicResource SystemAltHighColor}"
                 IsHitTestVisible="False"
                 IsVisible="False"
                 Opacity="0.7">
