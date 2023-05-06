@@ -40,7 +40,7 @@ public partial class ShellView : Window
         };
 
         PointerClient.PointerMoved += (s, e) => {
-            if (IsInResizeBorder(e, out WindowEdge edge) && !RootMenu.IsOpen) {
+            if (IsInResizeBorder(e, out WindowEdge edge) && e.Source is Border border && border.Name is "ResizeClient" or "ChromeClient" or "ChromeStack") {
                 ChromeStack.IsHitTestVisible = false;
                 Cursor = new(edge switch {
                     WindowEdge.NorthWest => StandardCursorType.TopLeftCorner,

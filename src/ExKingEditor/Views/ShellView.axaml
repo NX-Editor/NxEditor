@@ -29,7 +29,7 @@
         <Border Name="ResizeClient"
                 Grid.RowSpan="2"
                 BorderBrush="Transparent"
-                BorderThickness="5" />
+                BorderThickness="3" />
 
         <Grid Name="ChromeStack" ColumnDefinitions="Auto,Auto,*,Auto">
             <Image Width="22"
