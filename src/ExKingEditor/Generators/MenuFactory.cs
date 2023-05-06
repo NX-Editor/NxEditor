@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using ExKingEditor.Attributes;
 using ExKingEditor.Models;
+using ExKingEditor.Views;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
@@ -27,15 +28,19 @@ public class MenuFactory
         "MenuFactor-MenuItem"
     };
 
-    public static ObservableCollection<Control> Generate<T>() where T : new() => Generate(new T());
-    public static ObservableCollection<Control> Generate<T>(T model)
-    {
-        if (model == null) {
-            throw new ArgumentNullException(nameof(model), "Cannot generate menu from null object");
-        }
+    private static TopLevel? _visualRoot;
+    public static ObservableCollection<Control>? ItemsSource { get; set; }
 
+    public static void Init(TopLevel visualRoot)
+    {
+        _visualRoot = visualRoot;
+    }
+
+    public static ObservableCollection<Control> Generate<T>() => Generate<T>(default);
+    public static ObservableCollection<Control> Generate<T>(T? model)
+    {
         // Filter the ViewModel functions
-        IEnumerable<MethodInfo> functions = model.GetType().GetMethods().Where(x => x.GetCustomAttributes<MenuAttribute>().Any());
+        IEnumerable<MethodInfo> functions = typeof(T).GetMethods().Where(x => x.GetCustomAttributes<MenuAttribute>().Any());
 
         // Define a new dynamic dictionary object to
         // store the sorted menu functions
@@ -61,7 +66,10 @@ public class MenuFactory
             // and create the required dicts for
             // each "folder" in the path
             foreach (var folder in menu.Path.Split('/')) {
-                if (!dictPos.ContainsKey(folder)) dictPos.Add(folder, new Dictionary<string, dynamic>());
+                if (!dictPos.ContainsKey(folder)) {
+                    dictPos.Add(folder, new Dictionary<string, dynamic>());
+                }
+
                 dictPos = dictPos[folder];
             }
 
@@ -70,10 +78,10 @@ public class MenuFactory
             dictPos.Add(func.Name, func);
         }
 
-        return CollectChildItems(pseudoMenu, model);
+        return ItemsSource = SetChildItems(pseudoMenu, model);
     }
 
-    private static ObservableCollection<Control> CollectChildItems<T>(Dictionary<string, dynamic> data, T obj)
+    private static ObservableCollection<Control> SetChildItems<T>(Dictionary<string, dynamic> data, T? obj)
     {
         // Define the root list
         ObservableCollection<Control> itemsRoot = new();
@@ -84,9 +92,22 @@ public class MenuFactory
             if (childData is MethodInfo func) {
 
                 var menu = func.GetCustomAttribute<MenuAttribute>()!;
-                if (menu.IsSeparator) itemsRoot.Add(new Separator());
+                if (menu.IsSeparator) {
+                    itemsRoot.Add(new Separator());
+                }
 
                 KeyGesture? shortcut = string.IsNullOrEmpty(menu.HotKey) ? null : KeyGesture.Parse(menu.HotKey);
+
+                var command = ReactiveCommand.Create(() => {
+                    try {
+                        if(ShellView.MainMenu?.Any(x => x.Name == $"MenuItem__{menu.PathRoot()}") == true) {
+                            func.Invoke(obj, Array.Empty<object>());
+                        }
+                    }
+                    catch (Exception ex) {
+                        App.Log(ex, func.Name, "[ShellMenu]", -1);
+                    }
+                });
 
                 child = new() {
                     Header = menu.Name ?? func.Name,
@@ -94,11 +115,15 @@ public class MenuFactory
                     HotKey = shortcut,
                     InputGesture = shortcut!,
                     Height = (menu.Name ?? func.Name).StartsWith("_") ? 30 : double.NaN,
-                    Classes = MenuItemClasses
+                    Classes = MenuItemClasses,
+                    Command = command
                 };
 
                 if (shortcut != null) {
-                    HotKeyManager.SetHotKey(child, shortcut);
+                    _visualRoot?.KeyBindings.Add(new KeyBinding {
+                        Gesture = shortcut,
+                        Command = command
+                    });
                 }
 
                 if (func.Name == "Recent") {
@@ -117,16 +142,6 @@ public class MenuFactory
                         }
                     };
                 }
-                else {
-                    child.Command = ReactiveCommand.Create(() => {
-                        try {
-                            func.Invoke(obj, Array.Empty<object>());
-                        }
-                        catch (Exception ex) {
-                            App.Log(ex, func.Name, "[ShellMenu]", -1);
-                        }
-                    });
-                }
 
                 foreach (var cls in MenuItemClasses) {
                     child.Classes.Add(cls);
@@ -134,8 +149,9 @@ public class MenuFactory
             }
             else if (childData is Dictionary<string, dynamic> dict) {
                 child = new() {
+                    Name = $"MenuItem__{name}",
                     Header = name,
-                    ItemsSource = CollectChildItems(dict, obj),
+                    ItemsSource = SetChildItems(dict, obj),
                     Classes = TopLevelClasses
                 };
             }

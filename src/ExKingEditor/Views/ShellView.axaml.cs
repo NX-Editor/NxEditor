@@ -11,12 +11,15 @@ using System.Collections.ObjectModel;
 namespace ExKingEditor.Views;
 public partial class ShellView : Window
 {
-    public static ObservableCollection<Control> MainMenu { get; } = MenuFactory.Generate<ShellMenu>();
+    public static ObservableCollection<Control>? MainMenu { get; private set; }
     public static int MenuOverflow { get; set; } = 0;
 
     public ShellView()
     {
         InitializeComponent();
+        MenuFactory.Init(this);
+        // TODO: this is kinda stupid, refactor the MenuFactor to avoid this weird dependency injection method
+        MenuFactory.ItemsSource = MainMenu = MenuFactory.Generate<ShellMenu>();
 
         Minimize.Click += (s, e) => WindowState = WindowState.Minimized;
         Fullscreen.Click += (s, e) => WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
