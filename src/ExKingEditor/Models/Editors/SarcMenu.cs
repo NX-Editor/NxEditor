@@ -20,10 +20,12 @@ public class SarcMenu
     [Menu("Import File", "Sarc", "Ctrl + Shift + A", "fa-solid fa-file-circle-plus")]
     public async Task ImportFile()
     {
-        BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
-        if (await dialog.ShowDialog() is string path && File.Exists(path)) {
+        BrowserDialog dialog = new(BrowserMode.OpenFile, "Import Files", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
+        if (await dialog.ShowDialog(allowMultiple: true) is IEnumerable<string> paths) {
+            foreach (var path in paths.Where(File.Exists)) {
             Sarc.ImportFile(path, File.ReadAllBytes(path));
         }
+    }
     }
 
     [Menu("Import Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
