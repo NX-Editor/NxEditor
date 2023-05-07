@@ -86,11 +86,11 @@ public partial class BymlViewModel : ReactiveEditor
         base.Find();
     }
 
-    public override void FindAndReplace()
+    public override Task FindAndReplace()
     {
         Editor.SearchPanel.IsReplaceMode = true;
         Editor.SearchPanel.Open();
-        base.FindAndReplace();
+        return base.FindAndReplace();
     }
 
     public override bool HasChanged()

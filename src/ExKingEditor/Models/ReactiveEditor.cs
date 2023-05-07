@@ -68,7 +68,7 @@ public abstract unsafe class ReactiveEditor : Document
     public virtual void Paste() { }
 
     public virtual void Find() { }
-    public virtual void FindAndReplace() { }
+    public virtual Task FindAndReplace() => Task.CompletedTask;
 
     protected Span<byte> RawData()
     {
