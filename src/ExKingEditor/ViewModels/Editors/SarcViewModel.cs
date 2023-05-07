@@ -75,7 +75,7 @@ public partial class SarcViewModel : ReactiveEditor
             BrowserDialog dialog = new(BrowserMode.OpenFolder, "Save to Folder", "Any File:*.*", instanceBrowserKey: "export-sarc-folder");
             if (await dialog.ShowDialog() is string path) {
                 foreach (var node in Selected) {
-                    node.Export(path, relativeTo: node);
+                    node.Export(path, relativeTo: node.Parent);
                 }
             }
         }
