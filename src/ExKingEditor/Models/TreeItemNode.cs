@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ExKingEditor.Helpers;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 
 namespace ExKingEditor.Models;
 
@@ -29,9 +29,12 @@ public partial class TreeItemNode : ObservableObject
         _parent = parent;
     }
 
-    public void Rename()
+    public void Sort()
     {
-       IsRenaming = true;
+        Children = new(Children.OrderBy(x => x.Header));
+        foreach (var child in Children) {
+            child.Sort();
+        }
     }
 
     public string GetPath(TreeItemNode? relativeTo = null)
