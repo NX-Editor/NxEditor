@@ -28,7 +28,8 @@
               DragDrop.AllowDrop="True"
               Focusable="True"
               ItemsSource="{Binding Root.Children}"
-              SelectedItems="{Binding Selected}">
+              SelectedItems="{Binding Selected}"
+              SelectionMode="Multiple">
         <TreeView.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding Rename}"
