@@ -68,21 +68,14 @@ public partial class SarcViewModel : ReactiveEditor
         if (Selected[0].IsFile) {
             BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", "Any File:*.*", Path.GetFileName(Selected[0].Header), "export-sarc-file");
             if (await dialog.ShowDialog() is string path) {
-                using FileStream fs = File.Create(path);
-                fs.Write(Selected[0].GetData());
+                Selected[0].Export(path);
             }
         }
         else {
             BrowserDialog dialog = new(BrowserMode.OpenFolder, "Save to Folder", "Any File:*.*", instanceBrowserKey: "export-sarc-folder");
             if (await dialog.ShowDialog() is string path) {
                 foreach (var node in Selected) {
-                    var nodes = node.GetFileNodes(recursive: true);
-                    foreach (var child in nodes) {
-                        string output = Path.Combine(path, child.GetPath(relativeTo: node));
-                        Directory.CreateDirectory(output);
-                        using FileStream fs = File.Create(Path.Combine(output, child.Header));
-                        fs.Write(child.GetData());
-                    }
+                    node.Export(path, relativeTo: node);
                 }
             }
         }
@@ -133,7 +126,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         using Sarc sarc = new();
         foreach (var file in Root.GetFileNodes()) {
-            sarc.Add(file.GetPath(relativeTo: Root), file.GetData());
+            sarc.Add(file.GetPath(), file.GetData());
         }
 
         using DataHandle handle = sarc.ToBinary();
