@@ -31,6 +31,7 @@ public partial class BymlViewModel : ReactiveEditor
 
         if (path == _file) {
             _stream.Seek(0, SeekOrigin.Begin);
+            _stream.SetLength(data.Length);
             _stream.Write(data);
         }
         else {
