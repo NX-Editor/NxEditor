@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExKingEditor": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\Bin\\Totk\\Bootup.Nin_NX_NVN.pack.zs\""
+    }
+  }
+}

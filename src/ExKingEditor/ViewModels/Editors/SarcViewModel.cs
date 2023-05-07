@@ -41,6 +41,12 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public override void SelectAll()
+    {
+        View?.DropClient.SelectAll();
+        base.SelectAll();
+    }
+
     public void ImportFile(string path, ReadOnlySpan<byte> data)
     {
         string name = Path.GetFileName(path);
