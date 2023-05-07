@@ -10,10 +10,18 @@ using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Mode
 
 namespace ExKingEditor.ViewModels.Editors;
 
+
+
 public partial class SarcViewModel : ReactiveEditor
 {
-    private int _originalCount;
-    // private readonly Sarc _live;
+    public enum Change
+    {
+        Add,
+        Remove,
+        Rename
+    }
+
+    private readonly Stack<(Change change, TreeItemNode node)> _history = new();
     private readonly NodeMap _map = new();
 
     [ObservableProperty]
@@ -25,7 +33,6 @@ public partial class SarcViewModel : ReactiveEditor
     public SarcViewModel(string file) : base(file)
     {
         using Sarc sarc = Sarc.FromBinary(RawData());
-        _originalCount = sarc.Count;
 
         foreach ((var name, var sarcFile) in sarc.OrderBy(x => x.Key)) {
             AppendPathToView(name, sarcFile.AsSpan());
@@ -38,17 +45,17 @@ public partial class SarcViewModel : ReactiveEditor
         AppendPathToView(name, data);
     }
 
+    public void ImportFolder(string path)
+    {
+        foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)) {
+            ImportFile(Path.GetRelativePath(path, file), File.ReadAllBytes(file));
+        }
+    }
+
     public void Rename()
     {
         if (Selected.FirstOrDefault() is TreeItemNode node) {
             node.IsRenaming = true;
-        }
-    }
-
-    public void Remove()
-    {
-        foreach (var item in Selected) {
-            (item.Parent ?? Root).Children.Remove(item);
         }
     }
 
@@ -71,13 +78,31 @@ public partial class SarcViewModel : ReactiveEditor
                 foreach (var node in Selected) {
                     var nodes = node.GetFileNodes(recursive: true);
                     foreach (var child in nodes) {
-                        string output = Path.Combine(path, child.GetPath());
+                        string output = Path.Combine(path, child.GetPath(relativeTo: node));
                         Directory.CreateDirectory(output);
                         using FileStream fs = File.Create(Path.Combine(output, child.Header));
                         fs.Write(child.GetData());
                     }
                 }
             }
+        }
+    }
+
+    public async Task Replace()
+    {
+        if (Selected.FirstOrDefault() is TreeItemNode node && node.IsFile) {
+            BrowserDialog dialog = new(BrowserMode.OpenFile, "Replace File", "Any File:*.*", instanceBrowserKey: "replace-sarc-file");
+            if (await dialog.ShowDialog() is string path && File.Exists(path)) {
+                node.SetData(File.ReadAllBytes(path));
+            }
+        }
+    }
+
+    public void Remove()
+    {
+        foreach (var item in Selected) {
+            (item.Parent ?? Root).Children.Remove(item);
+            _history.Push((Change.Remove, item));
         }
     }
 
@@ -101,7 +126,7 @@ public partial class SarcViewModel : ReactiveEditor
 
     public override bool HasChanged()
     {
-        return true;
+        return _history.Count > 0;
     }
 
     public override void SaveAs(string path)
@@ -125,7 +150,6 @@ public partial class SarcViewModel : ReactiveEditor
             fs.Write(data);
         }
 
-        _originalCount = sarc.Count;
         ToastSaveSuccess(path);
     }
 }
