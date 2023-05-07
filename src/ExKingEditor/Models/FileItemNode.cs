@@ -4,16 +4,16 @@ using System.Reactive.Linq;
 
 namespace ExKingEditor.Models;
 
-public partial class TreeItemNode : ObservableObject
+public partial class FileItemNode : ObservableObject
 {
     [ObservableProperty]
-    private TreeItemNode? _parent;
+    private FileItemNode? _parent;
 
     [ObservableProperty]
     private string _header = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<TreeItemNode> _children = new();
+    private ObservableCollection<FileItemNode> _children = new();
 
     [ObservableProperty]
     private bool _isRenaming;
@@ -23,7 +23,7 @@ public partial class TreeItemNode : ObservableObject
 
     public bool IsFile => _len != null;
 
-    public TreeItemNode(string header, TreeItemNode? parent = null)
+    public FileItemNode(string header, FileItemNode? parent = null)
     {
         _header = header;
         _parent = parent;
@@ -37,9 +37,9 @@ public partial class TreeItemNode : ObservableObject
         }
     }
 
-    public async Task ExportAsync(string path, bool recursive = true, bool isSingleFile = false, TreeItemNode? relativeTo = null)
+    public async Task ExportAsync(string path, bool recursive = true, bool isSingleFile = false, FileItemNode? relativeTo = null)
         => await Task.Run(() => Export(path, recursive, isSingleFile, relativeTo));
-    public void Export(string path, bool recursive = true, bool isSingleFile = false, TreeItemNode? relativeTo = null)
+    public void Export(string path, bool recursive = true, bool isSingleFile = false, FileItemNode? relativeTo = null)
     {
         if (IsFile) {
             Directory.CreateDirectory(isSingleFile ? Path.GetDirectoryName(path)! : path);
@@ -53,10 +53,10 @@ public partial class TreeItemNode : ObservableObject
         }
     }
 
-    public string GetPath(TreeItemNode? relativeTo = null)
+    public string GetPath(FileItemNode? relativeTo = null)
     {
         Stack<string> parts = new();
-        TreeItemNode? parent = _parent;
+        FileItemNode? parent = _parent;
         while (parent != null && parent != relativeTo && parent.Header != "__root__") {
             parts.Push(parent.Header);
             parent = parent.Parent;
@@ -65,9 +65,9 @@ public partial class TreeItemNode : ObservableObject
         return Path.Combine(parts.ToArray());
     }
 
-    public IEnumerable<TreeItemNode> GetFileNodes(bool recursive = true)
+    public IEnumerable<FileItemNode> GetFileNodes(bool recursive = true)
     {
-        IEnumerable<TreeItemNode> result = Children.Where(x => x.IsFile);
+        IEnumerable<FileItemNode> result = Children.Where(x => x.IsFile);
         foreach (var child in Children.Where(x => !x.IsFile)) {
             result = result.Concat(child.GetFileNodes(recursive));
         }
@@ -92,8 +92,8 @@ public partial class TreeItemNode : ObservableObject
         throw new InvalidDataException("The node does not have any data!");
     }
 
-    public TreeItemNode Clone()
+    public FileItemNode Clone()
     {
-        return (TreeItemNode)MemberwiseClone();
+        return (FileItemNode)MemberwiseClone();
     }
 }

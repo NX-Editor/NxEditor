@@ -6,7 +6,7 @@ using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.Views.Editors;
 using System.Collections.ObjectModel;
-using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Models.TreeItemNode root, object map)>;
+using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Models.FileItemNode root, object map)>;
 
 namespace ExKingEditor.ViewModels.Editors;
 
@@ -21,16 +21,16 @@ public partial class SarcViewModel : ReactiveEditor
         Rename
     }
 
-    private readonly Stack<(Change change, TreeItemNode node)> _history = new();
+    private readonly Stack<(Change change, FileItemNode node)> _history = new();
     private readonly NodeMap _map = new();
 
     public SarcView? View { get; set; }
 
     [ObservableProperty]
-    private TreeItemNode _root = new("__root__");
+    private FileItemNode _root = new("__root__");
 
     [ObservableProperty]
-    private ObservableCollection<TreeItemNode> _selected = new();
+    private ObservableCollection<FileItemNode> _selected = new();
 
     public SarcViewModel(string file) : base(file)
     {
@@ -62,7 +62,7 @@ public partial class SarcViewModel : ReactiveEditor
 
     public void Rename()
     {
-        if (Selected.FirstOrDefault() is TreeItemNode node) {
+        if (Selected.FirstOrDefault() is FileItemNode node) {
             node.IsRenaming = true;
         }
     }
@@ -91,7 +91,7 @@ public partial class SarcViewModel : ReactiveEditor
 
     public async Task Replace()
     {
-        if (Selected.FirstOrDefault() is TreeItemNode node && node.IsFile) {
+        if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {
             BrowserDialog dialog = new(BrowserMode.OpenFile, "Replace File", "Any File:*.*", instanceBrowserKey: "replace-sarc-file");
             if (await dialog.ShowDialog() is string path && File.Exists(path)) {
                 node.SetData(File.ReadAllBytes(path));
@@ -110,7 +110,7 @@ public partial class SarcViewModel : ReactiveEditor
     private void AppendPathToView(string path, ReadOnlySpan<byte> data)
     {
         NodeMap map = _map;
-        TreeItemNode item = _root;
+        FileItemNode item = _root;
 
         foreach (var part in path.Replace('\\', '/').Split('/')) {
             if (!map.TryGetValue(part, out var node)) {
