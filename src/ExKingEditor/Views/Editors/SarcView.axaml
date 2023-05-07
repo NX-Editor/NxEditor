@@ -15,25 +15,58 @@
              mc:Ignorable="d">
     <UserControl.KeyBindings>
         <KeyBinding Command="{Binding Rename}" Gesture="F2" />
+        <KeyBinding Command="{Binding Root.Sort}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding Export}" Gesture="Ctrl+E" />
+        <KeyBinding Command="{Binding Replace}" Gesture="Ctrl+R" />
+        <KeyBinding Command="{Binding Remove}" Gesture="Delete" />
     </UserControl.KeyBindings>
     <TreeView Name="DropClient"
               Grid.Row="1"
               Margin="5"
               AutoScrollToSelectedItem="True"
+              Background="Transparent"
               DragDrop.AllowDrop="True"
+              Focusable="True"
               ItemsSource="{Binding Root.Children}"
               SelectedItems="{Binding Selected}">
         <TreeView.ContextMenu>
             <ContextMenu>
-                <MenuItem Command="{Binding Export}" Header="Export" />
-                <MenuItem Command="{Binding Remove}" Header="Remove" />
-                <MenuItem Command="{Binding Root.Sort}" Header="Sort" />
-                <Separator />
                 <MenuItem Command="{Binding Rename}"
                           Header="Rename"
                           InputGesture="F2">
                     <MenuItem.Icon>
                         <pi:Icon Value="fa-regular fa-pen-to-square" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Command="{Binding Root.Sort}"
+                          Header="Sort"
+                          InputGesture="Ctrl+Alt+S">
+                    <MenuItem.Icon>
+                        <pi:Icon Value="fa-solid fa-arrow-down-a-z" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Command="{Binding Export}"
+                          Header="Export"
+                          InputGesture="Ctrl+E">
+                    <MenuItem.Icon>
+                        <pi:Icon Value="fa-solid fa-arrow-right-from-bracket" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding Replace}"
+                          Header="Replace"
+                          InputGesture="Ctrl+R">
+                    <MenuItem.Icon>
+                        <pi:Icon Value="fa-solid fa-repeat" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Command="{Binding Remove}"
+                          Header="Remove"
+                          InputGesture="Delete">
+                    <MenuItem.Icon>
+                        <pi:Icon Value="fa-solid fa-trash" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
