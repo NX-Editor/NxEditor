@@ -1,6 +1,7 @@
 <UserControl x:Class="ExKingEditor.Views.Editors.SarcView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="using:ExKingEditor"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
@@ -40,18 +41,29 @@
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}">
                 <Grid>
-                    <TextBlock IsVisible="{Binding !IsRenaming}" Text="{Binding Header}" />
-                    <TextBox Name="RenameClient"
-                             AcceptsTab="False"
+                    <TextBlock HorizontalAlignment="Left"
+                               DoubleTapped="RenameDoubleTapped"
+                               IsVisible="{Binding !IsRenaming, Mode=TwoWay}"
+                               Text="{Binding Header}" />
+                    <TextBox AcceptsTab="False"
                              Classes="Inline"
                              IsVisible="{Binding IsRenaming, Mode=TwoWay}"
+                             KeyDown="RenameKeyDown"
                              Text="{Binding Header}">
                         <i:Interaction.Behaviors>
-                            <ia:DataTriggerBehavior Binding="{Binding IsRenaming}">
-                                <ia:ChangePropertyAction PropertyName="Foreground"
-                                                         TargetObject="{Binding #RenameClient}"
-                                                         Value="Red" />
+                            <ia:DataTriggerBehavior Binding="{Binding IsRenaming}"
+                                                    ComparisonCondition="Equal"
+                                                    Value="True">
+                                <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                                <ia:CallMethodAction MethodName="SelectAll" TargetObject="{Binding $parent[TextBox]}" />
+                                <ia:CallMethodAction MethodName="Focus" TargetObject="{Binding $parent[TextBox]}" />
                             </ia:DataTriggerBehavior>
+                            <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
+                                <ia:ChangePropertyAction PropertyName="IsVisible"
+                                                         TargetObject="{Binding $parent[TextBox]}"
+                                                         Value="False" />
+                                <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                            </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </Grid>

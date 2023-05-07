@@ -33,6 +33,22 @@ public partial class SarcView : UserControl
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
     }
 
+    public void RenameKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is TextBox tb && (e.Key == Key.Enter || e.Key == Key.Escape)) {
+            (tb.Parent as Grid)?.Focus();
+        }
+    }
+
+    public void RenameDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is TextBlock tb) {
+            tb.IsVisible = false;
+        }
+
+        e.Handled = true;
+    }
+
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {

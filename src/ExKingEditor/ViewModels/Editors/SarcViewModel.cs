@@ -41,7 +41,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Rename()
     {
         if (Selected.FirstOrDefault() is TreeItemNode node) {
-            node.Rename();
+            node.IsRenaming = true;
         }
     }
 
