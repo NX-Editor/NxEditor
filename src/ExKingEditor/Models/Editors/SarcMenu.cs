@@ -31,7 +31,7 @@ public class SarcMenu
     [Menu("Import Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
     public async Task ImportFolder()
     {
-        BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "import-sarc-folder");
+        BrowserDialog dialog = new(BrowserMode.OpenFolder, "Import Folder", "Any File:*.*", instanceBrowserKey: "import-sarc-folder");
         if (await dialog.ShowDialog() is string path) {
             Sarc.ImportFolder(path);
         }
