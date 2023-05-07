@@ -15,6 +15,9 @@ public partial class TreeItemNode : ObservableObject
     [ObservableProperty]
     private ObservableCollection<TreeItemNode> _children = new();
 
+    [ObservableProperty]
+    private bool _isRenaming;
+
     private nint _data;
     private int? _len;
 
@@ -24,6 +27,11 @@ public partial class TreeItemNode : ObservableObject
     {
         _header = header;
         _parent = parent;
+    }
+
+    public void Rename()
+    {
+       IsRenaming = true;
     }
 
     public string GetPath(TreeItemNode? relativeTo = null)

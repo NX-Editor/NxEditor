@@ -2,6 +2,8 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              xmlns:vm="using:ExKingEditor.ViewModels.Editors"
@@ -10,6 +12,9 @@
              x:CompileBindings="True"
              x:DataType="vm:SarcViewModel"
              mc:Ignorable="d">
+    <UserControl.KeyBindings>
+        <KeyBinding Command="{Binding Rename}" Gesture="F2" />
+    </UserControl.KeyBindings>
     <TreeView Name="DropClient"
               Grid.Row="1"
               Margin="5"
@@ -21,11 +26,35 @@
             <ContextMenu>
                 <MenuItem Command="{Binding Export}" Header="Export" />
                 <MenuItem Command="{Binding Remove}" Header="Remove" />
+                <MenuItem Command="{Binding Root.Sort}" Header="Sort" />
+                <Separator />
+                <MenuItem Command="{Binding Rename}"
+                          Header="Rename"
+                          InputGesture="F2">
+                    <MenuItem.Icon>
+                        <pi:Icon Value="fa-regular fa-pen-to-square" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
         </TreeView.ContextMenu>
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}">
-                <TextBlock Text="{Binding Header}" />
+                <Grid>
+                    <TextBlock IsVisible="{Binding !IsRenaming}" Text="{Binding Header}" />
+                    <TextBox Name="RenameClient"
+                             AcceptsTab="False"
+                             Classes="Inline"
+                             IsVisible="{Binding IsRenaming, Mode=TwoWay}"
+                             Text="{Binding Header}">
+                        <i:Interaction.Behaviors>
+                            <ia:DataTriggerBehavior Binding="{Binding IsRenaming}">
+                                <ia:ChangePropertyAction PropertyName="Foreground"
+                                                         TargetObject="{Binding #RenameClient}"
+                                                         Value="Red" />
+                            </ia:DataTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </Grid>
             </TreeDataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>

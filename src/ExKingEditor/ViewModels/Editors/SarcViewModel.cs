@@ -38,6 +38,13 @@ public partial class SarcViewModel : ReactiveEditor
         AppendPathToView(name, data);
     }
 
+    public void Rename()
+    {
+        if (Selected.FirstOrDefault() is TreeItemNode node) {
+            node.Rename();
+        }
+    }
+
     public void Remove()
     {
         foreach (var item in Selected) {
