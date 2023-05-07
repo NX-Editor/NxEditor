@@ -41,7 +41,7 @@ public partial class TreeItemNode : ObservableObject
     {
         Stack<string> parts = new();
         TreeItemNode? parent = _parent;
-        while (parent != null && parent != relativeTo) {
+        while (parent != null && parent != relativeTo && parent.Header != "__root__") {
             parts.Push(parent.Header);
             parent = parent.Parent;
         }
