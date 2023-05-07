@@ -11,6 +11,8 @@ using System.Collections.ObjectModel;
 namespace ExKingEditor.Views;
 public partial class ShellView : Window
 {
+    private List<KeyBinding>? _keyBindings;
+
     public static ObservableCollection<Control>? MainMenu { get; private set; }
     public static int MenuOverflow { get; set; } = 0;
 
@@ -63,6 +65,23 @@ public partial class ShellView : Window
         DropClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
         DropClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
+    }
+
+    public void ActivateGlobalShortcuts()
+    {
+        if (_keyBindings != null) {
+            foreach (var binding in _keyBindings) {
+                KeyBindings.Add(binding);
+            }
+        }
+
+        _keyBindings = null;
+    }
+
+    public void DisableGlobalShortcuts()
+    {
+        _keyBindings = KeyBindings;
+        KeyBindings.Clear();
     }
 
     public static void ClearOverflowMenu()
