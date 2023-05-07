@@ -68,7 +68,7 @@ public partial class SarcViewModel : ReactiveEditor
         if (Selected[0].IsFile) {
             BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", "Any File:*.*", Path.GetFileName(Selected[0].Header), "export-sarc-file");
             if (await dialog.ShowDialog() is string path) {
-                Selected[0].Export(path);
+                Selected[0].Export(path, isSingleFile: true);
             }
         }
         else {

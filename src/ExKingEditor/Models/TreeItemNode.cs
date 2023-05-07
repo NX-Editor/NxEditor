@@ -37,16 +37,16 @@ public partial class TreeItemNode : ObservableObject
         }
     }
 
-    public void Export(string path, bool recursive = true, TreeItemNode? relativeTo = null)
+    public void Export(string path, bool recursive = true, bool isSingleFile = false, TreeItemNode? relativeTo = null)
     {
         if (IsFile) {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            using FileStream fs = File.Create(path);
+            Directory.CreateDirectory(isSingleFile ? Path.GetDirectoryName(path)! : path);
+            using FileStream fs = File.Create(isSingleFile ? path : Path.Combine(path, Header));
             fs.Write(GetData());
         }
         else {
             foreach (var file in GetFileNodes(recursive)) {
-                file.Export(Path.Combine(path, file.GetPath(relativeTo), file.Header));
+                file.Export(Path.Combine(path, file.GetPath(relativeTo)));
             }
         }
     }
