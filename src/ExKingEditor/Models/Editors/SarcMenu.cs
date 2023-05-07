@@ -21,14 +21,26 @@ public class SarcMenu
     public async Task ImportFile()
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
-        if (await dialog.ShowDialog() is string path) {
+        if (await dialog.ShowDialog() is string path && File.Exists(path)) {
             Sarc.ImportFile(path, File.ReadAllBytes(path));
         }
     }
 
     [Menu("Import Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
-    public void ImportFolder()
+    public async Task ImportFolder()
     {
-        App.Log("Import Folder");
+        BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "import-sarc-folder");
+        if (await dialog.ShowDialog() is string path) {
+            Sarc.ImportFolder(path);
+        }
+    }
+
+    [Menu("Export All", "Sarc", "Ctrl + Shift + E", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
+    public async Task ExportAll()
+    {
+        BrowserDialog dialog = new(BrowserMode.OpenFolder, "Open Folder", instanceBrowserKey: "export-all-sarc-folder");
+        if (await dialog.ShowDialog() is string path) {
+            // do the thing
+        }
     }
 }
