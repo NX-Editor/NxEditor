@@ -43,7 +43,7 @@ public class SarcMenu
         BrowserDialog dialog = new(BrowserMode.OpenFolder, "Open Folder", instanceBrowserKey: "export-all-sarc-folder");
         if (await dialog.ShowDialog() is string path) {
             // TODO: use loading modal
-            await Task.Run(() => Sarc.Root.Export(path));
+            await Sarc.Root.ExportAsync(path);
             App.Toast("Files exported sucessfully!", type: Avalonia.Controls.Notifications.NotificationType.Success);
         }
     }

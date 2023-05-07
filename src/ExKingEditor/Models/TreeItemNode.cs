@@ -37,6 +37,8 @@ public partial class TreeItemNode : ObservableObject
         }
     }
 
+    public async Task ExportAsync(string path, bool recursive = true, bool isSingleFile = false, TreeItemNode? relativeTo = null)
+        => await Task.Run(() => Export(path, recursive, isSingleFile, relativeTo));
     public void Export(string path, bool recursive = true, bool isSingleFile = false, TreeItemNode? relativeTo = null)
     {
         if (IsFile) {
