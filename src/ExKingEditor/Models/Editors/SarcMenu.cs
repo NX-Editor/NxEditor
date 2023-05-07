@@ -23,9 +23,9 @@ public class SarcMenu
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Import Files", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
         if (await dialog.ShowDialog(allowMultiple: true) is IEnumerable<string> paths) {
             foreach (var path in paths.Where(File.Exists)) {
-            Sarc.ImportFile(path, File.ReadAllBytes(path));
+                Sarc.ImportFile(path, File.ReadAllBytes(path));
+            }
         }
-    }
     }
 
     [Menu("Import Folder", "Sarc", "Ctrl + Shift + F", "fa-solid fa-folder-plus")]
@@ -42,7 +42,8 @@ public class SarcMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFolder, "Open Folder", instanceBrowserKey: "export-all-sarc-folder");
         if (await dialog.ShowDialog() is string path) {
-            Sarc.Root.Export(path);
+            // TODO: use loading modal
+            await Task.Run(() => Sarc.Root.Export(path));
             App.Toast("Files exported sucessfully!", type: Avalonia.Controls.Notifications.NotificationType.Success);
         }
     }
