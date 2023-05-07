@@ -37,6 +37,20 @@ public partial class TreeItemNode : ObservableObject
         }
     }
 
+    public void Export(string path, bool recursive = true, TreeItemNode? relativeTo = null)
+    {
+        if (IsFile) {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            using FileStream fs = File.Create(path);
+            fs.Write(GetData());
+        }
+        else {
+            foreach (var file in GetFileNodes(recursive)) {
+                file.Export(Path.Combine(path, file.GetPath(relativeTo), file.Header));
+            }
+        }
+    }
+
     public string GetPath(TreeItemNode? relativeTo = null)
     {
         Stack<string> parts = new();
