@@ -1,10 +1,10 @@
-﻿using AvaloniaEdit.Editing;
-using Cead;
+﻿using Cead;
 using Cead.Handles;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExKingEditor.Core;
 using ExKingEditor.Helpers;
 using ExKingEditor.Models;
+using ExKingEditor.Views.Editors;
 using System.Collections.ObjectModel;
 using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Models.TreeItemNode root, object map)>;
 
@@ -23,6 +23,8 @@ public partial class SarcViewModel : ReactiveEditor
 
     private readonly Stack<(Change change, TreeItemNode node)> _history = new();
     private readonly NodeMap _map = new();
+
+    public SarcView? View { get; set; }
 
     [ObservableProperty]
     private TreeItemNode _root = new("__root__");

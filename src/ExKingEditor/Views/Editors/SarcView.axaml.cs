@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
@@ -69,5 +70,11 @@ public partial class SarcView : UserControl
     public void DragLeaveEvent(object? sender, DragEventArgs e)
     {
         DragDrop.SetAllowDrop(App.Desktop!.DropClient, true);
+    }
+
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        (DataContext as SarcViewModel)!.View = this;
+        base.OnDataContextChanged(e);
     }
 }
