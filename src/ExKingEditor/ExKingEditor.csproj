@@ -33,12 +33,13 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Xaml.Interactions" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview6" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0-preview6" />
     <PackageReference Include="AvaloniaSettingsFactory" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0-preview6" />
     <PackageReference Include="Dock.Serializer" Version="11.0.0-preview6" />
-    <PackageReference Include="FluentAvaloniaUI" Version="2.0.0-preview6" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="6.6.0-preview6" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="6.6.0-preview6" />
   </ItemGroup>
@@ -47,5 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Using Include="ReactiveUI" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\Dialogs\ContentDialogView.axaml.cs">
+      <DependentUpon>ContentDialogView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
