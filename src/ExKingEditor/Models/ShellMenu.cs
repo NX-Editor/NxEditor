@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using ExKingEditor.Attributes;
 using ExKingEditor.Core;
 using ExKingEditor.Core.Extensions;
@@ -129,7 +130,7 @@ public class ShellMenu
         await BrowserExtension.OpenUrl(Logger.LogsPath);
     }
 
-    [Menu("Clear Logs Folder", "Tools", icon: "fa-solid fa-file-circle-xmark")]
+    [Menu("Clear Logs Folder", "Tools", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
     public static void ClearLogsFolder()
     {
         foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.log")) {
@@ -138,6 +139,7 @@ public class ShellMenu
             }
         }
 
+        App.Toast("Logs folder cleared successfully", "Clear Logs Folder", NotificationType.Success);
     }
 
     [Menu("Clear Editor Cache", "Tools", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
