@@ -11,9 +11,9 @@ public class TotkZstd
     private static readonly Decompressor _mapDecompressor = new();
     private static readonly Decompressor _packDecompressor = new();
 
-    private static readonly Compressor _commonCompressor = new(15);
-    private static readonly Compressor _mapCompressor = new(15);
-    private static readonly Compressor _packCompressor = new(15);
+    private static readonly Compressor _commonCompressor = new(16);
+    private static readonly Compressor _mapCompressor = new(16);
+    private static readonly Compressor _packCompressor = new(16);
 
     static TotkZstd()
     {
