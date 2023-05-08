@@ -8,6 +8,7 @@ namespace ExKingEditor.Models;
 public abstract unsafe class ReactiveEditor : Document
 {
     protected readonly string _file;
+    protected readonly string _temp;
     protected bool _compressed;
     protected readonly FileStream _stream;
 
@@ -23,6 +24,11 @@ public abstract unsafe class ReactiveEditor : Document
 
         _file = file;
         _compressed = file.EndsWith(".zs");
+
+        // Create temp directory
+        _temp = Directory.CreateDirectory(
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", Path.GetFileName(file), Guid.NewGuid().ToString())
+        ).FullName;
 
         // keep the file open until the
         // tab closes
@@ -51,6 +57,7 @@ public abstract unsafe class ReactiveEditor : Document
             return false;
         }
 
+        Directory.Delete(_temp, true);
         _stream.Close();
         return true;
     }
