@@ -74,7 +74,10 @@ public partial class SarcView : UserControl
 
     protected override void OnDataContextChanged(EventArgs e)
     {
-        (DataContext as SarcViewModel)!.View = this;
+        if (DataContext is SarcViewModel vm) {
+            vm.View = this;
+        }
+
         base.OnDataContextChanged(e);
     }
 }
