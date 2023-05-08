@@ -12,7 +12,7 @@
              mc:Ignorable="d">
     <Grid>
         <Border Name="FadeMask"
-                Background="{DynamicResource SystemAltHighColor}"
+                Background="Black"
                 Opacity="0.3" />
         <Border Name="DialogClient"
                 HorizontalAlignment="Center"
@@ -20,7 +20,7 @@
                 Background="{DynamicResource SystemChromeLowColor}"
                 BorderBrush="{DynamicResource SystemChromeMediumColor}"
                 BorderThickness="1"
-                BoxShadow="2 2 25 1 Black"
+                BoxShadow="2 2 15 1 #50000000"
                 CornerRadius="3">
             <StackPanel Margin="15" Spacing="10">
                 <TextBlock FontSize="16"
