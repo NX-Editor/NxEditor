@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 namespace ExKingEditor.Views;
 public partial class ShellView : Window
 {
-    private List<KeyBinding>? _keyBindings;
+    private KeyBinding[]? _keyBindings;
 
     public static ObservableCollection<Control>? MainMenu { get; private set; }
     public static int MenuOverflow { get; set; } = 0;
@@ -80,7 +80,7 @@ public partial class ShellView : Window
 
     public void DisableGlobalShortcuts()
     {
-        _keyBindings = KeyBindings;
+        _keyBindings = KeyBindings.ToArray();
         KeyBindings.Clear();
     }
 
