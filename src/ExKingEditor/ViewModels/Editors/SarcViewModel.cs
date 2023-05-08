@@ -94,7 +94,7 @@ public partial class SarcViewModel : ReactiveEditor
 
     public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
     {
-        if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data) is FileItemNode node) {
+        if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
             Selected.Add(node);
         }
     }
@@ -162,7 +162,7 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
-    private FileItemNode? CreateNodeFromPath(string path, ReadOnlySpan<byte> data)
+    private FileItemNode? CreateNodeFromPath(string path, ReadOnlySpan<byte> data, bool expandParentTree = false)
     {
         NodeMap map = _map;
         FileItemNode item = _root;
@@ -175,6 +175,11 @@ public partial class SarcViewModel : ReactiveEditor
 
             item = node.root;
             map = (NodeMap)node.map;
+
+            if (expandParentTree) {
+                item.IsExpanded = true;
+                Selected.Add(item);
+            }
         }
 
         item?.SetData(data);
