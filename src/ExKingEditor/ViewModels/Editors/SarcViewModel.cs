@@ -78,8 +78,13 @@ public partial class SarcViewModel : ReactiveEditor
     public override async Task Paste()
     {
         if (await Application.Current!.Clipboard!.GetDataAsync("Files") is IEnumerable<IStorageItem> files) {
-            foreach (var file in files.Select(x => x.Path.LocalPath)) {
-                ImportFile(file, File.ReadAllBytes(file));
+            foreach (var path in files.Select(x => x.Path.LocalPath)) {
+                if (File.Exists(path)) {
+                    ImportFile(path, File.ReadAllBytes(path));
+                }
+                else if (Directory.Exists(path)) {
+                    ImportFolder(path);
+                }
             }
         }
 
