@@ -24,6 +24,13 @@ public partial class LogsViewModel : Document
 
     public void AddLog(string message)
     {
+        // Ignore avalonia errors
+        if (message.Contains("[Visual]") == true || message.Contains("[Binding]") == true) {
+            // Write to the system console
+            Console.WriteLine(message);
+            return;
+        }
+
         int idx = message.LastIndexOf('|');
         if (idx >= 0) {
             string meta = message[..idx];

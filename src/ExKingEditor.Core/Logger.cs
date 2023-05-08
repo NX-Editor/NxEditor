@@ -24,17 +24,8 @@ public static class Logger
 
     public static void Write(object obj, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
     {
-        string? message = obj.ToString();
-
-        // Ignore avalonia errors
-        if (message is string str && !(str[..str.IndexOf(']')] is "[Visual" or "[Binding")) {
-            // Write to the system console
-            Console.WriteLine(message);
-            return;
-        }
-
         string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}] | \"{Path.GetRelativePath(SourceRoot, filepath)}\":{lineNumber} | ";
-        Trace.WriteLine($"{meta}{message?.Replace("\n", $"\n{new string(' ', meta.Length)}")}".Replace('\\', '/'));
+        Trace.WriteLine($"{meta}{obj.ToString()?.Replace("\n", $"\n{new string(' ', meta.Length)}")}".Replace('\\', '/'));
     }
 
     public static void SetTraceListener(TraceListener listener, int? pos = null)
