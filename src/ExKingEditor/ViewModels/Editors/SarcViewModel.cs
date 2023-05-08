@@ -94,8 +94,9 @@ public partial class SarcViewModel : ReactiveEditor
 
     public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
     {
-        string name = Path.GetFileName(path);
-        AppendPathToView(name, data);
+        if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data) is FileItemNode node) {
+            Selected.Add(node);
+        }
     }
 
     public void ImportFolder(string path, bool importTopLevel = false)
