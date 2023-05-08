@@ -70,9 +70,9 @@ public abstract unsafe class ReactiveEditor : Document
     public virtual void Redo() { }
 
     public virtual void SelectAll() { }
-    public virtual void Cut() { }
-    public virtual void Copy() { }
-    public virtual void Paste() { }
+    public virtual Task Cut() => Task.CompletedTask;
+    public virtual Task Copy() => Task.CompletedTask;
+    public virtual Task Paste() => Task.CompletedTask;
 
     public virtual void Find() { }
     public virtual Task FindAndReplace() => Task.CompletedTask;

@@ -62,22 +62,22 @@ public partial class BymlViewModel : ReactiveEditor
         base.SelectAll();
     }
 
-    public override void Cut()
+    public override Task Cut()
     {
         Editor.Cut();
-        base.Cut();
+        return base.Cut();
     }
 
-    public override void Copy()
+    public override Task Copy()
     {
         Editor.Copy();
-        base.Copy();
+        return base.Copy();
     }
 
-    public override void Paste()
+    public override Task Paste()
     {
         Editor.Paste();
-        base.Paste();
+        return base.Paste();
     }
 
     public override void Find()
