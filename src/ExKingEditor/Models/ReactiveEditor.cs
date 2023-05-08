@@ -7,6 +7,8 @@ namespace ExKingEditor.Models;
 
 public abstract unsafe class ReactiveEditor : Document
 {
+    public static List<ReactiveEditor> OpenEditors { get; } = new();
+
     protected readonly string _file;
     protected readonly string _temp;
     protected bool _compressed;
@@ -45,6 +47,8 @@ public abstract unsafe class ReactiveEditor : Document
         fixed (byte* ptr = data) {
             _data = ptr;
         }
+
+        OpenEditors.Add(this);
     }
 
     public override bool OnClose()
@@ -57,8 +61,7 @@ public abstract unsafe class ReactiveEditor : Document
             return false;
         }
 
-        Directory.Delete(_temp, true);
-        _stream.Close();
+        Dispose();
         return true;
     }
 
@@ -87,5 +90,12 @@ public abstract unsafe class ReactiveEditor : Document
         App.Toast(
             $"Saved {(_compressed ? "and compressed " : "")}{Path.GetFileName(path)}", "Success",
             NotificationType.Success, TimeSpan.FromSeconds(1.2));
+    }
+
+    public void Dispose()
+    {
+        OpenEditors.Remove(this);
+        Directory.Delete(_temp, true);
+        _stream.Close();
     }
 }

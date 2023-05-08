@@ -10,6 +10,7 @@ using ExKingEditor.Generators;
 using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace ExKingEditor;
@@ -53,6 +54,12 @@ public partial class App : Application
                     }
                 });
             }
+
+            desktop.MainWindow.Closed += (s, e) => {
+                foreach (var editor in ReactiveEditor.OpenEditors) {
+                    editor.Dispose();
+                }
+            };
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
