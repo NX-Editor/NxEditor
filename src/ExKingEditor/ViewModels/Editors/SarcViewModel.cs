@@ -44,6 +44,52 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public override void SaveAs(string path)
+    {
+        using Sarc sarc = new();
+        foreach (var file in Root.GetFileNodes()) {
+            sarc.Add(Path.Combine(file.GetPath(), file.Header).Replace(Path.DirectorySeparatorChar, '/'), file.GetData());
+        }
+
+        using DataHandle handle = sarc.ToBinary();
+
+        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
+
+        if (path == _file) {
+            _stream.Seek(0, SeekOrigin.Begin);
+            _stream.SetLength(data.Length);
+            _stream.Write(data);
+        }
+        else {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            using FileStream fs = File.Create(path);
+            fs.Write(data);
+        }
+
+        ToastSaveSuccess(path);
+    }
+
+    public override bool HasChanged()
+    {
+        return _history.Count > 0;
+    }
+
+    public override void Undo()
+    {
+        base.Undo();
+    }
+
+    public override void Redo()
+    {
+        base.Redo();
+    }
+
+    public override void SelectAll()
+    {
+        View?.DropClient.SelectAll();
+        base.SelectAll();
+    }
+
     public override async Task Cut()
     {
         await Copy();
@@ -91,10 +137,14 @@ public partial class SarcViewModel : ReactiveEditor
         await base.Paste();
     }
 
-    public override void SelectAll()
+    public override void Find()
     {
-        View?.DropClient.SelectAll();
-        base.SelectAll();
+        base.Find();
+    }
+
+    public override Task FindAndReplace()
+    {
+        return base.FindAndReplace();
     }
 
     public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
@@ -205,35 +255,5 @@ public partial class SarcViewModel : ReactiveEditor
         key ??= node.Header;
         map.Remove(key);
         return map;
-    }
-
-    public override bool HasChanged()
-    {
-        return _history.Count > 0;
-    }
-
-    public override void SaveAs(string path)
-    {
-        using Sarc sarc = new();
-        foreach (var file in Root.GetFileNodes()) {
-            sarc.Add(Path.Combine(file.GetPath(), file.Header).Replace(Path.DirectorySeparatorChar, '/'), file.GetData());
-        }
-
-        using DataHandle handle = sarc.ToBinary();
-
-        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
-
-        if (path == _file) {
-            _stream.Seek(0, SeekOrigin.Begin);
-            _stream.SetLength(data.Length);
-            _stream.Write(data);
-        }
-        else {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            using FileStream fs = File.Create(path);
-            fs.Write(data);
-        }
-
-        ToastSaveSuccess(path);
     }
 }
