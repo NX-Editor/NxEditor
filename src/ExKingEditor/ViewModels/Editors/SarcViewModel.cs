@@ -41,6 +41,34 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public override async Task Copy()
+    {
+        DataObject obj = new();
+
+        // Sorry to anyone trying
+        // to read this mess
+        // 
+        // TODO: Document this
+        IEnumerable<string> paths = Selected
+            .Select(parent => parent.GetFileNodes()
+                .Select(x => {
+                    string file = Path.Combine(_temp, x.GetPath(parent.Parent), x.Header);
+                    x.Export(file, isSingleFile: true);
+
+                    return parent.IsFile ? file : Path.Combine(_temp,
+                        Path.Combine(x.GetPath(parent.Parent), x.Header).Split(Path.DirectorySeparatorChar).First());
+                }
+            ))
+            .Aggregate((current, next) => current.Concat(next))
+            .Distinct();
+
+        obj.Set("Files", CF_HDROP.Build(paths));
+        obj.Set("FileName", @"D:\Bin\Totk\Dummy.root.asb"u8.ToArray());
+        obj.Set("FileNameW", @"D:\Bin\Totk\Dummy.root.asb");
+
+        await Application.Current!.Clipboard!.SetDataObjectAsync(obj);
+        await base.Copy();
+    }
     public override void SelectAll()
     {
         View?.DropClient.SelectAll();
