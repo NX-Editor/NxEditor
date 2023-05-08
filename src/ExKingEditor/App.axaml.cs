@@ -56,8 +56,8 @@ public partial class App : Application
             }
 
             desktop.MainWindow.Closed += (s, e) => {
-                foreach (var editor in ReactiveEditor.OpenEditors) {
-                    editor.Dispose();
+                for (int i = 0; i < ReactiveEditor.OpenEditors.Count; i++) {
+                    ReactiveEditor.OpenEditors[i].Dispose();
                 }
             };
 
