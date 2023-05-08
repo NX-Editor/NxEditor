@@ -7,6 +7,8 @@ namespace ExKingEditor.Models;
 
 public abstract unsafe class ReactiveEditor : Document
 {
+    public static string CacheDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", "ExKing.ReactiveEditor");
+
     public static List<ReactiveEditor> OpenEditors { get; } = new();
 
     protected readonly string _file;
@@ -28,8 +30,7 @@ public abstract unsafe class ReactiveEditor : Document
         _compressed = file.EndsWith(".zs");
 
         // Create temp directory
-        _temp = Directory.CreateDirectory(
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", Path.GetFileName(file), Guid.NewGuid().ToString())
+        _temp = Directory.CreateDirectory(Path.Combine(CacheDirectory, Path.GetFileName(file), Guid.NewGuid().ToString())
         ).FullName;
 
         // keep the file open until the

@@ -137,6 +137,17 @@ public class ShellMenu
                 File.Delete(file);
             }
         }
+
+    }
+
+    [Menu("Clear Editor Cache", "Tools", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
+    public static void ClearEditorCache()
+    {
+        if (Directory.Exists(ReactiveEditor.CacheDirectory)) {
+            Directory.Delete(ReactiveEditor.CacheDirectory, true);
+        }
+
+        App.Toast("Editor cache cleared successfully", "Clear Editor Cache", NotificationType.Success);
     }
 
     // 
