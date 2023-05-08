@@ -28,7 +28,7 @@
               DragDrop.AllowDrop="True"
               Focusable="True"
               ItemsSource="{Binding Root.Children}"
-              SelectedItems="{Binding Selected}"
+              SelectedItems="{Binding Selected, Mode=TwoWay}"
               SelectionMode="Multiple">
         <TreeView.ContextMenu>
             <ContextMenu>
@@ -93,11 +93,26 @@
                                 <ia:CallMethodAction MethodName="Focus" TargetObject="{Binding $parent[TextBox]}" />
                             </ia:DataTriggerBehavior>
                             <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
+                                <ia:CallMethodAction MethodName="Rename" TargetObject="{Binding $parent[UserControl].DataContext}" />
                                 <ia:ChangePropertyAction PropertyName="IsVisible"
                                                          TargetObject="{Binding $parent[TextBox]}"
                                                          Value="False" />
                                 <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
                             </ia:EventTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
+                                                    ComparisonCondition="Equal"
+                                                    Value="True">
+                                <ia:ChangePropertyAction PropertyName="IsExpanded"
+                                                         TargetObject="{Binding $parent[TreeViewItem]}"
+                                                         Value="{Binding !IsFile}" />
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
+                                                    ComparisonCondition="Equal"
+                                                    Value="False">
+                                <ia:ChangePropertyAction PropertyName="IsExpanded"
+                                                         TargetObject="{Binding $parent[TreeViewItem]}"
+                                                         Value="{Binding !IsFile}" />
+                            </ia:DataTriggerBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </Grid>

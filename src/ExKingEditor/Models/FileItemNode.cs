@@ -18,6 +18,9 @@ public partial class FileItemNode : ObservableObject
     [ObservableProperty]
     private bool _isRenaming;
 
+    [ObservableProperty]
+    private bool _isExpanded;
+
     private nint _data;
     private int? _len;
 
