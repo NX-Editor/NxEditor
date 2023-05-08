@@ -110,8 +110,16 @@ public partial class SarcViewModel : ReactiveEditor
     public void Rename()
     {
         if (Selected.FirstOrDefault() is FileItemNode node) {
+            if (node.IsRenaming && node.PrevName != null) {
+                NodeMap map = RemoveNodeFromMap(node, node.PrevName);
+                map[node.Header] = (node, new NodeMap());
+                node.PrevName = null;
+            }
+            else {
+                node.PrevName = node.Header;
             node.IsRenaming = true;
         }
+    }
     }
 
     public async Task Export()

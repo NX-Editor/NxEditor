@@ -22,6 +22,7 @@ public partial class FileItemNode : ObservableObject
     private int? _len;
 
     public bool IsFile => _len != null;
+    public string? PrevName { get; set; }
 
     public FileItemNode(string header, FileItemNode? parent = null)
     {
