@@ -148,7 +148,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         foreach (var item in Selected) {
             (item.Parent ?? Root).Children.Remove(item);
-            _history.Push((Change.Remove, item));
+            RemoveNodeFromMap(item);
         }
     }
 
@@ -168,6 +168,18 @@ public partial class SarcViewModel : ReactiveEditor
         }
 
         item?.SetData(data);
+    }
+
+    private NodeMap RemoveNodeFromMap(FileItemNode node, string? key = null)
+    {
+        NodeMap map = _map;
+        foreach (var part in node.GetPathParts()) {
+            map = (NodeMap)map[part].map;
+        }
+
+        key ??= node.Header;
+        map.Remove(key);
+        return map;
     }
 
     public override bool HasChanged()
