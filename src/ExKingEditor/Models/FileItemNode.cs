@@ -67,9 +67,15 @@ public partial class FileItemNode : ObservableObject
 
     public IEnumerable<FileItemNode> GetFileNodes(bool recursive = true)
     {
-        IEnumerable<FileItemNode> result = Children.Where(x => x.IsFile);
-        foreach (var child in Children.Where(x => !x.IsFile)) {
-            result = result.Concat(child.GetFileNodes(recursive));
+        IEnumerable<FileItemNode> result;
+        if (!IsFile) {
+            result = Children.Where(x => x.IsFile);
+            foreach (var child in Children.Where(x => !x.IsFile)) {
+                result = result.Concat(child.GetFileNodes(recursive));
+            }
+        }
+        else {
+            result = new FileItemNode[1] { this };
         }
 
         return result;
