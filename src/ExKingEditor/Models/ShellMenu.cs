@@ -81,25 +81,19 @@ public class ShellMenu
     [Menu("Cut", "Edit", "Ctrl + X", "fa-solid fa-scissors", IsSeparator = true)]
     public static async Task Cut()
     {
-        if (EditorMgr.Current?.Cut() is Task task) {
-            await task;
-        }
+        await (EditorMgr.Current?.Cut()).SafeInvoke();
     }
 
     [Menu("Copy", "Edit", "Ctrl + C", "fa-solid fa-copy")]
     public static async Task Copy()
     {
-        if (EditorMgr.Current?.Copy() is Task task) {
-            await task;
-        }
+        await (EditorMgr.Current?.Copy()).SafeInvoke();
     }
 
     [Menu("Paste", "Edit", "Ctrl + V", "fa-solid fa-paste")]
     public static async Task Paste()
     {
-        if (EditorMgr.Current?.Paste() is Task task) {
-            await task;
-        }
+        await (EditorMgr.Current?.Paste()).SafeInvoke();
     }
 
     [Menu("Find", "Edit", "Ctrl + F", "fa-solid fa-magnifying-glass", IsSeparator = true)]
@@ -111,9 +105,7 @@ public class ShellMenu
     [Menu("Find & Replace", "Edit", "Ctrl + H", "fa-solid fa-arrows-turn-to-dots")]
     public static async Task FindAndReplace()
     {
-        if (EditorMgr.Current?.FindAndReplace() is Task task) {
-            await task;
-        }
+        await (EditorMgr.Current?.FindAndReplace()).SafeInvoke();
     }
 
     // 
