@@ -1,10 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Cead;
 using Cead.Handles;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExKingEditor.Core;
-using ExKingEditor.Core.Windows;
 using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.Views.Editors;
@@ -55,25 +55,21 @@ public partial class SarcViewModel : ReactiveEditor
     {
         DataObject obj = new();
 
-        // Sorry to anyone trying
-        // to read this mess
-        // 
-        // TODO: Document this
-        IEnumerable<string> paths = Selected
-            .Select(parent => parent.GetFileNodes()
-                .Select(x => {
-                    string file = Path.Combine(_temp, x.GetPath(), x.Header);
-                    x.Export(file, isSingleFile: true);
+        List<IStorageItem?> payload = new();
+        IStorageProvider storageProvider = App.VisualRoot!.StorageProvider;
+        foreach (var node in Selected) {
+            foreach (var file in node.GetFileNodes()) {
+                string path = Path.Combine(_temp, file.GetPath(), file.Header);
+                file.Export(path, isSingleFile: true);
 
-                    return parent.IsFile ? file : Path.Combine(_temp, parent.GetPath(), parent.Header);
+                payload.Add(node.IsFile
+                    ? await storageProvider.TryGetFileFromPathAsync(path)
+                    : await storageProvider.TryGetFolderFromPathAsync(Path.Combine(_temp, node.GetPath(), node.Header))
+                );
                 }
-            ))
-            .Aggregate((current, next) => current.Concat(next))
-            .Distinct();
+        }
 
-        obj.Set("Files", CF_HDROP.Build(paths));
-        obj.Set("FileName", @"D:\Bin\Totk\Dummy.root.asb"u8.ToArray());
-        obj.Set("FileNameW", @"D:\Bin\Totk\Dummy.root.asb");
+        obj.Set("Files", payload.DistinctBy(x => x?.Path));
 
         await Application.Current!.Clipboard!.SetDataObjectAsync(obj);
         await base.Copy();
