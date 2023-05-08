@@ -100,7 +100,7 @@ public class MenuFactory
 
                 var command = ReactiveCommand.Create(() => {
                     try {
-                        if(ShellView.MainMenu?.Any(x => x.Name == $"MenuItem__{menu.PathRoot()}") == true) {
+                        if (ShellView.MainMenu?.Any(x => x.Name == $"MenuItem__{menu.PathRoot()}") == true) {
                             func.Invoke(obj, Array.Empty<object>());
                         }
                     }

@@ -1,7 +1,10 @@
-﻿using Cead;
+﻿using Avalonia;
+using Avalonia.Input;
+using Cead;
 using Cead.Handles;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExKingEditor.Core;
+using ExKingEditor.Core.Windows;
 using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.Views.Editors;
