@@ -24,7 +24,7 @@ public partial class SarcViewModel : ReactiveEditor
         Rename
     }
 
-    private readonly Stack<(Change change, FileItemNode node)> _history = new();
+    private readonly Stack<(Change change, FileItemNode[] nodes)> _history = new();
     private readonly NodeMap _map = new();
 
     public SarcView? View { get; set; }
@@ -66,7 +66,7 @@ public partial class SarcViewModel : ReactiveEditor
                     ? await storageProvider.TryGetFileFromPathAsync(path)
                     : await storageProvider.TryGetFolderFromPathAsync(Path.Combine(_temp, node.GetPath(), node.Header))
                 );
-                }
+            }
         }
 
         obj.Set("Files", payload.DistinctBy(x => x?.Path));
@@ -122,9 +122,9 @@ public partial class SarcViewModel : ReactiveEditor
             }
             else {
                 node.PrevName = node.Header;
-            node.IsRenaming = true;
+                node.IsRenaming = true;
+            }
         }
-    }
     }
 
     public async Task Export()
@@ -161,6 +161,10 @@ public partial class SarcViewModel : ReactiveEditor
 
     public void Remove()
     {
+        if (Selected.Any()) {
+            _history.Push((Change.Remove, Selected.ToArray()));
+        }
+
         foreach (var item in Selected) {
             (item.Parent ?? Root).Children.Remove(item);
             RemoveNodeFromMap(item);
