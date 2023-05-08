@@ -20,6 +20,8 @@ public readonly struct CF_HDROP
             unicode.AddRange(Encoding.Unicode.GetBytes(path + '\0'));
         }
 
+        unicode.Add((byte)'\0');
+
         int size = Marshal.SizeOf<CF_HDROP>();
         byte[] data = new byte[size + unicode.Count];
         nint ptr = nint.Zero;
