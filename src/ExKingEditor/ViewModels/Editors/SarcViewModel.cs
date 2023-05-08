@@ -52,11 +52,10 @@ public partial class SarcViewModel : ReactiveEditor
         IEnumerable<string> paths = Selected
             .Select(parent => parent.GetFileNodes()
                 .Select(x => {
-                    string file = Path.Combine(_temp, x.GetPath(parent.Parent), x.Header);
+                    string file = Path.Combine(_temp, x.GetPath(), x.Header);
                     x.Export(file, isSingleFile: true);
 
-                    return parent.IsFile ? file : Path.Combine(_temp,
-                        Path.Combine(x.GetPath(parent.Parent), x.Header).Split(Path.DirectorySeparatorChar).First());
+                    return parent.IsFile ? file : Path.Combine(_temp, parent.GetPath(), parent.Header);
                 }
             ))
             .Aggregate((current, next) => current.Concat(next))
