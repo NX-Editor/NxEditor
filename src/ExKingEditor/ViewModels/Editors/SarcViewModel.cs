@@ -78,6 +78,18 @@ public partial class SarcViewModel : ReactiveEditor
         await Application.Current!.Clipboard!.SetDataObjectAsync(obj);
         await base.Copy();
     }
+
+    public override async Task Paste()
+    {
+        if (await Application.Current!.Clipboard!.GetDataAsync("Files") is IEnumerable<IStorageItem> files) {
+            foreach (var file in files.Select(x => x.Path.LocalPath)) {
+                ImportFile(file, File.ReadAllBytes(file));
+            }
+        }
+
+        await base.Paste();
+    }
+
     public override void SelectAll()
     {
         View?.DropClient.SelectAll();
