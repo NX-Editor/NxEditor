@@ -53,8 +53,15 @@ public partial class SarcView : UserControl
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
-            foreach (var path in paths.Select(x => x.Path.LocalPath).Where(File.Exists)) {
-                (DataContext as SarcViewModel)?.ImportFile(path, File.ReadAllBytes(path));
+            foreach (var path in paths.Select(x => x.Path.LocalPath)) {
+                if (DataContext is SarcViewModel vm) {
+                    if (File.Exists(path)) {
+                        vm.ImportFile(path, File.ReadAllBytes(path));
+                    }
+                    else {
+                        vm.ImportFolder(path, importTopLevel: true);
+                    }
+                }
             }
         }
 

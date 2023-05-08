@@ -92,16 +92,17 @@ public partial class SarcViewModel : ReactiveEditor
         base.SelectAll();
     }
 
-    public void ImportFile(string path, ReadOnlySpan<byte> data)
+    public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
     {
         string name = Path.GetFileName(path);
         AppendPathToView(name, data);
     }
 
-    public void ImportFolder(string path)
+    public void ImportFolder(string path, bool importTopLevel = false)
     {
         foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)) {
-            ImportFile(Path.GetRelativePath(path, file), File.ReadAllBytes(file));
+            ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
+                File.ReadAllBytes(file), isRelPath: true);
         }
     }
 
