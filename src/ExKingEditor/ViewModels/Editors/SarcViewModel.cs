@@ -44,6 +44,13 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public override async Task Cut()
+    {
+        await Copy();
+        Remove();
+        await base.Cut();
+    }
+
     public override async Task Copy()
     {
         DataObject obj = new();
