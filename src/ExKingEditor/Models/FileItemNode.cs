@@ -56,6 +56,7 @@ public partial class FileItemNode : ObservableObject
         }
     }
 
+    public string GetFilePath(FileItemNode? relativeTo = null) => Path.Combine(GetPathParts(relativeTo).Append(Header).ToArray());
     public string GetPath(FileItemNode? relativeTo = null) => Path.Combine(GetPathParts(relativeTo).ToArray());
     public Stack<string> GetPathParts(FileItemNode? relativeTo = null)
     {
