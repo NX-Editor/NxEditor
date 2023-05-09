@@ -25,6 +25,7 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     private readonly Stack<(Change change, FileItemNode[] nodes)> _history = new();
+    private readonly Dictionary<string, FileItemNode> _search = new();
     private readonly NodeMap _map = new();
 
     public SarcView? View { get; set; }
@@ -179,8 +180,6 @@ public partial class SarcViewModel : ReactiveEditor
             Selected.Clear();
         }
 
-        Selected.Add(Root.Children[0]);
-
         if (Selected.FirstOrDefault() is FileItemNode node && IsReplacing && ReplaceQuery != null) {
             // Rename the selected item
             node.PrevName = node.Header;
@@ -264,11 +263,10 @@ public partial class SarcViewModel : ReactiveEditor
     {
         if (Selected.Any()) {
             _history.Push((Change.Remove, Selected.ToArray()));
-        }
-
-        foreach (var item in Selected) {
-            (item.Parent ?? Root).Children.Remove(item);
-            RemoveNodeFromMap(item);
+            foreach (var item in Selected) {
+                (item.Parent ?? Root).Children.Remove(item);
+                RemoveNodeFromMap(item);
+            }
         }
     }
 
@@ -292,8 +290,13 @@ public partial class SarcViewModel : ReactiveEditor
             }
         }
 
-        item?.SetData(data);
-        return item;
+        if (item != null) {
+            item.SetData(data);
+            _search.Add(item.GetFilePath(), item);
+            return item;
+        }
+
+        throw new Exception($"Import Failed: the tree item was null - '{path}' ({data.Length})");
     }
 
     private NodeMap RemoveNodeFromMap(FileItemNode node, string? key = null)
@@ -305,13 +308,17 @@ public partial class SarcViewModel : ReactiveEditor
 
         key ??= node.Header;
         map.Remove(key);
+        _search.Remove(node.GetFilePath());
         return map;
     }
 
     private void RenameMapNode(FileItemNode node)
     {
         NodeMap map = RemoveNodeFromMap(node, node.PrevName);
+        _search.Remove(node.GetFilePath());
+
         map[node.Header] = (node, new NodeMap());
+        _search.Add(node.GetFilePath(), node);
         node.PrevName = null;
     }
 }
