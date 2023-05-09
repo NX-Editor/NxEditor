@@ -35,6 +35,24 @@ public partial class SarcViewModel : ReactiveEditor
     [ObservableProperty]
     private ObservableCollection<FileItemNode> _selected = new();
 
+    [ObservableProperty]
+    private bool _isFinding = true;
+
+    [ObservableProperty]
+    private bool _isReplacing = true;
+
+    [ObservableProperty]
+    private bool _matchCase;
+
+    [ObservableProperty]
+    private int _foundCount;
+
+    [ObservableProperty]
+    private string? _findQuery;
+
+    [ObservableProperty]
+    private string? _replaceQuery;
+
     public SarcViewModel(string file) : base(file)
     {
         using Sarc sarc = Sarc.FromBinary(RawData());
@@ -139,15 +157,48 @@ public partial class SarcViewModel : ReactiveEditor
 
     public override void Find()
     {
+        IsFinding = !(IsReplacing = false);
+
         base.Find();
     }
 
     public override Task FindAndReplace()
     {
+        IsFinding = IsReplacing = true;
+
         return base.FindAndReplace();
     }
 
-    public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
+    public int FindNext(bool clearSelection)
+    {
+        // Clear selection and select the
+        // next element from the previous
+        // selection or __root__
+
+        if (clearSelection) {
+            Selected.Clear();
+        }
+
+        Selected.Add(Root.Children[0]);
+
+        if (Selected.FirstOrDefault() is FileItemNode node && IsReplacing && ReplaceQuery != null) {
+            // Rename the selected item
+            node.PrevName = node.Header;
+            node.Header = node.Header.Replace(FindQuery ?? "", ReplaceQuery);
+            RenameMapNode(node);
+        }
+
+        return -1;
+    }
+
+    public void FindAll()
+    {
+        Selected.Clear();
+        while (FindNext(clearSelection: false) > 0) { }
+    }
+
+    public void ChangeFindMode() => IsReplacing = !IsReplacing;
+
     public void ImportFile(string path, byte[] data, bool isRelPath = false)
     {
         if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
@@ -167,9 +218,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         if (Selected.FirstOrDefault() is FileItemNode node) {
             if (node.IsRenaming && node.PrevName != null) {
-                NodeMap map = RemoveNodeFromMap(node, node.PrevName);
-                map[node.Header] = (node, new NodeMap());
-                node.PrevName = null;
+                RenameMapNode(node);
             }
             else {
                 node.PrevName = node.Header;
@@ -256,5 +305,12 @@ public partial class SarcViewModel : ReactiveEditor
         key ??= node.Header;
         map.Remove(key);
         return map;
+    }
+
+    private void RenameMapNode(FileItemNode node)
+    {
+        NodeMap map = RemoveNodeFromMap(node, node.PrevName);
+        map[node.Header] = (node, new NodeMap());
+        node.PrevName = null;
     }
 }

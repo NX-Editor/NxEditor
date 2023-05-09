@@ -20,103 +20,248 @@
         <KeyBinding Command="{Binding Replace}" Gesture="Ctrl+R" />
         <KeyBinding Command="{Binding Remove}" Gesture="Delete" />
     </UserControl.KeyBindings>
-    <TreeView Name="DropClient"
-              Grid.Row="1"
-              Margin="5"
-              AutoScrollToSelectedItem="True"
-              Background="Transparent"
-              DragDrop.AllowDrop="True"
-              Focusable="True"
-              ItemsSource="{Binding Root.Children}"
-              SelectedItems="{Binding Selected, Mode=TwoWay}"
-              SelectionMode="Multiple">
-        <TreeView.ContextMenu>
-            <ContextMenu>
-                <MenuItem Command="{Binding Rename}"
-                          Header="Rename"
-                          InputGesture="F2">
-                    <MenuItem.Icon>
-                        <pi:Icon Value="fa-regular fa-pen-to-square" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Command="{Binding Root.Sort}"
-                          Header="Sort"
-                          InputGesture="Ctrl+Alt+S">
-                    <MenuItem.Icon>
-                        <pi:Icon Value="fa-solid fa-arrow-down-a-z" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Command="{Binding Export}"
-                          Header="Export"
-                          InputGesture="Ctrl+E">
-                    <MenuItem.Icon>
-                        <pi:Icon Value="fa-solid fa-arrow-right-from-bracket" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding Replace}"
-                          Header="Replace"
-                          InputGesture="Ctrl+R">
-                    <MenuItem.Icon>
-                        <pi:Icon Value="fa-solid fa-repeat" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Command="{Binding Remove}"
-                          Header="Remove"
-                          InputGesture="Delete">
-                    <MenuItem.Icon>
-                        <pi:Icon Value="fa-solid fa-trash" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </ContextMenu>
-        </TreeView.ContextMenu>
-        <TreeView.ItemTemplate>
-            <TreeDataTemplate ItemsSource="{Binding Children}">
-                <Grid>
-                    <TextBlock HorizontalAlignment="Left"
-                               DoubleTapped="RenameDoubleTapped"
-                               IsVisible="{Binding !IsRenaming, Mode=TwoWay}"
-                               Text="{Binding Header}" />
-                    <TextBox AcceptsTab="False"
-                             Classes="Inline"
-                             IsVisible="{Binding IsRenaming, Mode=TwoWay}"
-                             KeyDown="RenameKeyDown"
-                             Text="{Binding Header}">
+    <Grid>
+        <TreeView Name="DropClient"
+                  Grid.Row="1"
+                  Margin="5"
+                  AutoScrollToSelectedItem="True"
+                  Background="Transparent"
+                  DragDrop.AllowDrop="True"
+                  Focusable="True"
+                  ItemsSource="{Binding Root.Children}"
+                  SelectedItems="{Binding Selected, Mode=TwoWay}"
+                  SelectionMode="Multiple">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding Rename}"
+                              Header="Rename"
+                              InputGesture="F2">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-regular fa-pen-to-square" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="{Binding Root.Sort}"
+                              Header="Sort"
+                              InputGesture="Ctrl+Alt+S">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-solid fa-arrow-down-a-z" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="{Binding Export}"
+                              Header="Export"
+                              InputGesture="Ctrl+E">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-solid fa-arrow-right-from-bracket" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding Replace}"
+                              Header="Replace"
+                              InputGesture="Ctrl+R">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-solid fa-repeat" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="{Binding Remove}"
+                              Header="Remove"
+                              InputGesture="Delete">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-solid fa-trash" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </TreeView.ContextMenu>
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate ItemsSource="{Binding Children}">
+                    <Grid>
+                        <TextBlock Grid.Column="1"
+                                   HorizontalAlignment="Left"
+                                   DoubleTapped="RenameDoubleTapped"
+                                   IsVisible="{Binding !IsRenaming, Mode=TwoWay}"
+                                   Text="{Binding Header}" />
+                        <TextBox Grid.Column="1"
+                                 AcceptsTab="False"
+                                 Classes="Inline"
+                                 IsVisible="{Binding IsRenaming, Mode=TwoWay}"
+                                 KeyDown="RenameKeyDown"
+                                 Text="{Binding Header}">
+                            <i:Interaction.Behaviors>
+                                <ia:DataTriggerBehavior Binding="{Binding IsRenaming}"
+                                                        ComparisonCondition="Equal"
+                                                        Value="True">
+                                    <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                                    <ia:CallMethodAction MethodName="SelectAll" TargetObject="{Binding $parent[TextBox]}" />
+                                    <ia:CallMethodAction MethodName="Focus" TargetObject="{Binding $parent[TextBox]}" />
+                                </ia:DataTriggerBehavior>
+                                <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
+                                    <ia:CallMethodAction MethodName="Rename" TargetObject="{Binding $parent[UserControl].DataContext}" />
+                                    <ia:ChangePropertyAction PropertyName="IsVisible"
+                                                             TargetObject="{Binding $parent[TextBox]}"
+                                                             Value="False" />
+                                    <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                                </ia:EventTriggerBehavior>
+                                <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
+                                                        ComparisonCondition="Equal"
+                                                        Value="True">
+                                    <ia:ChangePropertyAction PropertyName="IsExpanded"
+                                                             TargetObject="{Binding $parent[TreeViewItem]}"
+                                                             Value="{Binding !IsFile}" />
+                                </ia:DataTriggerBehavior>
+                                <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
+                                                        ComparisonCondition="Equal"
+                                                        Value="False">
+                                    <ia:ChangePropertyAction PropertyName="IsExpanded"
+                                                             TargetObject="{Binding $parent[TreeViewItem]}"
+                                                             Value="{Binding !IsFile}" />
+                                </ia:DataTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+                    </Grid>
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <Border Width="270"
+                Margin="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="{DynamicResource SystemChromeLowColor}"
+                BorderBrush="{DynamicResource SystemChromeMediumColor}"
+                BorderThickness="1"
+                BoxShadow="-1 1 10 0 #40000000"
+                CornerRadius="3"
+                IsVisible="{Binding IsFinding}">
+            <Grid Margin="2.6"
+                  ColumnDefinitions="Auto,*,Auto,Auto"
+                  RowDefinitions="Auto,Auto,Auto">
+                <Button Classes="Hyperlink" Command="{Binding ChangeFindMode}">
+                    <pi:Icon Value="fa-solid fa-angle-up">
                         <i:Interaction.Behaviors>
-                            <ia:DataTriggerBehavior Binding="{Binding IsRenaming}"
-                                                    ComparisonCondition="Equal"
-                                                    Value="True">
-                                <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                                <ia:CallMethodAction MethodName="SelectAll" TargetObject="{Binding $parent[TextBox]}" />
-                                <ia:CallMethodAction MethodName="Focus" TargetObject="{Binding $parent[TextBox]}" />
-                            </ia:DataTriggerBehavior>
-                            <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
-                                <ia:CallMethodAction MethodName="Rename" TargetObject="{Binding $parent[UserControl].DataContext}" />
-                                <ia:ChangePropertyAction PropertyName="IsVisible"
-                                                         TargetObject="{Binding $parent[TextBox]}"
-                                                         Value="False" />
-                                <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                            </ia:EventTriggerBehavior>
-                            <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
-                                                    ComparisonCondition="Equal"
-                                                    Value="True">
-                                <ia:ChangePropertyAction PropertyName="IsExpanded"
-                                                         TargetObject="{Binding $parent[TreeViewItem]}"
-                                                         Value="{Binding !IsFile}" />
-                            </ia:DataTriggerBehavior>
-                            <ia:DataTriggerBehavior Binding="{Binding IsExpanded}"
+                            <ia:DataTriggerBehavior Binding="{Binding IsReplacing}"
                                                     ComparisonCondition="Equal"
                                                     Value="False">
-                                <ia:ChangePropertyAction PropertyName="IsExpanded"
-                                                         TargetObject="{Binding $parent[TreeViewItem]}"
-                                                         Value="{Binding !IsFile}" />
+                                <ia:ChangePropertyAction PropertyName="Value"
+                                                         TargetObject="{Binding $parent[Button].Content}"
+                                                         Value="fa-solid fa-angle-down" />
+                            </ia:DataTriggerBehavior>
+                            <ia:DataTriggerBehavior Binding="{Binding IsReplacing}"
+                                                    ComparisonCondition="Equal"
+                                                    Value="True">
+                                <ia:ChangePropertyAction PropertyName="Value"
+                                                         TargetObject="{Binding $parent[Button].Content}"
+                                                         Value="fa-solid fa-angle-up" />
                             </ia:DataTriggerBehavior>
                         </i:Interaction.Behaviors>
-                    </TextBox>
+                    </pi:Icon>
+                </Button>
+
+                <TextBox Grid.Column="1"
+                         Margin="2.6"
+                         Padding="5,3"
+                         HorizontalAlignment="Stretch"
+                         BorderBrush="{DynamicResource SystemChromeMediumColor}"
+                         BorderThickness="1"
+                         Classes="Inline"
+                         Text="{Binding FindQuery}"
+                         Watermark="Find...">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">
+                            <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                        </ia:EventTriggerBehavior>
+                        <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
+                            <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         Margin="2.6"
+                         Padding="5,3"
+                         HorizontalAlignment="Stretch"
+                         BorderBrush="{DynamicResource SystemChromeMediumColor}"
+                         BorderThickness="1"
+                         Classes="Inline"
+                         IsVisible="{Binding IsReplacing}"
+                         Text="{Binding ReplaceQuery}"
+                         Watermark="Replace...">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">
+                            <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                        </ia:EventTriggerBehavior>
+                        <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
+                            <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+
+                <Button Grid.Column="2"
+                        Margin="3,0,0,0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Classes="Hyperlink">
+                    <Viewbox Width="10" Height="10">
+                        <pi:Icon Value="fa-solid fa-xmark" />
+                    </Viewbox>
+                </Button>
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="10"
+                           Text="{Binding FoundCount, StringFormat=({0})}" />
+
+                <Grid Grid.Row="2"
+                      Grid.Column="1"
+                      ColumnDefinitions="*,*">
+                    <Grid.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Height" Value="24" />
+                            <Setter Property="Width" Value="24" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                        <Style Selector="ToggleButton">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Height" Value="24" />
+                            <Setter Property="Width" Value="24" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </Grid.Styles>
+                    <StackPanel Margin="2.6"
+                                Orientation="Horizontal"
+                                Spacing="2.6">
+                        <Button Command="{Binding FindNext}"
+                                CommandParameter="True"
+                                ToolTip.Tip="Find/Replace Next">
+                            <pi:Icon Value="ms-find" />
+                        </Button>
+                        <Button Command="{Binding FindAll}" ToolTip.Tip="Find/Replace All">
+                            <pi:Icon Value="ms-find-and-replace" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1"
+                                Margin="2.6"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                Spacing="2.6">
+                        <ToggleButton IsChecked="{Binding MatchCase}" ToolTip.Tip="Match Case">
+                            <pi:Icon Value="ms-match-case" />
+                        </ToggleButton>
+                        <ToggleButton IsEnabled="False" ToolTip.Tip="Match Whole Word">
+                            <pi:Icon Value="ms-match-word" />
+                        </ToggleButton>
+                        <ToggleButton IsEnabled="False" ToolTip.Tip="Regex">
+                            <pi:Icon Value="ms-regex" />
+                        </ToggleButton>
+                    </StackPanel>
                 </Grid>
-            </TreeDataTemplate>
-        </TreeView.ItemTemplate>
-    </TreeView>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
