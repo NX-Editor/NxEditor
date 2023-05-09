@@ -40,7 +40,7 @@ public partial class SarcViewModel : ReactiveEditor
         using Sarc sarc = Sarc.FromBinary(RawData());
 
         foreach ((var name, var sarcFile) in sarc.OrderBy(x => x.Key)) {
-            CreateNodeFromPath(name, sarcFile.AsSpan());
+            CreateNodeFromPath(name, sarcFile.ToArray());
         }
     }
 
@@ -148,6 +148,7 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     public void ImportFile(string path, ReadOnlySpan<byte> data, bool isRelPath = false)
+    public void ImportFile(string path, byte[] data, bool isRelPath = false)
     {
         if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
             Selected.Add(node);
@@ -221,7 +222,7 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
-    private FileItemNode? CreateNodeFromPath(string path, ReadOnlySpan<byte> data, bool expandParentTree = false)
+    private FileItemNode? CreateNodeFromPath(string path, byte[] data, bool expandParentTree = false)
     {
         NodeMap map = _map;
         FileItemNode item = _root;

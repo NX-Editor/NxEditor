@@ -21,10 +21,9 @@ public partial class FileItemNode : ObservableObject
     [ObservableProperty]
     private bool _isExpanded;
 
-    private nint _data;
-    private int? _len;
+    private byte[]? _data;
 
-    public bool IsFile => _len != null;
+    public bool IsFile => _data != null;
     public string? PrevName { get; set; }
 
     public FileItemNode(string header, FileItemNode? parent = null)
@@ -86,18 +85,15 @@ public partial class FileItemNode : ObservableObject
         return result;
     }
 
-    public unsafe void SetData(ReadOnlySpan<byte> data)
+    public void SetData(byte[] data)
     {
-        _len = data.Length;
-        fixed (byte* ptr = data) {
-            _data = (nint)ptr;
-        }
+        _data = data;
     }
 
     public unsafe Span<byte> GetData()
     {
-        if (_len is int len) {
-            return new((byte*)_data, len);
+        if (_data is byte[] data) {
+            return data;
         }
 
         throw new InvalidDataException("The node does not have any data!");
