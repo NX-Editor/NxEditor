@@ -201,7 +201,8 @@
                         Margin="3,0,0,0"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Classes="Hyperlink">
+                        Classes="Hyperlink"
+                        Command="{Binding CloseFindDialog}">
                     <Viewbox Width="10" Height="10">
                         <pi:Icon Value="fa-solid fa-xmark" />
                     </Viewbox>

@@ -198,6 +198,7 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
+    public void CloseFindDialog() => IsReplacing = false;
 
     public void ImportFile(string path, byte[] data, bool isRelPath = false)
     {
