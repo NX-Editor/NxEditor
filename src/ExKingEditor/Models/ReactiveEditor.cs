@@ -7,7 +7,7 @@ namespace ExKingEditor.Models;
 
 public abstract unsafe class ReactiveEditor : Document
 {
-    public static string CacheDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", "ExKing.ReactiveEditor");
+    public static string CacheDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", "ExKingEditor", "ReactiveEditor");
 
     public static List<ReactiveEditor> OpenEditors { get; } = new();
 
