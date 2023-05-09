@@ -9,6 +9,7 @@ using ExKingEditor.Helpers;
 using ExKingEditor.Models;
 using ExKingEditor.Views.Editors;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Models.FileItemNode root, object map)>;
 
 namespace ExKingEditor.ViewModels.Editors;
@@ -25,7 +26,7 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     private readonly Stack<(Change change, FileItemNode[] nodes)> _history = new();
-    private readonly Dictionary<string, FileItemNode> _search = new();
+    private readonly List<FileItemNode> _searchCache = new();
     private readonly NodeMap _map = new();
 
     public SarcView? View { get; set; }
@@ -46,13 +47,16 @@ public partial class SarcViewModel : ReactiveEditor
     private bool _matchCase;
 
     [ObservableProperty]
-    private int _foundCount;
-
-    [ObservableProperty]
     private string? _findQuery;
 
     [ObservableProperty]
     private string? _replaceQuery;
+
+    [ObservableProperty]
+    private int _searchCount;
+
+    [ObservableProperty]
+    private int _searchIndex;
 
     public SarcViewModel(string file) : base(file)
     {
@@ -170,7 +174,32 @@ public partial class SarcViewModel : ReactiveEditor
         return base.FindAndReplace();
     }
 
-    public int FindNext(bool clearSelection)
+    partial void OnFindQueryChanged(string? value)
+    {
+        _searchCache.Clear();
+
+        if (string.IsNullOrEmpty(value)) {
+            return;
+        }
+
+        Iter(Root);
+        SearchCount = _searchCache.Count;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        void Iter(FileItemNode node)
+        {
+            foreach (var child in node.Children) {
+                if (!child.IsFile) {
+                    Iter(child);
+                }
+                else if (child.Header.Contains(value!)) {
+                    _searchCache.Add(child);
+                }
+            }
+        }
+    }
+
+    public void FindNext(bool clearSelection)
     {
         // Clear selection and select the
         // next element from the previous
@@ -180,20 +209,23 @@ public partial class SarcViewModel : ReactiveEditor
             Selected.Clear();
         }
 
+        Selected.Add(_searchCache[SearchIndex = SearchIndex >= SearchCount ? 0 : SearchIndex]);
+        SearchIndex++;
+
         if (Selected.FirstOrDefault() is FileItemNode node && IsReplacing && ReplaceQuery != null) {
             // Rename the selected item
             node.PrevName = node.Header;
             node.Header = node.Header.Replace(FindQuery ?? "", ReplaceQuery);
             RenameMapNode(node);
         }
-
-        return -1;
     }
 
     public void FindAll()
     {
         Selected.Clear();
-        while (FindNext(clearSelection: false) > 0) { }
+        do {
+            FindNext(clearSelection: false);
+        } while (SearchIndex < SearchCount);
     }
 
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
@@ -292,7 +324,6 @@ public partial class SarcViewModel : ReactiveEditor
 
         if (item != null) {
             item.SetData(data);
-            _search.Add(item.GetFilePath(), item);
             return item;
         }
 
@@ -308,17 +339,14 @@ public partial class SarcViewModel : ReactiveEditor
 
         key ??= node.Header;
         map.Remove(key);
-        _search.Remove(node.GetFilePath());
         return map;
     }
 
     private void RenameMapNode(FileItemNode node)
     {
         NodeMap map = RemoveNodeFromMap(node, node.PrevName);
-        _search.Remove(node.GetFilePath());
 
         map[node.Header] = (node, new NodeMap());
-        _search.Add(node.GetFilePath(), node);
         node.PrevName = null;
     }
 }
