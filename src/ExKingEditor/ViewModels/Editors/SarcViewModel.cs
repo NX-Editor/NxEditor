@@ -36,10 +36,10 @@ public partial class SarcViewModel : ReactiveEditor
     private ObservableCollection<FileItemNode> _selected = new();
 
     [ObservableProperty]
-    private bool _isFinding = true;
+    private bool _isFinding;
 
     [ObservableProperty]
-    private bool _isReplacing = true;
+    private bool _isReplacing;
 
     [ObservableProperty]
     private bool _matchCase;
@@ -198,7 +198,7 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
-    public void CloseFindDialog() => IsReplacing = false;
+    public void CloseFindDialog() => IsFinding = false;
 
     public void ImportFile(string path, byte[] data, bool isRelPath = false)
     {
