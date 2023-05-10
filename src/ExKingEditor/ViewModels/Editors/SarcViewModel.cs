@@ -184,7 +184,7 @@ public partial class SarcViewModel : ReactiveEditor
         }
 
         Iter(Root);
-        SearchCount = _searchCache.Count;
+        SearchCount = _searchCache.Count - 1;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void Iter(FileItemNode node)
@@ -212,7 +212,7 @@ public partial class SarcViewModel : ReactiveEditor
 
         // Find/select next node
         FileItemNode node = findLast
-            ? _searchCache[SearchIndex = SearchIndex == 0 ? SearchCount - 1 : --SearchIndex]
+            ? _searchCache[SearchIndex = SearchIndex == 0 ? SearchCount : --SearchIndex]
             : _searchCache[SearchIndex = SearchIndex >= SearchCount ? -1 : ++SearchIndex];
         node.IsSelected = true;
 
@@ -238,9 +238,9 @@ public partial class SarcViewModel : ReactiveEditor
     {
         Selected.Clear();
         SearchIndex = -1;
-        do {
+        while (SearchIndex < SearchCount) {
             FindNext(clearSelection: false);
-        } while (SearchIndex < SearchCount);
+    }
     }
 
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
