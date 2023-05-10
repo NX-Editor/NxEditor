@@ -20,7 +20,7 @@ public partial class SarcViewModel : ReactiveEditor
 {
     public enum Change
     {
-        Add,
+        Import,
         Remove,
         Rename
     }
@@ -249,6 +249,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void ImportFile(string path, byte[] data, bool isRelPath = false)
     {
         if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
+            node.IsSelected = true;
             Selected.Add(node);
         }
     }
@@ -256,6 +257,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void ImportFolder(string path, bool importTopLevel = false)
     {
         foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)) {
+            _history.Push((Change.Import, null));
             ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
                 File.ReadAllBytes(file), isRelPath: true);
         }
@@ -265,6 +267,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         if (Selected.FirstOrDefault() is FileItemNode node) {
             if (node.IsRenaming && node.PrevName != null) {
+                _history.Push((Change.Remove, Selected.ToArray()));
                 RenameMapNode(node);
             }
             else {
