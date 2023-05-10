@@ -54,26 +54,35 @@ public partial class SarcView : UserControl
         if (sender is TextBox tb) {
             if (e.Key == Key.Escape) {
                 tb.IsVisible = false;
-                e.Handled = true;
             }
             else if (e.Key == Key.Enter && e.KeyModifiers == KeyModifiers.Shift) {
                 if (DataContext is SarcViewModel vm) {
                     vm.FindNext(clearSelection: true, findLast: true);
                 }
-
-                e.Handled = true;
             }
             else if (e.Key == Key.Enter) {
                 if (DataContext is SarcViewModel vm) {
                     vm.FindNext(clearSelection: true);
                 }
-
-                e.Handled = true;
+            }
+            else if (e.Key == Key.F && e.KeyModifiers == KeyModifiers.Control) {
+                if (DataContext is SarcViewModel vm) {
+                    vm.Find();
+                }
+            }
+            else if (e.Key == Key.H && e.KeyModifiers == KeyModifiers.Control) {
+                if (DataContext is SarcViewModel vm) {
+                    vm.FindAndReplace();
+                }
             }
             else if (e.Key == Key.Tab) {
                 (tb.Name == nameof(FindField) ? ReplaceField : FindField).Focus();
-                e.Handled = true;
             }
+            else {
+                return;
+            }
+
+            e.Handled = true;
         }
     }
 
