@@ -13,13 +13,10 @@ public partial class BymlViewModel : ReactiveEditor
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
 
-    public BymlViewModel(string file) : base(file)
+    public BymlViewModel(string file, byte[] data, Stream? fs) : base(file, data, fs)
     {
-        // Load source into readonly field for diffing
-        using Byml byml = Byml.FromBinary(RawData());
-        _yaml = byml.ToText();
-
-        Yaml = _yaml;
+        using Byml byml = Byml.FromBinary(_data);
+        Yaml = _yaml = byml.ToText();
     }
 
     public override void SaveAs(string path)

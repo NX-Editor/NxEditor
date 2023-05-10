@@ -50,9 +50,9 @@ public partial class SarcViewModel : ReactiveEditor
     [ObservableProperty]
     private int _searchIndex = -1;
 
-    public SarcViewModel(string file) : base(file)
+    public SarcViewModel(string file, byte[] data, Stream? fs = null) : base(file, data, fs)
     {
-        using Sarc sarc = Sarc.FromBinary(RawData());
+        using Sarc sarc = Sarc.FromBinary(_data);
 
         foreach ((var name, var sarcFile) in sarc.OrderBy(x => x.Key)) {
             CreateNodeFromPath(name, sarcFile.ToArray());
@@ -272,6 +272,13 @@ public partial class SarcViewModel : ReactiveEditor
             }
 
             _history.StageChange(SarcChange.Import, nodes.ToList());
+        }
+    }
+
+    public void Edit()
+    {
+        if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {
+            App.Log($"Edit {node.Header}");
         }
     }
 
