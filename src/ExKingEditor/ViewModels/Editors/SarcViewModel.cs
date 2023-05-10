@@ -278,7 +278,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Edit()
     {
         if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {
-            App.Log($"Edit {node.Header}");
+            EditorMgr.TryLoadEditorSafe(node.Header, node.Data);
         }
     }
 
