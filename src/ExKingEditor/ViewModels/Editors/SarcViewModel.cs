@@ -174,6 +174,7 @@ public partial class SarcViewModel : ReactiveEditor
         return base.FindAndReplace();
     }
 
+    partial void OnMatchCaseChanged(bool value) => OnFindFieldChanged(FindField);
     partial void OnFindFieldChanged(string? value)
     {
         _searchCache.Clear();
