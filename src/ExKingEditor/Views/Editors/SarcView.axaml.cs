@@ -49,6 +49,27 @@ public partial class SarcView : UserControl
         e.Handled = true;
     }
 
+    public void FieldKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is TextBox tb) {
+            if (e.Key == Key.Escape) {
+                tb.IsVisible = false;
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Enter) {
+                if (DataContext is SarcViewModel vm) {
+                    vm.FindNext(clearSelection: true);
+                }
+
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Tab) {
+                (tb.Name == nameof(FindField) ? ReplaceField : FindField).Focus();
+                e.Handled = true;
+            }
+        }
+    }
+
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {

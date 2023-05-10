@@ -157,13 +157,16 @@
                     </pi:Icon>
                 </Button>
 
-                <TextBox Grid.Column="1"
+                <TextBox Name="FindField"
+                         Grid.Column="1"
                          Margin="2.6"
                          Padding="5,3"
                          HorizontalAlignment="Stretch"
                          BorderBrush="{DynamicResource SystemChromeMediumColor}"
                          BorderThickness="1"
                          Classes="Inline"
+                         IsVisible="{Binding IsFinding, Mode=TwoWay}"
+                         KeyDown="FieldKeyDown"
                          Text="{Binding FindQuery}"
                          Watermark="Find...">
                     <i:Interaction.Behaviors>
@@ -176,7 +179,8 @@
                     </i:Interaction.Behaviors>
                 </TextBox>
 
-                <TextBox Grid.Row="1"
+                <TextBox Name="ReplaceField"
+                         Grid.Row="1"
                          Grid.Column="1"
                          Margin="2.6"
                          Padding="5,3"
@@ -184,7 +188,8 @@
                          BorderBrush="{DynamicResource SystemChromeMediumColor}"
                          BorderThickness="1"
                          Classes="Inline"
-                         IsVisible="{Binding IsReplacing}"
+                         IsVisible="{Binding IsReplacing, Mode=TwoWay}"
+                         KeyDown="FieldKeyDown"
                          Text="{Binding ReplaceQuery}"
                          Watermark="Replace...">
                     <i:Interaction.Behaviors>
