@@ -62,7 +62,7 @@ public partial class App : Application
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
-                    EditorMgr.TryLoadEditorSafe(arg, out _);
+                    EditorMgr.TryLoadEditorSafe(arg);
                 }
             }
         }

@@ -19,7 +19,7 @@ public class ShellMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (!EditorMgr.TryLoadEditorSafe(path, out _)) {
+            if (!EditorMgr.TryLoadEditorSafe(path)) {
                 // TODO: throw message dialog
             }
         }
@@ -43,7 +43,7 @@ public class ShellMenu
     [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
     public static void Recent(string path)
     {
-        EditorMgr.TryLoadEditorSafe(path, out _);
+        EditorMgr.TryLoadEditorSafe(path);
     }
 
     [Menu("Clear Recent", "File", icon: "fa-regular fa-circle-xmark")]

@@ -1,4 +1,5 @@
 ﻿using Dock.Model.Core;
+using ExKingEditor.Core;
 using ExKingEditor.Core.Extensions;
 using ExKingEditor.Generators;
 using System.Runtime.CompilerServices;
@@ -11,20 +12,19 @@ public static class EditorMgr
 
     public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
 
-    public static bool TryLoadEditorSafe(string path, out ReactiveEditor? reactiveEditor)
+    public static bool TryLoadEditorSafe(string path, byte[]? data = null)
     {
         try {
-            return TryLoadEditor(path, out reactiveEditor);
+            return TryLoadEditor(path, data);
         }
         catch (Exception ex) {
             App.Log(ex);
         }
 
-        reactiveEditor = null;
         return false;
     }
 
-    public static bool TryLoadEditor(string path, out ReactiveEditor? reactiveEditor)
+    public static bool TryLoadEditor(string path, byte[]? data = null)
     {
         App.Log($"Processing {Path.GetFileName(path)}");
 
@@ -32,17 +32,25 @@ public static class EditorMgr
             throw new NotSupportedException($"Unsupported file type {Path.GetExtension(path)}");
         }
 
-        if (ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor exEditor) {
-            reactiveEditor = exEditor;
+        if (ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
             return true;
         }
 
+        Stream? fs = null;
+        if (data == null) {
+            fs = File.Open(path, FileMode.Open);
+            data = new byte[fs.Length];
+            fs.Read(data, 0, data.Length);
+        }
+
+        // Decompress if necessary
+        data = path.EndsWith(".zs") ? TotkZstd.Decompress(path, data).ToArray() : data;
+
         string ext = GetExt(path);
         object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_editors[ext]}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path);
+            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, fs);
 
         if (instance is ReactiveEditor editor) {
-            reactiveEditor = editor;
             ShellDockFactory.AddDoc(editor);
             StateMgr.Shared.Recent.AddPath(path);
 
