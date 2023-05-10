@@ -17,8 +17,11 @@ public static class Logger
         CurrentLog = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd-HH-mm}.log");
 
         TextWriterTraceListener listener = new(CurrentLog);
-
         SetTraceListener(listener, 1);
+
+        ConsoleTraceListener console = new();
+        SetTraceListener(console, 2);
+
         Trace.AutoFlush = true;
     }
 
