@@ -50,7 +50,7 @@ public partial class SarcViewModel : ReactiveEditor
     [ObservableProperty]
     private int _searchIndex = -1;
 
-    public SarcViewModel(string file, byte[] data, Stream? fs = null) : base(file, data, fs)
+    public SarcViewModel(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
     {
         using Sarc sarc = Sarc.FromBinary(_data);
 
@@ -71,9 +71,7 @@ public partial class SarcViewModel : ReactiveEditor
         Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
         if (path == _file) {
-            _stream.Seek(0, SeekOrigin.Begin);
-            _stream.SetLength(data.Length);
-            _stream.Write(data);
+            WriteToSource(data.ToArray());
         }
         else {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -278,7 +276,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Edit()
     {
         if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {
-            EditorMgr.TryLoadEditorSafe(node.Header, node.Data);
+            EditorMgr.TryLoadEditorSafe(node.GetFilePath(), node.Data, node.SetData);
         }
     }
 

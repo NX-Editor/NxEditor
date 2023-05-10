@@ -12,10 +12,10 @@ public static class EditorMgr
 
     public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
 
-    public static bool TryLoadEditorSafe(string path, byte[]? data = null)
+    public static bool TryLoadEditorSafe(string path, byte[]? data = null, Action<byte[]>? setSource = null)
     {
         try {
-            return TryLoadEditor(path, data);
+            return TryLoadEditor(path, data, setSource);
         }
         catch (Exception ex) {
             App.Log(ex);
@@ -24,7 +24,7 @@ public static class EditorMgr
         return false;
     }
 
-    public static bool TryLoadEditor(string path, byte[]? data = null)
+    public static bool TryLoadEditor(string path, byte[]? data = null, Action<byte[]>? setSource = null)
     {
         App.Log($"Processing {Path.GetFileName(path)}");
 
@@ -48,7 +48,7 @@ public static class EditorMgr
 
         string ext = GetExt(path);
         object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_editors[ext]}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, fs);
+            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, fs, setSource);
 
         if (instance is ReactiveEditor editor) {
             ShellDockFactory.AddDoc(editor);

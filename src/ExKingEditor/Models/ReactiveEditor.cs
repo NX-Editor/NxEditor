@@ -13,19 +13,21 @@ public abstract unsafe class ReactiveEditor : Document
     protected readonly string _file;
     protected readonly string _temp;
     protected bool _compressed;
-    protected readonly Stream _stream;
+    protected readonly Stream? _stream;
+    protected readonly Action<byte[]>? _setSource;
     protected readonly byte[] _data;
 
     public string FilePath => _file;
 
-    public ReactiveEditor(string file, byte[] data, Stream? fs = null)
+    public ReactiveEditor(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null)
     {
         Id = file;
         Title = Path.GetFileName(file);
 
         _file = file;
+        _stream = fs;
+        _setSource = setSource;
         _data = data;
-        _stream = fs ?? new MemoryStream(_data);
 
         // Create temp directory
         _temp = Directory.CreateDirectory(
@@ -63,6 +65,18 @@ public abstract unsafe class ReactiveEditor : Document
 
     public virtual void Find() { }
     public virtual Task FindAndReplace() => Task.CompletedTask;
+    
+    protected void WriteToSource(Span<byte> data)
+    {
+        if (_stream is FileStream) {
+            _stream.Seek(0, SeekOrigin.Begin);
+            _stream.SetLength(data.Length);
+            _stream.Write(data);
+        }
+        else {
+            _setSource?.Invoke(data.ToArray());
+        }
+    }
 
     protected void ToastSaveSuccess(string path)
     {
@@ -75,6 +89,6 @@ public abstract unsafe class ReactiveEditor : Document
     {
         OpenEditors.Remove(this);
         Directory.Delete(_temp, true);
-        _stream.Close();
+        _stream?.Close();
     }
 }

@@ -13,7 +13,7 @@ public partial class BymlViewModel : ReactiveEditor
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
 
-    public BymlViewModel(string file, byte[] data, Stream? fs) : base(file, data, fs)
+    public BymlViewModel(string file, byte[] data, Stream? fs, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
     {
         using Byml byml = Byml.FromBinary(_data);
         Yaml = _yaml = byml.ToText();
@@ -27,9 +27,7 @@ public partial class BymlViewModel : ReactiveEditor
         Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
         if (path == _file) {
-            _stream.Seek(0, SeekOrigin.Begin);
-            _stream.SetLength(data.Length);
-            _stream.Write(data);
+            WriteToSource(data);
         }
         else {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
