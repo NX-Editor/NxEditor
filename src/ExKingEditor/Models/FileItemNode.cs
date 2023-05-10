@@ -21,6 +21,9 @@ public partial class FileItemNode : ObservableObject
     [ObservableProperty]
     private bool _isExpanded;
 
+    [ObservableProperty]
+    private bool _isSelected;
+
     private byte[]? _data;
 
     public bool IsFile => _data != null;
