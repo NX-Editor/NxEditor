@@ -33,6 +33,13 @@ public partial class SarcView : UserControl
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
     }
 
+    public void TreeViewDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (DataContext is SarcViewModel vm) {
+            vm.Edit();
+        }
+    }
+
     public void RenameKeyDown(object? sender, KeyEventArgs e)
     {
         if (sender is TextBox tb && (e.Key == Key.Enter || e.Key == Key.Escape)) {

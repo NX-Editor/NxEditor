@@ -26,6 +26,7 @@
                   Margin="5"
                   AutoScrollToSelectedItem="True"
                   Background="Transparent"
+                  DoubleTapped="TreeViewDoubleTapped"
                   DragDrop.AllowDrop="True"
                   Focusable="True"
                   ItemsSource="{Binding Root.Children}"
@@ -33,11 +34,18 @@
                   SelectionMode="Multiple">
             <TreeView.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Command="{Binding Edit}"
+                              Header="Edit"
+                              InputGesture="F4">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-regular fa-pen-to-square" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Command="{Binding Rename}"
                               Header="Rename"
                               InputGesture="F2">
                         <MenuItem.Icon>
-                            <pi:Icon Value="fa-regular fa-pen-to-square" />
+                            <pi:Icon Value="fa-solid fa-pencil" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
