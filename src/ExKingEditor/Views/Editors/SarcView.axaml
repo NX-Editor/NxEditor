@@ -153,7 +153,7 @@
                          Classes="Inline"
                          IsVisible="{Binding IsFinding, Mode=TwoWay}"
                          KeyDown="FieldKeyDown"
-                         Text="{Binding FindQuery}"
+                         Text="{Binding FindField}"
                          Watermark="Find...">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">
@@ -176,7 +176,7 @@
                          Classes="Inline"
                          IsVisible="{Binding IsReplacing, Mode=TwoWay}"
                          KeyDown="FieldKeyDown"
-                         Text="{Binding ReplaceQuery}"
+                         Text="{Binding ReplaceField}"
                          Watermark="Replace...">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">

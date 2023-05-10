@@ -47,10 +47,10 @@ public partial class SarcViewModel : ReactiveEditor
     private bool _matchCase;
 
     [ObservableProperty]
-    private string? _findQuery;
+    private string? _findField;
 
     [ObservableProperty]
-    private string? _replaceQuery;
+    private string? _replaceField;
 
     [ObservableProperty]
     private int _searchCount;
@@ -174,7 +174,7 @@ public partial class SarcViewModel : ReactiveEditor
         return base.FindAndReplace();
     }
 
-    partial void OnFindQueryChanged(string? value)
+    partial void OnFindFieldChanged(string? value)
     {
         _searchCache.Clear();
 
@@ -212,10 +212,11 @@ public partial class SarcViewModel : ReactiveEditor
         Selected.Add(_searchCache[SearchIndex = SearchIndex >= SearchCount ? 0 : SearchIndex]);
         SearchIndex++;
 
-        if (Selected.FirstOrDefault() is FileItemNode node && IsReplacing && ReplaceQuery != null) {
+        // Execute replace function
+        if (IsReplacing && ReplaceField != null) {
             // Rename the selected item
             node.PrevName = node.Header;
-            node.Header = node.Header.Replace(FindQuery ?? "", ReplaceQuery);
+            node.Header = node.Header.Replace(FindField ?? "", ReplaceField);
             RenameMapNode(node);
         }
     }
