@@ -26,6 +26,7 @@ public partial class FileItemNode : ObservableObject
 
     private byte[]? _data;
 
+    public byte[] Data => _data ?? throw new InvalidDataException("The node does not have any data!");
     public bool IsFile => _data != null;
     public string? PrevName { get; set; }
 
@@ -50,7 +51,7 @@ public partial class FileItemNode : ObservableObject
         if (IsFile) {
             Directory.CreateDirectory(isSingleFile ? Path.GetDirectoryName(path)! : path);
             using FileStream fs = File.Create(isSingleFile ? path : Path.Combine(path, Header));
-            fs.Write(GetData());
+            fs.Write(Data);
         }
         else {
             foreach (var file in GetFileNodes(recursive)) {
@@ -92,15 +93,6 @@ public partial class FileItemNode : ObservableObject
     public void SetData(byte[] data)
     {
         _data = data;
-    }
-
-    public unsafe Span<byte> GetData()
-    {
-        if (_data is byte[] data) {
-            return data;
-        }
-
-        throw new InvalidDataException("The node does not have any data!");
     }
 
     public FileItemNode Clone()

@@ -63,7 +63,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         using Sarc sarc = new();
         foreach (var file in Root.GetFileNodes()) {
-            sarc.Add(Path.Combine(file.GetPath(), file.Header).Replace(Path.DirectorySeparatorChar, '/'), file.GetData());
+            sarc.Add(Path.Combine(file.GetPath(), file.Header).Replace(Path.DirectorySeparatorChar, '/'), file.Data);
         }
 
         using DataHandle handle = sarc.ToBinary();
