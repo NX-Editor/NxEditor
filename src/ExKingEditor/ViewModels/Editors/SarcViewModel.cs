@@ -172,6 +172,7 @@ public partial class SarcViewModel : ReactiveEditor
     partial void OnFindFieldChanged(string? value)
     {
         _searchCache.Clear();
+        SearchCount = -1;
 
         if (string.IsNullOrEmpty(value)) {
             return;
@@ -194,6 +195,7 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public void FindNextCommand(bool clearSelection) => FindNext(clearSelection, findLast: false);
     public void FindNext(bool clearSelection, bool findLast = false)
     {
         if (!_searchCache.Any()) {
@@ -207,7 +209,7 @@ public partial class SarcViewModel : ReactiveEditor
         // Find/select next node
         FileItemNode node = findLast
             ? _searchCache[SearchIndex = SearchIndex == 0 ? SearchCount : --SearchIndex]
-            : _searchCache[SearchIndex = SearchIndex >= SearchCount ? -1 : ++SearchIndex];
+            : _searchCache[SearchIndex = SearchIndex >= SearchCount ? 0 : ++SearchIndex];
         node.IsSelected = true;
 
         // Expand path to node
