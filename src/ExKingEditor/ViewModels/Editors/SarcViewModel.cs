@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ExKingEditor.Core;
 using ExKingEditor.Helpers;
 using ExKingEditor.Models;
+using ExKingEditor.Models.Editors;
 using ExKingEditor.Views.Editors;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
@@ -14,18 +15,9 @@ using NodeMap = System.Collections.Generic.Dictionary<string, (ExKingEditor.Mode
 
 namespace ExKingEditor.ViewModels.Editors;
 
-
-
 public partial class SarcViewModel : ReactiveEditor
 {
-    public enum Change
-    {
-        Import,
-        Remove,
-        Rename
-    }
-
-    private readonly Stack<(Change change, FileItemNode[] nodes)> _history = new();
+    private readonly SarcHistoryStack _history = new();
     private readonly List<FileItemNode> _searchCache = new();
     private readonly NodeMap _map = new();
 
@@ -94,16 +86,18 @@ public partial class SarcViewModel : ReactiveEditor
 
     public override bool HasChanged()
     {
-        return _history.Count > 0;
+        return _history.HasChanges;
     }
 
     public override void Undo()
     {
+        _history.InvokeLastAction(isRedo: false);
         base.Undo();
     }
 
     public override void Redo()
     {
+        _history.InvokeLastAction(isRedo: true);
         base.Redo();
     }
 
@@ -240,26 +234,42 @@ public partial class SarcViewModel : ReactiveEditor
         SearchIndex = -1;
         while (SearchIndex < SearchCount) {
             FindNext(clearSelection: false);
-    }
+        }
     }
 
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
     public void CloseFindDialog() => IsFinding = false;
 
-    public void ImportFile(string path, byte[] data, bool isRelPath = false)
+    public FileItemNode ImportFile(string path, byte[] data, bool isRelPath = false)
     {
         if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
             node.IsSelected = true;
             Selected.Add(node);
+
+            if (!isRelPath) {
+                _history.StageChange(SarcChange.Import, new(1) {
+                    node
+                });
+            }
+
+            return node;
         }
+
+        throw new InvalidOperationException("Import Failed: The file node could not be created");
     }
 
     public void ImportFolder(string path, bool importTopLevel = false)
     {
-        foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)) {
-            _history.Push((Change.Import, null));
-            ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
-                File.ReadAllBytes(file), isRelPath: true);
+        string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+        if (files.Length > 0) {
+            FileItemNode[] nodes = new FileItemNode[files.Length];
+            for (int i = 0; i < files.Length; i++) {
+                string file = files[i];
+                nodes[i] = ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
+                    File.ReadAllBytes(file), isRelPath: true);
+            }
+
+            _history.StageChange(SarcChange.Import, nodes.ToList());
         }
     }
 
@@ -267,7 +277,7 @@ public partial class SarcViewModel : ReactiveEditor
     {
         if (Selected.FirstOrDefault() is FileItemNode node) {
             if (node.IsRenaming && node.PrevName != null) {
-                _history.Push((Change.Remove, Selected.ToArray()));
+                _history.StageChange(SarcChange.Remove, Selected.ToList());
                 RenameMapNode(node);
             }
             else {
@@ -312,7 +322,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Remove()
     {
         if (Selected.Any()) {
-            _history.Push((Change.Remove, Selected.ToArray()));
+            _history.StageChange(SarcChange.Remove, Selected.ToList());
             foreach (var item in Selected) {
                 (item.Parent ?? Root).Children.Remove(item);
                 RemoveNodeFromMap(item);
