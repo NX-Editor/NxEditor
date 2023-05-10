@@ -56,6 +56,13 @@ public partial class SarcView : UserControl
                 tb.IsVisible = false;
                 e.Handled = true;
             }
+            else if (e.Key == Key.Enter && e.KeyModifiers == KeyModifiers.Shift) {
+                if (DataContext is SarcViewModel vm) {
+                    vm.FindNext(clearSelection: true, findLast: true);
+                }
+
+                e.Handled = true;
+            }
             else if (e.Key == Key.Enter) {
                 if (DataContext is SarcViewModel vm) {
                     vm.FindNext(clearSelection: true);

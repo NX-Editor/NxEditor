@@ -56,7 +56,7 @@ public partial class SarcViewModel : ReactiveEditor
     private int _searchCount;
 
     [ObservableProperty]
-    private int _searchIndex;
+    private int _searchIndex = -1;
 
     public SarcViewModel(string file) : base(file)
     {
@@ -192,25 +192,37 @@ public partial class SarcViewModel : ReactiveEditor
                 if (!child.IsFile) {
                     Iter(child);
                 }
-                else if (child.Header.Contains(value!)) {
+                else if ((MatchCase ? child.Header : child.Header.ToLower()).Contains(MatchCase ? value! : value!.ToLower())) {
                     _searchCache.Add(child);
                 }
             }
         }
     }
 
-    public void FindNext(bool clearSelection)
+    public void FindNext(bool clearSelection, bool findLast = false)
     {
-        // Clear selection and select the
-        // next element from the previous
-        // selection or __root__
+        if (!_searchCache.Any()) {
+            return;
+        }
 
         if (clearSelection) {
             Selected.Clear();
         }
 
-        Selected.Add(_searchCache[SearchIndex = SearchIndex >= SearchCount ? 0 : SearchIndex]);
-        SearchIndex++;
+        // Find/select next node
+        FileItemNode node = findLast
+            ? _searchCache[SearchIndex = SearchIndex == 0 ? SearchCount - 1 : --SearchIndex]
+            : _searchCache[SearchIndex = SearchIndex >= SearchCount ? -1 : ++SearchIndex];
+        node.IsSelected = true;
+
+        // Expand path to node
+        FileItemNode? parent = node;
+        while ((parent = parent.Parent) != null) {
+            parent.IsExpanded = true;
+        }
+
+        // Add to selection
+        Selected.Add(node);
 
         // Execute replace function
         if (IsReplacing && ReplaceField != null) {
@@ -224,6 +236,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void FindAll()
     {
         Selected.Clear();
+        SearchIndex = -1;
         do {
             FindNext(clearSelection: false);
         } while (SearchIndex < SearchCount);
