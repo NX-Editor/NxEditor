@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AvaloniaSettingsFactory.Core" Version="11.0.0-preview6" />
     <PackageReference Include="ZstdSharp.Port" Version="0.7.1" />
   </ItemGroup>
