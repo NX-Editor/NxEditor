@@ -1,8 +1,10 @@
 ﻿using AvaloniaEdit;
-using Cead;
-using Cead.Handles;
+using CsRestbl.Managed;
 using ExKingEditor.Core;
+using ExKingEditor.Core.Models;
+using ExKingEditor.Core.Utils;
 using ExKingEditor.Models;
+using System.Text;
 
 namespace ExKingEditor.ViewModels.Editors;
 
@@ -15,16 +17,39 @@ public class RestblViewModel : ReactiveEditor
 
     public RestblViewModel(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
     {
-        using Byml byml = Byml.FromBinary(_data);
-        Yaml = _yaml = byml.ToText();
+        Restbl table = Restbl.FromBinary(_data);
+        StringBuilder yaml = new();
+
+        IEnumerable<NameEntry> entries = table.NameTable
+            .Concat(table.CrcTable.Select(
+                x => new NameEntry(HashTable.Shared.TryGetValue(x.Hash, out string? name) ? name : $"0x{x.Hash:X2}", x.Size)))
+            .OrderBy(x => x.Name);
+        
+        foreach (var entry in entries) {
+            yaml.Append($"{entry.Name}: {entry.Size}\n");
+        }
+        
+        Yaml = _yaml = yaml.ToString();
     }
 
     public override void SaveAs(string path)
     {
-        using Byml byml = Byml.FromText(Yaml);
-        using DataHandle handle = byml.ToBinary(false, version: 7);
+        HashSet<uint> lookup = new();
 
-        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
+        Restbl restbl = new();
+        foreach ((var nameStr, var sizeStr) in Yaml.Split('\n')[..(^1)].Select(x => x.Split(": ")).Select(x => (name: x[0], size: x[1])).OrderBy(x => x.name)) {
+            uint size = Convert.ToUInt32(sizeStr, 10);
+            uint hash = nameStr.StartsWith("0x") ? Convert.ToUInt32(nameStr.Remove(0, 2), 16) : Crc32.Compute(nameStr);
+            if (lookup.Contains(hash)) {
+                restbl.NameTable.Add(new(nameStr, size));
+            }
+            else {
+                lookup.Add(hash);
+                restbl.CrcTable.Add(new(hash, size));
+            }
+        }
+
+        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, restbl.ToBinary()) : restbl.ToBinary();
 
         if (path == _file) {
             WriteToSource(data);

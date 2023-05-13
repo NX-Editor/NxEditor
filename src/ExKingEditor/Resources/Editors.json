@@ -6,5 +6,6 @@
   ".genvb": "SarcViewModel",
   ".pack": "SarcViewModel",
   ".sarc": "SarcViewModel",
-  ".ta": "SarcViewModel"
+  ".ta": "SarcViewModel",
+  ".rsizetable": "RestblViewModel"
 }
