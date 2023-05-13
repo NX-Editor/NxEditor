@@ -1,3 +1,6 @@
 [submodule "lib/Cead"]
 	path = lib/Cead
 	url = https://github.com/TotkMods/Cead.git
+[submodule "lib/cs-restbl"]
+	path = lib/cs-restbl
+	url = https://github.com/Nintendo-EPD/cs-restbl
