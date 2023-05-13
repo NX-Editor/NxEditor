@@ -8,14 +8,14 @@ namespace ExKingEditor.Views.Editors;
 
 public partial class BymlView : UserControl
 {
-    private static readonly RegistryOptions registryOptions = new(ThemeName.DarkPlus);
+    private static readonly RegistryOptions _registryOptions = new(ThemeName.DarkPlus);
 
     public BymlView()
     {
         InitializeComponent();
 
         // Initialize TextEditor
-        TextMate.Installation textMateInstallation = TextEditor.InstallTextMate(registryOptions);
+        TextMate.Installation textMateInstallation = TextEditor.InstallTextMate(_registryOptions);
         textMateInstallation.SetGrammar("source.yaml");
     }
 
