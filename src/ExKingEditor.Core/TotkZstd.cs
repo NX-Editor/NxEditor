@@ -7,10 +7,12 @@ public class TotkZstd
 {
     private static readonly string _zsDicPath = Path.Combine(TotkConfig.Shared.GamePath, "Pack", "ZsDic.pack.zs");
 
+    private static readonly Decompressor _defaultDecompressor = new();
     private static readonly Decompressor _commonDecompressor = new();
     private static readonly Decompressor _mapDecompressor = new();
     private static readonly Decompressor _packDecompressor = new();
 
+    private static readonly Compressor _defaultCompressor = new(16);
     private static readonly Compressor _commonCompressor = new(16);
     private static readonly Compressor _mapCompressor = new(16);
     private static readonly Compressor _packCompressor = new(16);
@@ -34,6 +36,7 @@ public class TotkZstd
         return
             file.EndsWith(".bcett.byml.zs") ? _mapDecompressor.Unwrap(raw) :
             file.EndsWith(".pack.zs") ? _packDecompressor.Unwrap(raw) :
+            file.EndsWith(".rsizetable.zs") ? _defaultDecompressor.Unwrap(raw) : 
             _commonDecompressor.Unwrap(raw);
     }
 
@@ -42,6 +45,7 @@ public class TotkZstd
         return
             file.EndsWith(".bcett.byml") ? _mapCompressor.Wrap(raw) :
             file.EndsWith(".pack.zs") ? _packCompressor.Wrap(raw) :
+            file.EndsWith(".rsizetable.zs") ? _defaultCompressor.Wrap(raw) :
             _commonCompressor.Wrap(raw);
     }
 }
