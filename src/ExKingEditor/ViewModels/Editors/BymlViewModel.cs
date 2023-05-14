@@ -3,12 +3,15 @@ using Cead;
 using Cead.Handles;
 using ExKingEditor.Core;
 using ExKingEditor.Models;
+using System.Buffers.Binary;
 
 namespace ExKingEditor.ViewModels.Editors;
 
 public partial class BymlViewModel : ReactiveEditor
 {
     private string _yaml;
+    private int _version;
+    private bool _isBigEndian;
 
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
@@ -17,12 +20,16 @@ public partial class BymlViewModel : ReactiveEditor
     {
         using Byml byml = Byml.FromBinary(_data);
         Yaml = _yaml = byml.ToText();
+
+        _version = (_isBigEndian = _data.AsSpan()[..2].SequenceEqual("BY"u8))
+            ? BinaryPrimitives.ReadInt16BigEndian(_data.AsSpan()[2..4])
+            : BinaryPrimitives.ReadInt16LittleEndian(_data.AsSpan()[2..4]);
     }
 
     public override void SaveAs(string path)
     {
         using Byml byml = Byml.FromText(Yaml);
-        using DataHandle handle = byml.ToBinary(false, version: 7);
+        using DataHandle handle = byml.ToBinary(_isBigEndian, _version);
 
         Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
