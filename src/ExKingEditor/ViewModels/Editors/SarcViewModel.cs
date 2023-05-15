@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Cead;
@@ -357,7 +358,7 @@ public partial class SarcViewModel : ReactiveEditor
     private FileItemNode? CreateNodeFromPath(string path, byte[] data, bool expandParentTree = false)
     {
         NodeMap map = _map;
-        FileItemNode item = _root;
+        FileItemNode item = Root;
 
         foreach (var part in path.Replace('\\', '/').Split('/')) {
             if (!map.TryGetValue(part, out var node)) {
@@ -385,11 +386,15 @@ public partial class SarcViewModel : ReactiveEditor
         throw new Exception($"Import Failed: the tree item was null - '{path}' ({data.Length})");
     }
 
-    internal NodeMap RemoveNodeFromMap(FileItemNode node, string? key = null)
+    internal NodeMap? RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
         NodeMap map = _map;
         foreach (var part in node.GetPathParts()) {
-            map = (NodeMap)map[part].map;
+            if (!map.TryGetValue(part, out var _node)) {
+                return null;
+            }
+
+            map = (NodeMap)_node.map;
         }
 
         key ??= node.Header;
@@ -399,7 +404,7 @@ public partial class SarcViewModel : ReactiveEditor
 
     internal void RenameMapNode(FileItemNode node)
     {
-        NodeMap map = RemoveNodeFromMap(node, node.PrevName);
+        NodeMap map = RemoveNodeFromMap(node, node.PrevName)!;
 
         map[node.Header] = (node, new NodeMap());
         node.PrevName = null;
