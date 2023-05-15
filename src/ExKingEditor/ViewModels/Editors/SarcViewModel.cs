@@ -387,11 +387,17 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     internal NodeMap? RemoveNodeFromMap(FileItemNode node, string? key = null)
+    internal (NodeMap, NodeMap) RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
         key ??= node.Header;
         NodeMap? map = FindNodeMap(node);
+        if (map != null) {
+            NodeMap child = (NodeMap)map[key].map;
         map?.Remove(key);
-        return map;
+            return (map!, child!);
+        }
+
+        return (null!, null!);
     }
 
     internal NodeMap? FindNodeMap(FileItemNode node)
@@ -410,9 +416,9 @@ public partial class SarcViewModel : ReactiveEditor
 
     internal void RenameMapNode(FileItemNode node)
     {
-        NodeMap map = RemoveNodeFromMap(node, node.PrevName)!;
+        (NodeMap map, NodeMap child) = RemoveNodeFromMap(node, node.PrevName)!;
 
-        map[node.Header] = (node, new NodeMap());
+        map![node.Header] = (node, child);
         node.PrevName = null;
     }
 }
