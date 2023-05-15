@@ -40,6 +40,13 @@ public partial class SarcView : UserControl
         }
     }
 
+    public void RenameClientAttached(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is TextBox tb && tb.DataContext is FileItemNode node) {
+            node.SetVisualRoot(tb.Parent?.Parent as TreeViewItem);
+        }
+    }
+
     public void RenameKeyDown(object? sender, KeyEventArgs e)
     {
         if (sender is TextBox tb && (e.Key == Key.Enter || e.Key == Key.Escape)) {

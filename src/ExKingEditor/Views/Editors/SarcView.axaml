@@ -99,6 +99,7 @@
                                    Text="{Binding Header}" />
                         <TextBox Grid.Column="1"
                                  AcceptsTab="False"
+                                 AttachedToVisualTree="RenameClientAttached"
                                  Classes="Inline"
                                  IsVisible="{Binding IsRenaming, Mode=TwoWay}"
                                  KeyDown="RenameKeyDown"

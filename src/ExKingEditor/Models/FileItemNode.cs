@@ -1,3 +1,4 @@
+﻿using Avalonia.Controls;
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
@@ -6,6 +7,8 @@ namespace ExKingEditor.Models;
 
 public partial class FileItemNode : ObservableObject
 {
+    private TreeViewItem? _visualRoot = null;
+
     [ObservableProperty]
     private FileItemNode? _parent;
 
@@ -98,6 +101,11 @@ public partial class FileItemNode : ObservableObject
     public void SetData(byte[] data)
     {
         _data = data;
+    }
+
+    internal void SetVisualRoot(TreeViewItem? item)
+    {
+        _visualRoot = item;
     }
 
     public FileItemNode Clone()
