@@ -10,8 +10,8 @@ namespace ExKingEditor.ViewModels.Editors;
 public partial class BymlViewModel : ReactiveEditor
 {
     private string _yaml;
-    private int _version;
-    private bool _isBigEndian;
+    private readonly int _version;
+    private readonly bool _isBigEndian;
 
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
