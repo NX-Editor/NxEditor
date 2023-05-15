@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using ExKingEditor.ViewModels.Editors;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 
@@ -7,7 +8,7 @@ namespace ExKingEditor.Models;
 
 public partial class FileItemNode : ObservableObject
 {
-    private TreeViewItem? _visualRoot = null;
+    private TextBox? _renameClient = null;
 
     [ObservableProperty]
     private FileItemNode? _parent;
@@ -47,6 +48,24 @@ public partial class FileItemNode : ObservableObject
         }
     }
 
+    public void BeginRename()
+    {
+        App.Desktop?.DisableGlobalShortcuts();
+        _renameClient?.SelectAll();
+        _renameClient?.Focus();
+        PrevName = Header;
+
+        IsRenaming = true;
+    }
+
+    public void EndRename(SarcViewModel owner)
+    {
+        App.Desktop?.ActivateGlobalShortcuts();
+        owner.RenameMapNode(this);
+        // Stage change in owner
+        IsRenaming = false;
+    }
+
     public async Task ExportAsync(string path, bool recursive = true, bool isSingleFile = false, FileItemNode? relativeTo = null)
         => await Task.Run(() => Export(path, recursive, isSingleFile, relativeTo));
     public void Export(string path, bool recursive = true, bool isSingleFile = false, FileItemNode? relativeTo = null)
@@ -73,7 +92,7 @@ public partial class FileItemNode : ObservableObject
     public Stack<string> GetPathParts(FileItemNode? relativeTo = null)
     {
         Stack<string> parts = new();
-        FileItemNode? parent = _parent;
+        FileItemNode? parent = Parent;
         while (parent != null && parent != relativeTo && parent.Header != "__root__") {
             parts.Push(parent.Header);
             parent = parent.Parent;
@@ -103,9 +122,9 @@ public partial class FileItemNode : ObservableObject
         _data = data;
     }
 
-    internal void SetVisualRoot(TreeViewItem? item)
+    internal void SetRenameClient(TextBox? renameClient)
     {
-        _visualRoot = item;
+        _renameClient = renameClient;
     }
 
     public FileItemNode Clone()

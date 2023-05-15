@@ -283,14 +283,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Rename()
     {
         if (Selected.FirstOrDefault() is FileItemNode node) {
-            if (node.IsRenaming && node.PrevName != null) {
-                _history.StageChange(SarcChange.Remove, Selected.ToList());
-                RenameMapNode(node);
-            }
-            else {
-                node.PrevName = node.Header;
-                node.IsRenaming = true;
-            }
+            node.BeginRename();
         }
     }
 
@@ -387,7 +380,7 @@ public partial class SarcViewModel : ReactiveEditor
         throw new Exception($"Import Failed: the tree item was null - '{path}' ({data.Length})");
     }
 
-    private NodeMap RemoveNodeFromMap(FileItemNode node, string? key = null)
+    internal NodeMap RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
         NodeMap map = _map;
         foreach (var part in node.GetPathParts()) {
@@ -399,7 +392,7 @@ public partial class SarcViewModel : ReactiveEditor
         return map;
     }
 
-    private void RenameMapNode(FileItemNode node)
+    internal void RenameMapNode(FileItemNode node)
     {
         NodeMap map = RemoveNodeFromMap(node, node.PrevName);
 

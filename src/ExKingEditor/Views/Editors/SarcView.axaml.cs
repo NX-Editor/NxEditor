@@ -1,7 +1,10 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using ExKingEditor.Generators;
+using ExKingEditor.Models;
 using ExKingEditor.Models.Editors;
 using ExKingEditor.ViewModels.Editors;
 
@@ -43,7 +46,14 @@ public partial class SarcView : UserControl
     public void RenameClientAttached(object? sender, VisualTreeAttachmentEventArgs e)
     {
         if (sender is TextBox tb && tb.DataContext is FileItemNode node) {
-            node.SetVisualRoot(tb.Parent?.Parent as TreeViewItem);
+            node.SetRenameClient(tb);
+        }
+    }
+
+    public void RenameLostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is SarcViewModel vm && sender is TextBox tb && tb.DataContext is FileItemNode node) {
+            node.EndRename(vm);
         }
     }
 
@@ -56,8 +66,8 @@ public partial class SarcView : UserControl
 
     public void RenameDoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is TextBlock tb) {
-            tb.IsVisible = false;
+        if (sender is TextBlock tb && tb.DataContext is FileItemNode node) {
+            node.BeginRename();
         }
 
         e.Handled = true;

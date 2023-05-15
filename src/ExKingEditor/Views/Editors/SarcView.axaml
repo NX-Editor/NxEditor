@@ -103,6 +103,7 @@
                                  Classes="Inline"
                                  IsVisible="{Binding IsRenaming, Mode=TwoWay}"
                                  KeyDown="RenameKeyDown"
+                                 LostFocus="RenameLostFocus"
                                  Text="{Binding Header}" />
                     </Grid>
                 </TreeDataTemplate>
