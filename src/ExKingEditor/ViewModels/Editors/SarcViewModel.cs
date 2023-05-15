@@ -17,9 +17,10 @@ namespace ExKingEditor.ViewModels.Editors;
 
 public partial class SarcViewModel : ReactiveEditor
 {
-    private readonly SarcHistoryStack _history = new();
     private readonly List<FileItemNode> _searchCache = new();
     private readonly NodeMap _map = new();
+
+    public SarcHistoryStack History { get; } = new();
 
     public SarcView? View { get; set; }
 
@@ -84,18 +85,18 @@ public partial class SarcViewModel : ReactiveEditor
 
     public override bool HasChanged()
     {
-        return _history.HasChanges;
+        return History.HasChanges;
     }
 
     public override void Undo()
     {
-        _history.InvokeLastAction(isRedo: false);
+        History.InvokeLastAction(isRedo: false);
         base.Undo();
     }
 
     public override void Redo()
     {
-        _history.InvokeLastAction(isRedo: true);
+        History.InvokeLastAction(isRedo: true);
         base.Redo();
     }
 
@@ -247,7 +248,7 @@ public partial class SarcViewModel : ReactiveEditor
             Selected.Add(node);
 
             if (!isRelPath) {
-                _history.StageChange(SarcChange.Import, new(1) {
+                History.StageChange(SarcChange.Import, new(1) {
                     node
                 });
             }
@@ -269,7 +270,7 @@ public partial class SarcViewModel : ReactiveEditor
                     File.ReadAllBytes(file), isRelPath: true);
             }
 
-            _history.StageChange(SarcChange.Import, nodes.ToList());
+            History.StageChange(SarcChange.Import, nodes.ToList());
         }
     }
 
@@ -344,7 +345,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Remove()
     {
         if (Selected.Any()) {
-            _history.StageChange(SarcChange.Remove, Selected.ToList());
+            History.StageChange(SarcChange.Remove, Selected.ToList());
             foreach (var item in Selected) {
                 (item.Parent ?? Root).Children.Remove(item);
                 RemoveNodeFromMap(item);
