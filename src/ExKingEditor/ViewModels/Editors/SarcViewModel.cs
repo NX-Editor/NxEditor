@@ -316,6 +316,28 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
+    public async Task ExportPath()
+    {
+        if (Selected.Count <= 0) {
+            return;
+        }
+
+        if (Selected.Count == 1 && Selected[0].IsFile) {
+            BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", "Any File:*.*", Path.GetFileName(Selected[0].Header), "export-sarc-file");
+            if (await dialog.ShowDialog() is string path) {
+                Selected[0].Export(path, relativeTo: Root);
+            }
+        }
+        else {
+            BrowserDialog dialog = new(BrowserMode.OpenFolder, "Save to Folder", "Any File:*.*", instanceBrowserKey: "export-sarc-folder");
+            if (await dialog.ShowDialog() is string path) {
+                foreach (var node in Selected) {
+                    node.Export(path, relativeTo: Root);
+                }
+            }
+        }
+    }
+
     public async Task Replace()
     {
         if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {

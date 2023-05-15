@@ -17,6 +17,7 @@
         <KeyBinding Command="{Binding Rename}" Gesture="F2" />
         <KeyBinding Command="{Binding Root.Sort}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding Export}" Gesture="Ctrl+E" />
+        <KeyBinding Command="{Binding ExportPath}" Gesture="Ctrl+Shift+E" />
         <KeyBinding Command="{Binding Replace}" Gesture="Ctrl+R" />
         <KeyBinding Command="{Binding Remove}" Gesture="Delete" />
     </UserControl.KeyBindings>
@@ -60,6 +61,13 @@
                     <MenuItem Command="{Binding Export}"
                               Header="Export"
                               InputGesture="Ctrl+E">
+                        <MenuItem.Icon>
+                            <pi:Icon Value="fa-solid fa-arrow-right-from-bracket" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding ExportPath}"
+                              Header="Export Path"
+                              InputGesture="Ctrl+Shift+E">
                         <MenuItem.Icon>
                             <pi:Icon Value="fa-solid fa-arrow-right-from-bracket" />
                         </MenuItem.Icon>

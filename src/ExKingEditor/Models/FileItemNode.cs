@@ -48,7 +48,12 @@ public partial class FileItemNode : ObservableObject
         => await Task.Run(() => Export(path, recursive, isSingleFile, relativeTo));
     public void Export(string path, bool recursive = true, bool isSingleFile = false, FileItemNode? relativeTo = null)
     {
-        if (IsFile) {
+        if (IsFile && relativeTo != null) {
+            Directory.CreateDirectory(path = Path.Combine(Path.GetDirectoryName(path)!, GetPath(relativeTo)));
+            using FileStream fs = File.Create(Path.Combine(path, Header));
+            fs.Write(Data);
+        }
+        else if (IsFile) {
             Directory.CreateDirectory(isSingleFile ? Path.GetDirectoryName(path)! : path);
             using FileStream fs = File.Create(isSingleFile ? path : Path.Combine(path, Header));
             fs.Write(Data);
