@@ -115,11 +115,24 @@ public partial class SarcView : UserControl
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
                 if (DataContext is SarcViewModel vm) {
+                    object? src = e.Source;
+                    FileItemNode? node = null;
+                    while (src is not TreeView && src is Control control) {
+                        if (src is TreeViewItem target) {
+                            node = target.DataContext as FileItemNode;
+                            break;
+                        }
+
+                        src = control.Parent;
+                    }
+
+                    node = node?.IsFile == true ? node?.Parent : node;
+
                     if (File.Exists(path)) {
-                        vm.ImportFile(path, File.ReadAllBytes(path));
+                        vm.ImportFile(path, File.ReadAllBytes(path), parentNode: node);
                     }
                     else {
-                        vm.ImportFolder(path, importTopLevel: true);
+                        vm.ImportFolder(path, importTopLevel: true, parentNode: node);
                     }
                 }
             }

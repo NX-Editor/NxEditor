@@ -24,7 +24,7 @@ public partial class SarcViewModel : ReactiveEditor
     public SarcHistoryStack History { get; } = new();
 
     public SarcView? View { get; set; }
-
+    
     [ObservableProperty]
     private FileItemNode _root = new("__root__");
 
@@ -242,9 +242,9 @@ public partial class SarcViewModel : ReactiveEditor
     public void ChangeFindMode() => IsReplacing = !IsReplacing;
     public void CloseFindDialog() => IsFinding = false;
 
-    public FileItemNode ImportFile(string path, byte[] data, bool isRelPath = false)
+    public FileItemNode ImportFile(string path, byte[] data, bool isRelPath = false, FileItemNode? parentNode = null)
     {
-        if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true) is FileItemNode node) {
+        if (CreateNodeFromPath(isRelPath ? path : Path.GetFileName(path), data, expandParentTree: true, parentNode) is FileItemNode node) {
             node.IsSelected = true;
             Selected.Add(node);
 
@@ -260,7 +260,7 @@ public partial class SarcViewModel : ReactiveEditor
         throw new InvalidOperationException("Import Failed: The file node could not be created");
     }
 
-    public void ImportFolder(string path, bool importTopLevel = false)
+    public void ImportFolder(string path, bool importTopLevel = false, FileItemNode? parentNode = null)
     {
         string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
         if (files.Length > 0) {
@@ -268,7 +268,7 @@ public partial class SarcViewModel : ReactiveEditor
             for (int i = 0; i < files.Length; i++) {
                 string file = files[i];
                 nodes[i] = ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
-                    File.ReadAllBytes(file), isRelPath: true);
+                    File.ReadAllBytes(file), isRelPath: true, parentNode);
             }
 
             History.StageChange(SarcChange.Import, nodes.ToList());
@@ -355,10 +355,10 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
-    private FileItemNode? CreateNodeFromPath(string path, byte[] data, bool expandParentTree = false)
+    private FileItemNode? CreateNodeFromPath(string path, byte[] data, bool expandParentTree = false, FileItemNode? parentNode = null)
     {
-        NodeMap map = _map;
-        FileItemNode item = Root;
+        NodeMap map = parentNode != null ? FindNodeMap(parentNode)! : _map;
+        FileItemNode item = parentNode ?? Root;
 
         foreach (var part in path.Replace('\\', '/').Split('/')) {
             if (!map.TryGetValue(part, out var node)) {
@@ -388,6 +388,14 @@ public partial class SarcViewModel : ReactiveEditor
 
     internal NodeMap? RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
+        key ??= node.Header;
+        NodeMap? map = FindNodeMap(node);
+        map?.Remove(key);
+        return map;
+    }
+
+    internal NodeMap? FindNodeMap(FileItemNode node)
+    {
         NodeMap map = _map;
         foreach (var part in node.GetPathParts()) {
             if (!map.TryGetValue(part, out var _node)) {
@@ -397,8 +405,6 @@ public partial class SarcViewModel : ReactiveEditor
             map = (NodeMap)_node.map;
         }
 
-        key ??= node.Header;
-        map.Remove(key);
         return map;
     }
 
