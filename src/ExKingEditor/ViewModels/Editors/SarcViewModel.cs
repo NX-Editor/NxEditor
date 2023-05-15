@@ -338,6 +338,7 @@ public partial class SarcViewModel : ReactiveEditor
             BrowserDialog dialog = new(BrowserMode.OpenFile, "Replace File", "Any File:*.*", instanceBrowserKey: "replace-sarc-file");
             if (await dialog.ShowDialog() is string path && File.Exists(path)) {
                 node.SetData(File.ReadAllBytes(path));
+                App.Toast("File Replaced", "Sucess", NotificationType.Success);
             }
         }
     }
@@ -362,6 +363,9 @@ public partial class SarcViewModel : ReactiveEditor
             if (!map.TryGetValue(part, out var node)) {
                 map[part] = node = (new(part, item), new NodeMap());
                 item.Children.Add(node.root);
+            }
+            else if (node.root.IsFile) {
+                App.Toast($"Replaced {node.root.Header}", "Sucess", NotificationType.Success);
             }
 
             item = node.root;
