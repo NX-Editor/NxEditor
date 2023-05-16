@@ -14,6 +14,7 @@
              x:DataType="vm:SarcViewModel"
              mc:Ignorable="d">
     <UserControl.KeyBindings>
+        <KeyBinding Command="{Binding Edit}" Gesture="F3" />
         <KeyBinding Command="{Binding Rename}" Gesture="F2" />
         <KeyBinding Command="{Binding Root.Sort}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding Export}" Gesture="Ctrl+E" />
@@ -37,7 +38,7 @@
                 <ContextMenu>
                     <MenuItem Command="{Binding Edit}"
                               Header="Edit"
-                              InputGesture="F4">
+                              InputGesture="F3">
                         <MenuItem.Icon>
                             <pi:Icon Value="fa-regular fa-pen-to-square" />
                         </MenuItem.Icon>

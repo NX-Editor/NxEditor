@@ -2,6 +2,7 @@
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Cead;
 using Cead.Handles;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -294,10 +295,12 @@ public partial class SarcViewModel : ReactiveEditor
         }
     }
 
-    public void Edit()
+    public async Task Edit()
     {
         if (Selected.FirstOrDefault() is FileItemNode node && node.IsFile) {
-            EditorMgr.TryLoadEditorSafe(node.GetFilePath(), node.Data, node.SetData);
+            await Dispatcher.UIThread.InvokeAsync(() => {
+                EditorMgr.TryLoadEditorSafe(node.GetFilePath(), node.Data, node.SetData);
+            });
         }
     }
 
