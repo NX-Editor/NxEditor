@@ -28,10 +28,10 @@ public class MenuFactory
         "MenuFactor-MenuItem"
     };
 
-    private static TopLevel? _visualRoot;
+    private static ShellView? _visualRoot;
     public static ObservableCollection<Control>? ItemsSource { get; set; }
 
-    public static void Init(TopLevel visualRoot)
+    public static void Init(ShellView visualRoot)
     {
         _visualRoot = visualRoot;
     }
@@ -120,10 +120,13 @@ public class MenuFactory
                 };
 
                 if (shortcut != null) {
-                    _visualRoot?.KeyBindings.Add(new KeyBinding {
+                    KeyBinding keyBinding = new() {
                         Gesture = shortcut,
                         Command = command
-                    });
+                    };
+
+                    _visualRoot?.KeyBindings.Add(keyBinding);
+                    _visualRoot?.KeyBindingHeaders.Add(keyBinding, menu.Path);
                 }
 
                 if (func.Name == "Recent") {
