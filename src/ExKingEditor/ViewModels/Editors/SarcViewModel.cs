@@ -21,7 +21,7 @@ public partial class SarcViewModel : ReactiveEditor
     private readonly List<FileItemNode> _searchCache = new();
     private readonly NodeMap _map = new();
 
-    public SarcHistoryStack History { get; } = new();
+    public SarcHistoryStack History { get; }
 
     public SarcView? View { get; set; }
     
@@ -59,6 +59,8 @@ public partial class SarcViewModel : ReactiveEditor
         foreach ((var name, var sarcFile) in sarc.OrderBy(x => x.Key)) {
             CreateNodeFromPath(name, sarcFile.ToArray());
         }
+
+        History = new(this);
     }
 
     public override void SaveAs(string path)
@@ -196,10 +198,10 @@ public partial class SarcViewModel : ReactiveEditor
     }
 
     public void FindNextCommand(bool clearSelection) => FindNext(clearSelection, findLast: false);
-    public void FindNext(bool clearSelection, bool findLast = false)
+    public (FileItemNode, string?) FindNext(bool clearSelection, bool findLast = false)
     {
         if (!_searchCache.Any()) {
-            return;
+            return (null!, null);
         }
 
         if (clearSelection) {
@@ -222,20 +224,37 @@ public partial class SarcViewModel : ReactiveEditor
         Selected.Add(node);
 
         // Execute replace function
+        string? prevNameCache = null;
         if (IsReplacing && ReplaceField != null) {
             // Rename the selected item
-            node.PrevName = node.Header;
+            node.PrevName = prevNameCache = node.Header;
             node.Header = node.Header.Replace(FindField ?? "", ReplaceField);
+
+            if (clearSelection) {
+                History.StageChange(SarcChange.Rename, new List<(FileItemNode, object?)>() {
+                    (node, node.PrevName)
+                });
+            }
+
             RenameMapNode(node);
         }
+
+        return (node, prevNameCache);
     }
 
     public void FindAll()
     {
+        List<(FileItemNode, object?)>? changes = (IsReplacing && ReplaceField != null) ? new() : null;
+
         Selected.Clear();
         SearchIndex = -1;
         while (SearchIndex < SearchCount) {
-            FindNext(clearSelection: false);
+            (FileItemNode node, string? prevName) = FindNext(clearSelection: false);
+            changes?.Add((node, prevName!));
+        }
+
+        if (changes != null) {
+            History.StageChange(SarcChange.Rename, changes);
         }
     }
 
@@ -250,7 +269,7 @@ public partial class SarcViewModel : ReactiveEditor
 
             if (!isRelPath) {
                 History.StageChange(SarcChange.Import, new(1) {
-                    node
+                    (node, null)
                 });
             }
 
@@ -264,10 +283,10 @@ public partial class SarcViewModel : ReactiveEditor
     {
         string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
         if (files.Length > 0) {
-            FileItemNode[] nodes = new FileItemNode[files.Length];
+            (FileItemNode node, object? _)[] nodes = new (FileItemNode, object? _)[files.Length];
             for (int i = 0; i < files.Length; i++) {
                 string file = files[i];
-                nodes[i] = ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
+                nodes[i].node = ImportFile(Path.GetRelativePath(importTopLevel ? Path.GetDirectoryName(path)! : path, file),
                     File.ReadAllBytes(file), isRelPath: true, parentNode);
             }
 
@@ -347,7 +366,7 @@ public partial class SarcViewModel : ReactiveEditor
     public void Remove()
     {
         if (Selected.Any()) {
-            History.StageChange(SarcChange.Remove, Selected.ToList());
+            History.StageChange(SarcChange.Remove, Selected.Select(x => (x, null as object)).ToList());
             foreach (var item in Selected) {
                 (item.Parent ?? Root).Children.Remove(item);
                 RemoveNodeFromMap(item);
@@ -386,28 +405,40 @@ public partial class SarcViewModel : ReactiveEditor
         throw new Exception($"Import Failed: the tree item was null - '{path}' ({data.Length})");
     }
 
-    internal NodeMap? RemoveNodeFromMap(FileItemNode node, string? key = null)
+    internal void AddNodeToTree(FileItemNode node)
+    {
+        NodeMap? map = FindNodeMap(node, createPath: true);
+        map?.Add(node.Header, (node, new NodeMap()));
+    }
+
     internal (NodeMap, NodeMap) RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
         key ??= node.Header;
         NodeMap? map = FindNodeMap(node);
         if (map != null) {
             NodeMap child = (NodeMap)map[key].map;
-        map?.Remove(key);
+            map?.Remove(key);
             return (map!, child!);
         }
 
         return (null!, null!);
     }
 
-    internal NodeMap? FindNodeMap(FileItemNode node)
+    internal NodeMap? FindNodeMap(FileItemNode node, bool createPath = false)
     {
         NodeMap map = _map;
+        FileItemNode item = Root;
+
         foreach (var part in node.GetPathParts()) {
             if (!map.TryGetValue(part, out var _node)) {
+                if (createPath) {
+                    map[part] = _node = (new(part, item), new NodeMap());
+                }
+
                 return null;
             }
 
+            item = _node.root;
             map = (NodeMap)_node.map;
         }
 

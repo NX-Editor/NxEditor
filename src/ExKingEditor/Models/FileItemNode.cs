@@ -61,8 +61,11 @@ public partial class FileItemNode : ObservableObject
     public void EndRename(SarcViewModel owner)
     {
         App.Desktop?.ActivateGlobalShortcuts();
+        owner.History.StageChange(Editors.SarcChange.Rename, new List<(FileItemNode, object?)>() {
+            (this, PrevName)
+        });
         owner.RenameMapNode(this);
-        // Stage change in owner
+
         IsRenaming = false;
     }
 
