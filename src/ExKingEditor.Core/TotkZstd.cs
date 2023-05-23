@@ -43,7 +43,7 @@ public class TotkZstd
     public static Span<byte> Compress(string file, Span<byte> raw)
     {
         return
-            file.EndsWith(".bcett.byml") ? _mapCompressor.Wrap(raw) :
+            file.EndsWith(".bcett.byml.zs") ? _mapCompressor.Wrap(raw) :
             file.EndsWith(".pack.zs") ? _packCompressor.Wrap(raw) :
             file.EndsWith(".rsizetable.zs") ? _defaultCompressor.Wrap(raw) :
             _commonCompressor.Wrap(raw);
