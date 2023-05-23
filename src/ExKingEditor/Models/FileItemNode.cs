@@ -95,6 +95,11 @@ public partial class FileItemNode : ObservableObject
     public Stack<string> GetPathParts(FileItemNode? relativeTo = null)
     {
         Stack<string> parts = new();
+
+        if (!IsFile) {
+            parts.Push(Header);
+        }
+
         FileItemNode? parent = Parent;
         while (parent != null && parent != relativeTo && parent.Header != "__root__") {
             parts.Push(parent.Header);
