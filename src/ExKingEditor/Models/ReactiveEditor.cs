@@ -13,7 +13,6 @@ public abstract unsafe class ReactiveEditor : Document
     protected readonly string _file;
     protected readonly string _temp;
     protected bool _compressed;
-    protected readonly Stream? _stream;
     protected readonly Action<byte[]>? _setSource;
     protected readonly byte[] _data;
 
@@ -25,7 +24,6 @@ public abstract unsafe class ReactiveEditor : Document
         Title = Path.GetFileName(file);
 
         _file = file;
-        _stream = fs;
         _setSource = setSource;
         _data = data;
 
@@ -68,13 +66,12 @@ public abstract unsafe class ReactiveEditor : Document
     
     protected void WriteToSource(Span<byte> data)
     {
-        if (_stream is FileStream) {
-            _stream.Seek(0, SeekOrigin.Begin);
-            _stream.SetLength(data.Length);
-            _stream.Write(data);
+        if (_setSource != null) {
+            _setSource.Invoke(data.ToArray());
         }
         else {
-            _setSource?.Invoke(data.ToArray());
+            using FileStream fs = File.Create(_file);
+            fs.Write(data);
         }
     }
 
@@ -89,6 +86,5 @@ public abstract unsafe class ReactiveEditor : Document
     {
         OpenEditors.Remove(this);
         Directory.Delete(_temp, true);
-        _stream?.Close();
     }
 }
