@@ -13,7 +13,7 @@ public partial class ShellView : Window
 {
     private List<KeyBinding> _keyBindings = new();
 
-    public Dictionary<KeyBinding, string> KeyBindingHeaders { get; } = new();
+    public Dictionary<KeyGesture, string> KeyBindingHeaders { get; } = new();
     public static ObservableCollection<Control>? MainMenu { get; private set; }
     public static int MenuOverflow { get; set; } = 0;
 
@@ -90,7 +90,7 @@ public partial class ShellView : Window
         for (int i = 0; i < KeyBindings.Count; i++) {
             KeyBinding key = KeyBindings[i];
             foreach (var target in targets) {
-                if (KeyBindingHeaders[key].StartsWith(target)) {
+                if (KeyBindingHeaders[key.Gesture].StartsWith(target)) {
                     _keyBindings.Add(key);
                     KeyBindings.RemoveAt(i);
                 }

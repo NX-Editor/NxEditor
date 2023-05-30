@@ -126,7 +126,7 @@ public class MenuFactory
                     };
 
                     _visualRoot?.KeyBindings.Add(keyBinding);
-                    _visualRoot?.KeyBindingHeaders.Add(keyBinding, menu.Path);
+                    _visualRoot?.KeyBindingHeaders.TryAdd(keyBinding.Gesture, menu.Path);
                 }
 
                 if (func.Name == "Recent") {
