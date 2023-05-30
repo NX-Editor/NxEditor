@@ -79,6 +79,7 @@ public partial class ShellView : Window
         _keyBindings = new();
     }
 
+    public void DisableGlobalShortcuts() => DisableGlobalShortcuts(Array.Empty<string>());
     public void DisableGlobalShortcuts(params string[] targets)
     {
         if (targets.Length <= 0) {
