@@ -66,7 +66,7 @@ public class ExConfig : ISettingsBase
         }
 
         return key switch {
-            "GamePath" => File.Exists(Path.Combine(path, "ActorSystem", "ActorSystemSetting", "GameActor.engine__actor__ActorSystemSetting.bgyml")),
+            "GamePath" => File.Exists(Path.Combine(path, "Pack", "ZsDic.pack.zs")),
             _ => false,
         };
     }
