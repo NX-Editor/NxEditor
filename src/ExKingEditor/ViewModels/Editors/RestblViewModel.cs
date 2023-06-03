@@ -30,34 +30,42 @@ public class RestblViewModel : ReactiveEditor
         }
         
         Yaml = _yaml = yaml.ToString();
+        SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
     }
 
     public override void SaveAs(string path)
     {
-        HashSet<uint> lookup = new();
+        string ext = Path.GetExtension(path);
 
-        Restbl restbl = new();
-        foreach ((var nameStr, var sizeStr) in Yaml.Split('\n')[..(^1)].Select(x => x.Split(": ")).Select(x => (name: x[0], size: x[1])).OrderBy(x => x.name)) {
-            uint size = Convert.ToUInt32(sizeStr, 10);
-            uint hash = nameStr.StartsWith("0x") ? Convert.ToUInt32(nameStr.Remove(0, 2), 16) : Crc32.Compute(nameStr);
-            if (lookup.Contains(hash)) {
-                restbl.NameTable.Add(new(nameStr, size));
-            }
-            else {
-                lookup.Add(hash);
-                restbl.CrcTable.Add(new(hash, size));
-            }
-        }
-
-        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, restbl.ToBinary()) : restbl.ToBinary();
-
-        if (path == _file) {
-            WriteToSource(data);
+        if (ext is ".yaml" or ".yml") {
+            File.WriteAllText(path, Yaml);
         }
         else {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            using FileStream fs = File.Create(path);
-            fs.Write(data);
+            HashSet<uint> lookup = new();
+
+            Restbl restbl = new();
+            foreach ((var nameStr, var sizeStr) in Yaml.Split('\n')[..(^1)].Select(x => x.Split(": ")).Select(x => (name: x[0], size: x[1])).OrderBy(x => x.name)) {
+                uint size = Convert.ToUInt32(sizeStr, 10);
+                uint hash = nameStr.StartsWith("0x") ? Convert.ToUInt32(nameStr.Remove(0, 2), 16) : Crc32.Compute(nameStr);
+                if (lookup.Contains(hash)) {
+                    restbl.NameTable.Add(new(nameStr, size));
+                }
+                else {
+                    lookup.Add(hash);
+                    restbl.CrcTable.Add(new(hash, size));
+                }
+            }
+
+            Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, restbl.ToBinary()) : restbl.ToBinary();
+
+            if (path == _file) {
+                WriteToSource(data);
+            }
+            else {
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                using FileStream fs = File.Create(path);
+                fs.Write(data);
+            }
         }
 
         _yaml = Yaml;
