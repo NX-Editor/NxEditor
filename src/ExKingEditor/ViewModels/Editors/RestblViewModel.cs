@@ -15,7 +15,7 @@ public class RestblViewModel : ReactiveEditor
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
 
-    public RestblViewModel(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
+    public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         Restbl table = Restbl.FromBinary(_data);
         StringBuilder yaml = new();

@@ -36,19 +36,14 @@ public static class EditorMgr
             return true;
         }
 
-        Stream? fs = null;
-        if (data == null) {
-            fs = File.Open(path, FileMode.Open);
-            data = new byte[fs.Length];
-            fs.Read(data, 0, data.Length);
-        }
+        data ??= File.ReadAllBytes(path);
 
         // Decompress if necessary
         data = path.EndsWith(".zs") ? TotkZstd.Decompress(path, data).ToArray() : data;
 
         string ext = GetExt(path);
         object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_editors[ext]}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, fs, setSource);
+            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, setSource);
 
         if (instance is ReactiveEditor editor) {
             ShellDockFactory.AddDoc(editor);

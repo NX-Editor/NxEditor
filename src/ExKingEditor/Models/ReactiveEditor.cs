@@ -18,7 +18,7 @@ public abstract unsafe class ReactiveEditor : Document
 
     public string FilePath => _file;
 
-    public ReactiveEditor(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null)
+    public ReactiveEditor(string file, byte[] data, Action<byte[]>? setSource = null)
     {
         Id = file;
         Title = Path.GetFileName(file);

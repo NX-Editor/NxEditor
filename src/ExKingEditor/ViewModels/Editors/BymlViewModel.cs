@@ -16,7 +16,7 @@ public partial class BymlViewModel : ReactiveEditor
     public TextEditor Editor { get; set; } = null!;
     public string Yaml { get; set; }
 
-    public BymlViewModel(string file, byte[] data, Stream? fs, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
+    public BymlViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         using Byml byml = Byml.FromBinary(_data);
         Yaml = _yaml = byml.ToText();

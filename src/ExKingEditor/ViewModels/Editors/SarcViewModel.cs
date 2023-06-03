@@ -53,7 +53,7 @@ public partial class SarcViewModel : ReactiveEditor
     [ObservableProperty]
     private int _searchIndex = -1;
 
-    public SarcViewModel(string file, byte[] data, Stream? fs = null, Action<byte[]>? setSource = null) : base(file, data, fs, setSource)
+    public SarcViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         using Sarc sarc = Sarc.FromBinary(_data);
 
