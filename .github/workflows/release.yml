@@ -71,7 +71,7 @@ jobs:
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
             -DCMAKE_BUILD_TYPE:STRING=Release \
             -S ./lib/cs-msbt/lib/NativeIO/native \
-            -B ./lib/cs-msbt/lib/NativeIO/native/build \
+            -B ./lib/cs-msbt/lib/NativeIO/native/build/${{ matrix.config.build }} \
             -G "Ninja"
 
       - name: Build NativeIO
