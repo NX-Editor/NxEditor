@@ -4,6 +4,7 @@ using Cead.Handles;
 using ExKingEditor.Core;
 using ExKingEditor.Models;
 using System.Buffers.Binary;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExKingEditor.ViewModels.Editors;
 
@@ -24,22 +25,31 @@ public partial class BymlViewModel : ReactiveEditor
         _version = (_isBigEndian = _data.AsSpan()[..2].SequenceEqual("BY"u8))
             ? BinaryPrimitives.ReadInt16BigEndian(_data.AsSpan()[2..4])
             : BinaryPrimitives.ReadInt16LittleEndian(_data.AsSpan()[2..4]);
+
+        SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
     }
 
     public override void SaveAs(string path)
     {
-        using Byml byml = Byml.FromText(Yaml);
-        using DataHandle handle = byml.ToBinary(_isBigEndian, _version);
+        string ext = Path.GetExtension(path);
 
-        Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
-
-        if (path == _file) {
-            WriteToSource(data);
+        if (ext is ".yaml" or ".yml") {
+            File.WriteAllText(path, Yaml);
         }
         else {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            using FileStream fs = File.Create(path);
-            fs.Write(data);
+            using Byml byml = Byml.FromText(Yaml);
+            using DataHandle handle = byml.ToBinary(_isBigEndian, _version);
+
+            Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
+
+            if (path == _file) {
+                WriteToSource(data);
+            }
+            else {
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                using FileStream fs = File.Create(path);
+                fs.Write(data);
+            }
         }
 
         _yaml = Yaml;
