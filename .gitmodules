@@ -4,3 +4,6 @@
 [submodule "lib/cs-restbl"]
 	path = lib/cs-restbl
 	url = https://github.com/Nintendo-EPD/cs-restbl
+[submodule "lib/cs-msbt"]
+	path = lib/cs-msbt
+	url = https://github.com/EPD-Libraries/cs-msbt
