@@ -200,9 +200,9 @@ public partial class ShellView : Window
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
                 bool canEdit = EditorMgr.CanEdit(path, out string? editor);
                 DragFadeMaskInfo.Children.Add(new TextBlock {
-                    Text = $"{(canEdit ? editor?.Replace("ViewModel", "") : "Unsupported")}: " +
+                    Text = $"{(canEdit ? editor?.Replace("ViewModel", "") : "Unknown")}: " +
                            Path.GetFileName(path),
-                    Foreground = canEdit ? Brushes.LightGreen : Brushes.Salmon,
+                    Foreground = canEdit ? Brushes.LightGreen : Brushes.Orange,
                 });
             }
         }

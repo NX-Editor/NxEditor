@@ -28,10 +28,6 @@ public static class EditorMgr
     {
         App.Log($"Processing {Path.GetFileName(path)}");
 
-        if (!CanEdit(path)) {
-            throw new NotSupportedException($"Unsupported file type {Path.GetExtension(path)}");
-        }
-
         if (ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
             return true;
         }
@@ -42,8 +38,10 @@ public static class EditorMgr
         data = path.EndsWith(".zs") ? TotkZstd.Decompress(path, data).ToArray() : data;
 
         string ext = GetExt(path);
-        object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{_editors[ext]}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{_editors[ext]}' was not found"), path, data, setSource);
+        string? editorName = _editors.TryGetValue(ext, out editorName) ? editorName : "TextViewModel";
+
+        object? instance = Activator.CreateInstance(Type.GetType($"{nameof(ExKingEditor)}.ViewModels.Editors.{editorName}")
+            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{editorName}' was not found"), path, data, setSource);
 
         if (instance is ReactiveEditor editor) {
             ShellDockFactory.AddDoc(editor);
