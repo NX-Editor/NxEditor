@@ -16,6 +16,7 @@ public abstract unsafe class ReactiveEditor : Document
     protected readonly Action<byte[]>? _setSource;
     protected readonly byte[] _data;
 
+    public List<string> SupportedExtensions { get; } = new();
     public string FilePath => _file;
 
     public ReactiveEditor(string file, byte[] data, Action<byte[]>? setSource = null)
@@ -30,6 +31,9 @@ public abstract unsafe class ReactiveEditor : Document
         // Create temp directory
         _temp = Directory.CreateDirectory(
             Path.Combine(CacheDirectory, Path.GetFileName(file), Guid.NewGuid().ToString())).FullName;
+
+        string ext = Path.GetExtension(file);
+        SupportedExtensions.Add($"{ext.Remove(0, 1).ToUpper()}:*{ext}|");
 
         // Cache the open editor
         OpenEditors.Add(this);

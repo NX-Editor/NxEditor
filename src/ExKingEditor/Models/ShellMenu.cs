@@ -6,6 +6,7 @@ using ExKingEditor.Core.Extensions;
 using ExKingEditor.Generators;
 using ExKingEditor.Helpers;
 using ExKingEditor.ViewModels;
+using System.Text;
 
 namespace ExKingEditor.Models;
 
@@ -34,7 +35,15 @@ public class ShellMenu
     [Menu("Save As", "File", "Ctrl + Shift + S", "fa-regular fa-floppy-disk")]
     public static async Task SaveAs()
     {
-        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", "Any File:*.*", Path.GetFileName(EditorMgr.Current?.FilePath), "save-file");
+        List<string>? supportedExtensions = EditorMgr.Current?.SupportedExtensions;
+        StringBuilder extensionsFilterString = new();
+        if (supportedExtensions?.Any() == true) {
+            foreach (var ext in supportedExtensions) {
+                extensionsFilterString.Append(ext);
+            }
+        }
+
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorMgr.Current?.FilePath), "save-file");
         if (await dialog.ShowDialog() is string path) {
             EditorMgr.Current?.SaveAs(path);
         }
