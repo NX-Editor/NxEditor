@@ -1,0 +1,42 @@
+<Application x:Class="NxEditor.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:NxEditor"
+             xmlns:sty="using:FluentAvalonia.Styling">
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <FontFamily x:Key="UbuntuMono">avares://NxEditor/Assets/Fonts/UbuntuMono/#Ubuntu Mono</FontFamily>
+        <FontFamily x:Key="Ubuntu">avares://NxEditor/Assets/Fonts/Ubuntu/#Ubuntu</FontFamily>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
+        <StyleInclude Source="/Styles/HyperlinkButton.axaml" />
+        <StyleInclude Source="/Styles/MenuItem.axaml" />
+        <StyleInclude Source="/Styles/TreeView.axaml" />
+        <Style>
+            <Style.Resources>
+                <SolidColorBrush x:Key="DockApplicationAccentBrushLow"
+                                 Opacity="0.5"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentBrushMed"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemBaseHighColor}" />
+                <SolidColorBrush x:Key="DockThemeBorderLowBrush" Color="{DynamicResource SystemChromeMediumColor}" />
+                <SolidColorBrush x:Key="DockThemeBackgroundBrush" Color="{DynamicResource SystemChromeLowColor}" />
+                <SolidColorBrush x:Key="DockThemeAccentBrush" Color="{DynamicResource SystemChromeMediumColor}" />
+                <SolidColorBrush x:Key="DockThemeForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemBaseHighColor}" />
+            </Style.Resources>
+        </Style>
+    </Application.Styles>
+</Application>

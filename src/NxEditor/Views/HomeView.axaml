@@ -1,0 +1,56 @@
+<UserControl x:Class="NxEditor.Views.HomeView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="using:NxEditor"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Viewbox MaxWidth="800" MaxHeight="600">
+        <ContentControl HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Grid Width="600"
+                  Height="300"
+                  Margin="10"
+                  RowDefinitions="auto,*">
+                <TextBlock Margin="5"
+                           FontFamily="{StaticResource Ubuntu}"
+                           FontSize="24"
+                           Foreground="{DynamicResource SystemBaseMediumColor}"
+                           Text="{x:Static app:App.Title}" />
+                <Button Margin="5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Classes="Hyperlink"
+                        Command="{Binding VersionLink}"
+                        Content="{x:Static app:App.Version}"
+                        FontFamily="{StaticResource Ubuntu}"
+                        FontSize="20"
+                        Foreground="{DynamicResource SystemAccentColor}" />
+                <Border Name="DragRegion"
+                        Grid.Row="1"
+                        Margin="5"
+                        Background="Transparent"
+                        BorderBrush="{DynamicResource SystemBaseLowColor}"
+                        BorderDashArray="10,10"
+                        BorderThickness="1"
+                        DragDrop.AllowDrop="True">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <i:Icon Margin="25"
+                                Foreground="{DynamicResource SystemBaseMediumColor}"
+                                RenderTransform="scale(5)"
+                                Value="fa-regular fa-folder-open" />
+                        <TextBlock Margin="5"
+                                   Padding="15"
+                                   FontFamily="{StaticResource Ubuntu}"
+                                   FontStyle="Italic"
+                                   Foreground="{DynamicResource SystemBaseMediumColor}"
+                                   Text="Drag and Drop a file to edit"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ContentControl>
+    </Viewbox>
+</UserControl>
