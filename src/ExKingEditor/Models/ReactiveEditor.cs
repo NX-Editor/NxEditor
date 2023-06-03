@@ -41,12 +41,14 @@ public abstract unsafe class ReactiveEditor : Document
 
     public override bool OnClose()
     {
-        if (HasChanged() && new ContentDialog {
-            Title = "Warning",
-            Content = "You have unsaved changes.\nAre you sure you wish to exit?",
-            PrimaryButtonContent = "Yes"
-        }.ShowDialog() == ContentDialogResult.Secondary) {
-            return false;
+        if (HasChanged()) {
+            if (new ContentDialog {
+                Title = "Warning",
+                Content = "You have unsaved changes.\nAre you sure you wish to exit?",
+                PrimaryButtonContent = "Yes"
+            }.ShowDialog() == ContentDialogResult.Secondary) {
+                return false;
+            }
         }
 
         Dispose();
