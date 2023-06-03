@@ -10,7 +10,6 @@ jobs:
     name: Build ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
-      fail-fast: false
       matrix:
         config:
           - name: Linux
@@ -45,7 +44,7 @@ jobs:
       - name: Install Dependencies
         run: ${{ matrix.config.setup }}
 
-      - name: Configure Cead (native)
+      - name: Configure Cead
         shell: bash
         run: |
           mkdir ./lib/Cead/native/build
@@ -57,10 +56,44 @@ jobs:
             -B ./lib/Cead/native/build/${{ matrix.config.build }} \
             -G "Ninja"
 
-      - name: Build Cead (native)
+      - name: Build Cead
         shell: bash
         run: |
           cmake --build ./lib/Cead/native/build/${{ matrix.config.build }} --config Release --target all -j 4
+
+      - name: Configure NativeIO
+        shell: bash
+        run: |
+          mkdir ./lib/cs-msbt/lib/NativeIO/native/build
+          ${{ matrix.config.vars }} \
+          cmake --no-warn-unused-cli \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+            -DCMAKE_BUILD_TYPE:STRING=Release \
+            -S ./lib/cs-msbt/lib/NativeIO \
+            -B ./lib/cs-msbt/lib/NativeIO/native/build \
+            -G "Ninja"
+
+      - name: Build NativeIO
+        shell: bash
+        run: |
+          cmake --build ./lib/cs-msbt/lib/NativeIO/native/build/${{ matrix.config.build }} --config Release --target all -j 4
+
+      - name: Configure cs-msbt
+        shell: bash
+        run: |
+          mkdir ./lib/cs-msbt/native/build
+          ${{ matrix.config.vars }} \
+          cmake --no-warn-unused-cli \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+            -DCMAKE_BUILD_TYPE:STRING=Release \
+            -S ./lib/cs-msbt/lib/native \
+            -B ./lib/cs-msbt/lib/native/build/${{ matrix.config.build }} \
+            -G "Ninja"
+
+      - name: Build cs-msbt
+        shell: bash
+        run: |
+          cmake --build ./lib/cs-msbt/native/build/${{ matrix.config.build }} --config Release --target all -j 4
 
       - name: Install DotNET
         uses: actions/setup-dotnet@v3
