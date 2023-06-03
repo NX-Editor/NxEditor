@@ -5,11 +5,13 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Cead.Interop;
+using CsMsbt;
 using ExKingEditor.Core;
 using ExKingEditor.Generators;
 using ExKingEditor.Models;
 using ExKingEditor.ViewModels;
 using ExKingEditor.Views;
+using Native.IO.Services;
 using System.Runtime.CompilerServices;
 
 namespace ExKingEditor;
@@ -32,10 +34,16 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             DllManager.LoadCead();
+            NativeLibraryManager.RegisterAssembly(typeof(App).Assembly, out bool isCommonLoaded)
+                .Register(new MsbtLibrary(), out bool isMsbtLoaded);
+
             ShellViewModel.InitDock();
 
             Logger.Initialize();
             Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
+
+            Log($"Loaded native io library: {isCommonLoaded}");
+            Log($"Loaded native cs_msbt: {isMsbtLoaded}");
 
             desktop.MainWindow = Desktop = new ShellView() {
                 DataContext = ShellViewModel.Shared

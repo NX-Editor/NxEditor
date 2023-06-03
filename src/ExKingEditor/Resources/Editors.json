@@ -7,5 +7,6 @@
   ".pack": "SarcViewModel",
   ".sarc": "SarcViewModel",
   ".ta": "SarcViewModel",
+  ".msbt": "MsbtViewModel",
   ".rsizetable": "RestblViewModel"
 }

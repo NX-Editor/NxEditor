@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cead", "..\lib\Cead\src\Cea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsRestbl.Managed", "..\lib\cs-restbl\src\CsRestbl.Managed\CsRestbl.Managed.csproj", "{CC4A588E-000B-4ECF-9DB8-29FD1C37583F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsMsbt", "..\lib\cs-msbt\src\CsMsbt.csproj", "{0061A76E-A903-4555-BA54-C1EF5DEC1B99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Native.IO", "..\lib\cs-msbt\lib\NativeIO\src\Native.IO.csproj", "{BBA43355-5E47-42DA-8E07-1745364399A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{CC4A588E-000B-4ECF-9DB8-29FD1C37583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4A588E-000B-4ECF-9DB8-29FD1C37583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4A588E-000B-4ECF-9DB8-29FD1C37583F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0061A76E-A903-4555-BA54-C1EF5DEC1B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0061A76E-A903-4555-BA54-C1EF5DEC1B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0061A76E-A903-4555-BA54-C1EF5DEC1B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0061A76E-A903-4555-BA54-C1EF5DEC1B99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA43355-5E47-42DA-8E07-1745364399A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA43355-5E47-42DA-8E07-1745364399A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA43355-5E47-42DA-8E07-1745364399A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA43355-5E47-42DA-8E07-1745364399A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +54,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2BBD0774-0E4F-42BD-95F6-9DF36C855E00} = {09313217-779E-4414-98E4-4560D72EA645}
 		{CC4A588E-000B-4ECF-9DB8-29FD1C37583F} = {09313217-779E-4414-98E4-4560D72EA645}
+		{0061A76E-A903-4555-BA54-C1EF5DEC1B99} = {09313217-779E-4414-98E4-4560D72EA645}
+		{BBA43355-5E47-42DA-8E07-1745364399A2} = {09313217-779E-4414-98E4-4560D72EA645}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D0AD796-5134-4289-89E8-1F1C207B814D}

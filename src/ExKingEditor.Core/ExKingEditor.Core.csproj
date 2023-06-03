@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\lib\Cead\src\Cead.csproj" />
+    <ProjectReference Include="..\..\lib\cs-msbt\src\CsMsbt.csproj" />
+    <ProjectReference Include="..\..\lib\cs-restbl\src\CsRestbl.Managed\CsRestbl.Managed.csproj" />
   </ItemGroup>
 
 </Project>

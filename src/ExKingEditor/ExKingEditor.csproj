@@ -45,7 +45,6 @@
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="6.6.0-preview6" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\cs-restbl\src\CsRestbl.Managed\CsRestbl.Managed.csproj" />
     <ProjectReference Include="..\ExKingEditor.Core\ExKingEditor.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
