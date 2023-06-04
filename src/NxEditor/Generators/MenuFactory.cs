@@ -112,7 +112,6 @@ public class MenuFactory
                 child = new() {
                     Header = menu.Name ?? func.Name,
                     Icon = new Projektanker.Icons.Avalonia.Icon() { Value = menu.Icon },
-                    HotKey = shortcut,
                     InputGesture = shortcut!,
                     Height = (menu.Name ?? func.Name).StartsWith("_") ? 30 : double.NaN,
                     Classes = MenuItemClasses,
