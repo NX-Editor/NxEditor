@@ -36,10 +36,10 @@ public partial class SarcView : UserControl
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
     }
 
-    public void TreeViewDoubleTapped(object? sender, TappedEventArgs e)
+    public async void TreeViewDoubleTapped(object? sender, TappedEventArgs e)
     {
         if (DataContext is SarcViewModel vm) {
-            vm.Edit();
+            await vm.Edit();
         }
     }
 
