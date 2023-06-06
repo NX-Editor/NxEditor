@@ -3,6 +3,7 @@ using Avalonia.Controls.Notifications;
 using NxEditor.Attributes;
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
+using NxEditor.Dialogs;
 using NxEditor.Generators;
 using NxEditor.Helpers;
 using NxEditor.ViewModels;
@@ -170,9 +171,37 @@ public class ShellMenu
         throw new NotImplementedException();
     }
 
-    [Menu("Credits", "About", "F12", "fa-solid fa-user-check")]
-    public static void Credits()
+    [Menu("About", "About", "F12", "fa-solid fa-circle-info")]
+    public static async Task About()
     {
-        throw new NotImplementedException();
+        await new ContentDialog {
+            Title = "About",
+            Content = new StackPanel { 
+                Spacing = 5,
+                Children = {
+                    new TextBlock {
+                        Text = "NX Editor",
+                        FontWeight = Avalonia.Media.FontWeight.Bold
+                    },
+                    new TextBlock {
+                        Text = """
+                        Open-source modding software for first-party
+                        Nintendo file formats.
+                        
+                        Developed by Arch Leaders with contributions from
+                        leoetlino (oead library), Trippixyz (msbt research),
+                        and Yannik Marchand (file format research)
+                        """
+                    },
+                    new Button {
+                        Content = "nx-editor.github.io",
+                        Classes = { "Hyperlink" },
+                        Command = ReactiveCommand.Create(async () => {
+                            await BrowserExtension.OpenUrl("https://nx-editor.github.io");
+                        })
+                    }
+                }
+            }
+        }.ShowAsync();
     }
 }
