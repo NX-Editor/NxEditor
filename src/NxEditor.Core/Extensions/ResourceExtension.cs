@@ -17,7 +17,7 @@ public static class ResourceExtension
     public static Stream? FetchEmbed(this Assembly assembly, string name)
     {
         Stream? stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.Resources.{name}");
-        if (ExConfig.Shared.LoadResourcesFromDisk) {
+        if (Config.Shared.LoadResourcesFromDisk) {
             string path = Path.Combine(_path, name);
             if (!File.Exists(path)) {
                 if (stream != null) {

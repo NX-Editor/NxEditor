@@ -4,11 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace NxEditor.Core;
 
-public class ExConfig : ISettingsBase
+public class Config : ISettingsBase
 {
     private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NX-Editor", "config.json");
 
-    public static ExConfig Shared { get; } = Load();
+    public static Config Shared { get; } = Load();
     public bool RequiresInput { get; set; } = true;
 
     [JsonIgnore]
@@ -44,19 +44,19 @@ public class ExConfig : ISettingsBase
         return this;
     }
 
-    public static ExConfig Load()
+    public static Config Load()
     {
         if (!File.Exists(_path)) {
             return Create();
         }
 
         using FileStream fs = File.OpenRead(_path);
-        return JsonSerializer.Deserialize<ExConfig>(fs) ?? Create();
+        return JsonSerializer.Deserialize<Config>(fs) ?? Create();
     }
 
-    private static ExConfig Create()
+    private static Config Create()
     {
-        ExConfig config = new() {
+        Config config = new() {
             Lang = "USen",
             RequiresInput = true,
         };

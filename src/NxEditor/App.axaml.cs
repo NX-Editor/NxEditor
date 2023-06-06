@@ -53,10 +53,10 @@ public partial class App : Application
 
             // Make sure settings are always set
             SettingsView settings = new();
-            if (ExConfig.Shared.RequiresInput || settings.ValidateSave() != null) {
+            if (Config.Shared.RequiresInput || settings.ValidateSave() != null) {
                 ShellDockFactory.AddDoc<SettingsViewModel>();
                 await Task.Run(() => {
-                    while (ExConfig.Shared.RequiresInput) {
+                    while (Config.Shared.RequiresInput) {
                         // Wait for setting to save successfully
                     }
                 });

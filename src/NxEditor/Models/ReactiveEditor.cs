@@ -22,7 +22,7 @@ public abstract unsafe class ReactiveEditor : Document
 
     public ReactiveEditor(string file, byte[] data, Action<byte[]>? setSource = null)
     {
-        Id = file + (ExConfig.Shared.UseSingleFileLock ? null : Guid.NewGuid());
+        Id = file + (Config.Shared.UseSingleFileLock ? null : Guid.NewGuid());
         Title = Path.GetFileName(file);
 
         _file = file;

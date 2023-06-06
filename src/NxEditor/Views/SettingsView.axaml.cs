@@ -30,7 +30,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
         FocusDelegate2.PointerPressed += (s, e) => FocusDelegate.Focus();
 
         AfterSaveEvent += () => App.Toast("Saved succefully", "Settings", NotificationType.Success);
-        InitializeSettingsFactory(new SettingsFactoryViewModel(false), this, ExConfig.Shared, _options);
+        InitializeSettingsFactory(new SettingsFactoryViewModel(false), this, Config.Shared, _options);
 
         Live = this;
     }
@@ -47,7 +47,7 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     {
         value ??= string.Empty;
         return key switch {
-            "GamePath" => ExConfig.ValidatePath(value, key),
+            "GamePath" => Config.ValidatePath(value, key),
             "Theme" => ValidateTheme(value!),
             _ => null,
         };
@@ -62,8 +62,8 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     public string? ValidateSave()
     {
         Dictionary<string, bool?> validated = new();
-        foreach (var prop in ExConfig.Shared.GetType().GetProperties().Where(x => x.GetCustomAttributes<SettingAttribute>(false).Any())) {
-            object? value = prop.GetValue(ExConfig.Shared);
+        foreach (var prop in Config.Shared.GetType().GetProperties().Where(x => x.GetCustomAttributes<SettingAttribute>(false).Any())) {
+            object? value = prop.GetValue(Config.Shared);
 
             if (value is bool boolean) {
                 validated.Add(prop.Name, ValidateBool(prop.Name, boolean));
