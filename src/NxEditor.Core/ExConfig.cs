@@ -24,6 +24,12 @@ public class ExConfig : ISettingsBase
     [Setting("Load Resources from Disk", "Loads a customizable copy of the resource files from disk instead of donwloading the latest version from the live server")]
     public bool LoadResourcesFromDisk { get; set; }
 
+    [Setting("Single Instance Lock", "Files opened through the shell will be opened as a tab in the current instance, rather than starting a second running application", Category = "Lock Settings")]
+    public bool UseSingleInstance { get; set; } = true;
+
+    [Setting("Single File Lock", "Restrict two files with the same path to be loaded concurrently", Category = "Lock Settings")]
+    public bool UseSingleFileLock { get; set; } = false;
+
     [Setting(UiType.Dropdown, "Dark", "Light", Category = "Appearance")]
     public string Theme { get; set; } = "Dark";
 

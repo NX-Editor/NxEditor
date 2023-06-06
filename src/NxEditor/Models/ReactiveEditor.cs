@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls.Notifications;
 using Dock.Model.Mvvm.Controls;
+using NxEditor.Core;
 using NxEditor.Dialogs;
 
 namespace NxEditor.Models;
@@ -21,7 +22,7 @@ public abstract unsafe class ReactiveEditor : Document
 
     public ReactiveEditor(string file, byte[] data, Action<byte[]>? setSource = null)
     {
-        Id = file;
+        Id = file + (ExConfig.Shared.UseSingleFileLock ? null : Guid.NewGuid());
         Title = Path.GetFileName(file);
 
         _file = file;

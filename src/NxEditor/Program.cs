@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
+using NxEditor.Core;
 using NxEditor.Core.Utils;
 using NxEditor.Generators.UI;
 using NxEditor.Models;
@@ -17,9 +18,11 @@ internal class Program
     [STAThread]
     public static unsafe void Main(string[] args)
     {
-        if (SingleInstanceManager.Start(args, Attach)) {
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        if (ExConfig.Shared.UseSingleInstance && !SingleInstanceManager.Start(args, Attach)) {
+            return;
         }
+
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
     public static void Attach(string[] args)

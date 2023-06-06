@@ -28,7 +28,7 @@ public static class EditorMgr
     {
         App.Log($"Processing {Path.GetFileName(path)}");
 
-        if (ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
+        if (ExConfig.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
             return true;
         }
 
