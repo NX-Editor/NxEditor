@@ -6,12 +6,13 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Cead.Interop;
 using CsMsbt;
+using CsRestbl;
+using Native.IO.Services;
 using NxEditor.Core;
 using NxEditor.Generators;
 using NxEditor.Models;
 using NxEditor.ViewModels;
 using NxEditor.Views;
-using Native.IO.Services;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor;
@@ -35,6 +36,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             DllManager.LoadCead();
             NativeLibraryManager.RegisterAssembly(typeof(App).Assembly, out bool isCommonLoaded)
+                .Register(new RestblLibrary(), out bool isRestblLoaded)
                 .Register(new MsbtLibrary(), out bool isMsbtLoaded);
 
             ShellViewModel.InitDock();
@@ -44,6 +46,7 @@ public partial class App : Application
 
             Log($"Loaded native io library: {isCommonLoaded}");
             Log($"Loaded native cs_msbt: {isMsbtLoaded}");
+            Log($"Loaded native cs_restbl: {isRestblLoaded}");
 
             desktop.MainWindow = Desktop = new ShellView() {
                 DataContext = ShellViewModel.Shared
