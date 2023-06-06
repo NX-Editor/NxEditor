@@ -30,7 +30,8 @@
                 <ContentPresenter HorizontalAlignment="Stretch" Content="{Binding Content}" />
                 <Grid Margin="0,15,0,0" ColumnDefinitions="*,*,*">
                     <Grid MinWidth="80" />
-                    <Button Grid.Column="1"
+                    <Button x:Name="PrimaryButton"
+                            Grid.Column="1"
                             MinWidth="80"
                             Margin="0,0,5,0"
                             HorizontalAlignment="Stretch"
@@ -39,7 +40,8 @@
                             Command="{Binding PrimaryButtonCommand}"
                             Content="{Binding PrimaryButtonContent}"
                             IsVisible="{Binding IsPrimaryButtonVisible}" />
-                    <Button Grid.Column="2"
+                    <Button x:Name="SecondaryButton"
+                            Grid.Column="2"
                             MinWidth="80"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"

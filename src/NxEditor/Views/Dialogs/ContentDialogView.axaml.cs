@@ -15,6 +15,7 @@ public partial class ContentDialogView : UserControl
     public void Show()
     {
         App.Desktop?.DropClient.Children.Add(this);
+        PrimaryButton.Focus();
     }
 
     public void Hide()
