@@ -5,7 +5,7 @@ using NxEditor.Dialogs;
 
 namespace NxEditor.Models;
 
-public abstract unsafe class ReactiveEditor : Document
+public abstract class ReactiveEditor : Document
 {
     public static string CacheDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp", "NxEditor", "ReactiveEditor");
 
