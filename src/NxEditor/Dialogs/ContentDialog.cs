@@ -83,7 +83,6 @@ public partial class ContentDialog : ObservableObject
     }
 
 
-    public ContentDialogResult ShowDialog() => ShowAsync().WaitSynchronously();
     public async Task<ContentDialogResult> ShowAsync()
     {
         _dialog.Show();

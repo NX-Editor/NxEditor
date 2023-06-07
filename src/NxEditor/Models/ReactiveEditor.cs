@@ -47,7 +47,7 @@ public abstract unsafe class ReactiveEditor : Document
                 Title = "Warning",
                 Content = "You have unsaved changes.\nAre you sure you wish to exit?",
                 PrimaryButtonContent = "Yes"
-            }.ShowDialog() == ContentDialogResult.Secondary) {
+            }.ShowAsync().WaitSynchronously() == ContentDialogResult.Secondary) {
                 return false;
             }
         }
