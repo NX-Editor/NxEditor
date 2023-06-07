@@ -18,7 +18,6 @@ public partial class TextViewModel : ReactiveEditor
 
     public override void SaveAs(string path)
     {
-        string ext = Path.GetExtension(path);
         File.WriteAllText(path, Text);
 
         _text = Text;
