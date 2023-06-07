@@ -1,65 +1,135 @@
-﻿using AvaloniaEdit;
-using CsRestbl.Managed;
+﻿using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CsRestbl;
+using Native.IO.Handles;
 using NxEditor.Core;
-using NxEditor.Core.Models;
 using NxEditor.Core.Utils;
 using NxEditor.Models;
-using System.Text;
+using System.Collections.ObjectModel;
 
 namespace NxEditor.ViewModels.Editors;
 
-public class RestblViewModel : ReactiveEditor
+public partial class RestblViewModel : ReactiveEditor
 {
-    private string _yaml;
     private readonly Restbl _table;
+    public Restbl Table => _table;
 
-    public TextEditor Editor { get; set; } = null!;
-    public string Yaml { get; set; }
+    [ObservableProperty]
+    private ObservableCollection<RestblEntry> _pinned = new();
+
+    [ObservableProperty]
+    private string _currentName = string.Empty;
+
+    [ObservableProperty]
+    private uint? _currentSize = 0;
 
     public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         _table = Restbl.FromBinary(_data);
-        StringBuilder yaml = new();
-
-        IEnumerable<NameEntry> entries = _table.NameTable
-            .Concat(_table.CrcTable.Select(
-                x => new NameEntry(HashTable.Shared.TryGetValue(x.Hash, out string? name) ? name : $"0x{x.Hash:X2}", x.Size)))
-            .OrderBy(x => x.Name);
         
-        foreach (var entry in entries) {
-            yaml.Append($"{entry.Name}: {entry.Size}\n");
+        SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
+    }
+
+    public void Search()
+    {
+        for (int i = 0; i < Pinned.Count; i++) {
+            if (!Pinned[i].IsPinned) {
+                Pinned.RemoveAt(i);
+                i--;
+            }
+        }
+
+        if (!Pinned.Select(x => x.Name).Contains(CurrentName)) {
+            if (_table.NameTable.Contains(CurrentName)) {
+                Pinned.Add(new(CurrentName, null, _table.NameTable[CurrentName]));
+                return;
+            }
+
+            uint hash = Crc32.Compute(CurrentName);
+            if (_table.CrcTable.Contains(hash)) {
+                Pinned.Add(new(CurrentName, hash, _table.CrcTable[hash]));
+                return;
+            }
+        }
+    }
+
+    public bool IsEntryValid(string action)
+    {
+        if (string.IsNullOrEmpty(CurrentName)) {
+            App.Toast("Name entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
+            return false;
         }
         
-        Yaml = _yaml = yaml.ToString();
-        SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
+        if (CurrentSize == null || CurrentSize < 0) {
+            App.Toast("Size entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
+            return false;
+        }
+
+        return true;
+    }
+
+    public void SaveEntry()
+    {
+        if (!IsEntryValid("saving entry")) {
+            return;
+        }
+
+        // Check the string table first
+        // as it's more accurate
+        if (_table.NameTable.Contains(CurrentName)) {
+            _table.NameTable[CurrentName] = (uint)CurrentSize!;
+            return;
+        }
+        
+        // Overwrite or add the value
+        // in the CrcTable
+        uint hash = Crc32.Compute(CurrentName);
+        _table.CrcTable[hash] = (uint)CurrentSize!;
+    }
+
+    public void AddEntry()
+    {
+        if (!IsEntryValid("adding entry")) {
+            return;
+        }
+
+        uint hash = Crc32.Compute(CurrentName);
+        if (_table.CrcTable.Contains(hash)) {
+            _table.NameTable[CurrentName] = (uint)CurrentSize!;
+            return;
+        }
+
+        _table.CrcTable[hash] = (uint)CurrentSize!;
+    }
+
+    public override void OnSelected()
+    {
+        base.OnSelected();
+        App.Desktop?.DisableGlobalShortcuts("Edit");
     }
 
     public override void SaveAs(string path)
     {
         string ext = Path.GetExtension(path);
 
-        if (ext is ".yaml" or ".yml") {
-            File.WriteAllText(path, Yaml);
-        }
-        else {
-            HashSet<uint> lookup = new();
+        if (ext is ".yml" or ".yaml") {
+            using FileStream fs = File.Create(path);
+            using StreamWriter writer = new(fs);
 
-            _table.CrcTable.Clear();
-            _table.NameTable.Clear();
-
-            foreach ((var nameStr, var sizeStr) in Yaml.Split('\n')[..(^1)].Select(x => x.Split(": ")).Select(x => (name: x[0], size: x[1])).OrderBy(x => x.name)) {
-                uint size = Convert.ToUInt32(sizeStr, 10);
-                uint hash = nameStr.StartsWith("0x") ? Convert.ToUInt32(nameStr.Remove(0, 2), 16) : Crc32.Compute(nameStr);
-                if (lookup.Contains(hash)) {
-                    _table.NameTable.Add(new(nameStr, size));
-                }
-                else {
-                    lookup.Add(hash);
-                    _table.CrcTable.Add(new(hash, size));
-                }
+            writer.WriteLine("CrcTable:");
+            foreach (var entry in Table.CrcTable) {
+                writer.WriteLine($"  {entry.Key}: {entry.Value}");
             }
 
-            Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, _table.ToBinary()) : _table.ToBinary();
+            writer.WriteLine("NameTable:");
+            foreach (var entry in Table.NameTable) {
+                writer.WriteLine($"  {entry.Key}: {entry.Value}");
+            }
+        }
+        else {
+            using DataMarshal handle = _table.ToBinary();
+
+            Span<byte> data = (_compressed = path.EndsWith(".zs")) ? TotkZstd.Compress(path, handle) : handle;
 
             if (path == _file) {
                 WriteToSource(data);
@@ -71,62 +141,51 @@ public class RestblViewModel : ReactiveEditor
             }
         }
 
-        _yaml = Yaml;
         ToastSaveSuccess(path);
     }
 
     public override void Undo()
     {
-        Editor.Undo();
         base.Undo();
     }
 
     public override void Redo()
     {
-        Editor.Redo();
         base.Redo();
     }
 
     public override void SelectAll()
     {
-        Editor.SelectAll();
         base.SelectAll();
     }
 
     public override Task Cut()
     {
-        Editor.Cut();
         return base.Cut();
     }
 
     public override Task Copy()
     {
-        Editor.Copy();
         return base.Copy();
     }
 
     public override Task Paste()
     {
-        Editor.Paste();
         return base.Paste();
     }
 
     public override void Find()
     {
-        Editor.SearchPanel.IsReplaceMode = false;
-        Editor.SearchPanel.Open();
         base.Find();
     }
 
     public override Task FindAndReplace()
     {
-        Editor.SearchPanel.IsReplaceMode = true;
-        Editor.SearchPanel.Open();
         return base.FindAndReplace();
     }
 
     public override bool HasChanged()
     {
-        return _yaml != Yaml;
+        return true;
     }
 }

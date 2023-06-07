@@ -4,6 +4,7 @@
              xmlns:AvalonaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              xmlns:vm="using:NxEditor.ViewModels.Editors"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -11,7 +12,130 @@
              x:DataType="vm:RestblViewModel"
              FontFamily="{StaticResource Ubuntu}"
              mc:Ignorable="d">
-    <AvalonaEdit:TextEditor Name="TextEditor"
-                            FontFamily="{StaticResource UbuntuMono}"
-                            ShowLineNumbers="True" />
+    <Grid RowDefinitions="*,Auto">
+
+        <ListBox Padding="10"
+                 Background="Transparent"
+                 Focusable="False"
+                 Items="{Binding Pinned}"
+                 SelectionMode="Toggle">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="5,2">
+                        <Border.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding Edit}"
+                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                                          Header="Edit" />
+                                <MenuItem Command="{Binding Pin}"
+                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                                          Header="{Binding PinHeaderText}" />
+                                <Separator />
+                                <MenuItem Command="{Binding Remove}"
+                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                                          Header="Remove" />
+                            </ContextMenu>
+                        </Border.ContextMenu>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <ToggleButton Margin="0"
+                                          Padding="0"
+                                          Classes="Hyperlink"
+                                          Command="{Binding Pin}"
+                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
+                                          IsChecked="{Binding IsPinned, Mode=OneWay}"
+                                          IsHitTestVisible="True">
+                                <pi:Icon Value="fa-thumbtack" />
+                            </ToggleButton>
+                            <TextBlock Grid.Column="1"
+                                       Margin="10,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding Name}"
+                                       TextWrapping="WrapWithOverflow" />
+                            <TextBlock Grid.Column="2"
+                                       Margin="10,0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding Size}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="CornerRadius" Value="3" />
+                    <Setter Property="Margin" Value="0,2" />
+                    <Setter Property="Padding" Value="3" />
+
+                    <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                    </Style>
+
+                    <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                    </Style>
+
+                    <Style Selector="^:selected">
+                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                        </Style>
+                        <Style Selector="^:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                        </Style>
+                        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                        </Style>
+                        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
+                        </Style>
+                    </Style>
+                </Style>
+            </ListBox.Styles>
+        </ListBox>
+
+        <Border Grid.Row="1"
+                Padding="10"
+                BorderBrush="{DynamicResource SystemChromeMediumColor}"
+                BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="Auto,*,120,Auto,Auto">
+                <Button Margin="0,0,5,0"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding Search}">
+                    <pi:Icon Value="fa-magnifying-glass" />
+                </Button>
+                <TextBox Grid.Column="1"
+                         Margin="0,0,5,0"
+                         Text="{Binding CurrentName}"
+                         Watermark="(Make sure to use forward slashes when searching keys)" />
+                <NumericUpDown Grid.Column="2"
+                               Margin="0,0,5,0"
+                               Minimum="0"
+                               ShowButtonSpinner="False"
+                               Value="{Binding CurrentSize}" />
+                <Button Grid.Column="3"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveEntry}">
+                    <pi:Icon Value="fa-floppy-disk" />
+                </Button>
+                <Button Grid.Column="4"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveEntry}">
+                    <pi:Icon Value="fa-plus" />
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
