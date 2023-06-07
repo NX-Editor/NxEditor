@@ -180,17 +180,15 @@ public class ShellMenu
                 Spacing = 5,
                 Children = {
                     new TextBlock {
-                        Text = "NX Editor",
+                        Text = "Nintendo Extended Editor (NX-Editor)",
                         FontWeight = Avalonia.Media.FontWeight.Bold
                     },
                     new TextBlock {
                         Text = """
-                        Open-source modding software for first-party
-                        Nintendo file formats.
-                        
-                        Developed by Arch Leaders with contributions from
-                        leoetlino (oead library), Trippixyz (msbt research),
-                        and Yannik Marchand (file format research)
+                        A general editor for editing first-party
+                        Nintendo formats. Primary aimed at support
+                        for Tears of the Kingdom files and more
+                        modern Nintendo Switch files.
                         """
                     },
                     new Button {
