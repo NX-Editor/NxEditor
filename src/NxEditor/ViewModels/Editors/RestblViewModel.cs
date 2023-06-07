@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CsRestbl;
 using Native.IO.Handles;
+using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Utils;
 using NxEditor.Models;

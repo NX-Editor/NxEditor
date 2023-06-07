@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using NxEditor.Component.Editors;
 using NxEditor.ViewModels.Editors;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
@@ -61,7 +62,7 @@ public partial class FileItemNode : ObservableObject
     public void EndRename(SarcViewModel owner)
     {
         App.Desktop?.ActivateGlobalShortcuts();
-        owner.History.StageChange(Editors.SarcChange.Rename, new List<(FileItemNode, object?)>() {
+        owner.History.StageChange(SarcChange.Rename, new List<(FileItemNode, object?)>() {
             (this, PrevName)
         });
         owner.RenameMapNode(this);

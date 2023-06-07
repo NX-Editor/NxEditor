@@ -2,9 +2,10 @@
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
 using NxEditor.Generators;
+using NxEditor.Models;
 using System.Runtime.CompilerServices;
 
-namespace NxEditor.Models;
+namespace NxEditor.Component;
 
 public static class EditorMgr
 {
@@ -14,10 +15,12 @@ public static class EditorMgr
 
     public static bool TryLoadEditorSafe(string path, byte[]? data = null, Action<byte[]>? setSource = null)
     {
-        try {
+        try
+        {
             return TryLoadEditor(path, data, setSource);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             App.Log(ex);
         }
 
@@ -28,7 +31,8 @@ public static class EditorMgr
     {
         App.Log($"Processing {Path.GetFileName(path)}");
 
-        if (Config.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
+        if (Config.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor)
+        {
             return true;
         }
 
@@ -43,7 +47,8 @@ public static class EditorMgr
         object? instance = Activator.CreateInstance(Type.GetType($"{nameof(NxEditor)}.ViewModels.Editors.{editorName}")
             ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{editorName}' was not found"), path, data, setSource);
 
-        if (instance is ReactiveEditor editor) {
+        if (instance is ReactiveEditor editor)
+        {
             ShellDockFactory.AddDoc(editor);
             StateMgr.Shared.Recent.AddPath(path);
 
@@ -72,7 +77,8 @@ public static class EditorMgr
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static string GetExt(string file)
     {
-        if (file.EndsWith(".zs")) {
+        if (file.EndsWith(".zs"))
+        {
             file = file[..^3];
         }
 

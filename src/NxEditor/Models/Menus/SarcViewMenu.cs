@@ -3,16 +3,16 @@ using NxEditor.Helpers;
 using NxEditor.ViewModels.Editors;
 using NxEditor.Views.Editors;
 
-namespace NxEditor.Models.Editors;
+namespace NxEditor.Models.Menus;
 
-public class SarcMenu
+public class SarcViewMenu
 {
     public readonly SarcView _view;
 
     public SarcViewModel Sarc => _view.DataContext as SarcViewModel ??
         throw new Exception("The SarcView did not have a valid data context");
 
-    public SarcMenu(SarcView view)
+    public SarcViewMenu(SarcView view)
     {
         _view = view;
     }
@@ -21,8 +21,10 @@ public class SarcMenu
     public async Task ImportFile()
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Import Files", "Any File:*.*", instanceBrowserKey: "import-sarc-file");
-        if (await dialog.ShowDialog(allowMultiple: true) is IEnumerable<string> paths) {
-            foreach (var path in paths.Where(File.Exists)) {
+        if (await dialog.ShowDialog(allowMultiple: true) is IEnumerable<string> paths)
+        {
+            foreach (var path in paths.Where(File.Exists))
+            {
                 Sarc.ImportFile(path, File.ReadAllBytes(path));
             }
         }
@@ -32,7 +34,8 @@ public class SarcMenu
     public async Task ImportFolder()
     {
         BrowserDialog dialog = new(BrowserMode.OpenFolder, "Import Folder", "Any File:*.*", instanceBrowserKey: "import-sarc-folder");
-        if (await dialog.ShowDialog() is string path) {
+        if (await dialog.ShowDialog() is string path)
+        {
             Sarc.ImportFolder(path);
         }
     }
@@ -41,7 +44,8 @@ public class SarcMenu
     public async Task ExportAll()
     {
         BrowserDialog dialog = new(BrowserMode.OpenFolder, "Open Folder", instanceBrowserKey: "export-all-sarc-folder");
-        if (await dialog.ShowDialog() is string path) {
+        if (await dialog.ShowDialog() is string path)
+        {
             // TODO: use loading modal
             await Sarc.Root.ExportAsync(path);
             App.Toast("Files exported sucessfully!", type: Avalonia.Controls.Notifications.NotificationType.Success);

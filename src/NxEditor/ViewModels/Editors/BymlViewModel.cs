@@ -1,8 +1,8 @@
 ﻿using AvaloniaEdit;
 using Cead;
 using Cead.Handles;
+using NxEditor.Component;
 using NxEditor.Core;
-using NxEditor.Models;
 using System.Buffers.Binary;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
+using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Utils;
 using NxEditor.Generators.UI;
-using NxEditor.Models;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 

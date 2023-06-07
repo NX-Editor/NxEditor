@@ -1,5 +1,5 @@
 ﻿using AvaloniaEdit;
-using NxEditor.Models;
+using NxEditor.Component;
 using System.Text;
 
 namespace NxEditor.ViewModels.Editors;

@@ -1,6 +1,6 @@
 ﻿using Dock.Model.Controls;
+using NxEditor.Component;
 using NxEditor.Generators;
-using NxEditor.Models;
 
 namespace NxEditor.ViewModels;
 

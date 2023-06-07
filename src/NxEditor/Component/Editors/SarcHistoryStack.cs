@@ -1,6 +1,7 @@
-﻿using NxEditor.ViewModels.Editors;
+﻿using NxEditor.Models;
+using NxEditor.ViewModels.Editors;
 
-namespace NxEditor.Models.Editors;
+namespace NxEditor.Component.Editors;
 
 public enum SarcChange
 {
@@ -26,12 +27,14 @@ public class SarcHistoryStack
 
     public void InvokeLastAction(bool isRedo)
     {
-        if (isRedo && _redoStack.Count <= 0 || !isRedo && _undoStack.Count <= 0) {
+        if (isRedo && _redoStack.Count <= 0 || !isRedo && _undoStack.Count <= 0)
+        {
             return;
         }
 
         HistoryItem item = (isRedo ? _redoStack : _undoStack).Pop();
-        Action<HistoryItem, bool>? action = item.Change switch {
+        Action<HistoryItem, bool>? action = item.Change switch
+        {
             SarcChange.Import => isRedo ? AddAction : RemoveAction,
             SarcChange.Remove => isRedo ? RemoveAction : AddAction,
             SarcChange.Rename => RenameAction,
@@ -43,7 +46,8 @@ public class SarcHistoryStack
 
     public void StageChange(SarcChange change, List<(FileItemNode, object?)> values)
     {
-        if (_redoStack.Count > 0) {
+        if (_redoStack.Count > 0)
+        {
             _redoStack.Clear();
         }
 
@@ -52,48 +56,57 @@ public class SarcHistoryStack
 
     private void RemoveAction(HistoryItem item, bool isRedo)
     {
-        foreach ((var node, _) in item.Values) {
+        foreach ((var node, _) in item.Values)
+        {
             (node.Parent ?? _editor.Root).Children.Remove(node);
             _editor.RemoveNodeFromMap(node);
         }
 
-        if (isRedo) {
+        if (isRedo)
+        {
             _undoStack.Push(item);
         }
-        else {
+        else
+        {
             _redoStack.Push(item);
         }
     }
 
     private void AddAction(HistoryItem item, bool isRedo)
     {
-        foreach ((var node, _) in item.Values) {
+        foreach ((var node, _) in item.Values)
+        {
             (node.Parent ?? _editor.Root).Children.Add(node);
             _editor.AddNodeToTree(node);
         }
 
-        if (isRedo) {
+        if (isRedo)
+        {
             _undoStack.Push(item);
         }
-        else {
+        else
+        {
             _redoStack.Push(item);
         }
     }
 
     private void RenameAction(HistoryItem item, bool isRedo)
     {
-        for (int i = 0; i < item.Values.Count; i++) {
+        for (int i = 0; i < item.Values.Count; i++)
+        {
             (var node, var data) = item.Values[i];
             node.PrevName = node.Header;
             item.Values[i] = (node, node.PrevName);
-            node.Header = (data as string) ?? node.Header;
+            node.Header = data as string ?? node.Header;
             _editor.RenameMapNode(node);
         }
 
-        if (isRedo) {
+        if (isRedo)
+        {
             _undoStack.Push(item);
         }
-        else {
+        else
+        {
             _redoStack.Push(item);
         }
     }

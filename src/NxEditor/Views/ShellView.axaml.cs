@@ -4,6 +4,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using NxEditor.Component;
 using NxEditor.Generators;
 using NxEditor.Models;
 using System.Collections.ObjectModel;
@@ -22,7 +23,7 @@ public partial class ShellView : Window
         InitializeComponent();
         MenuFactory.Init(this);
         // TODO: this is kinda stupid, refactor the MenuFactor to avoid this weird dependency injection method
-        MenuFactory.ItemsSource = MainMenu = MenuFactory.Generate<ShellMenu>();
+        MenuFactory.ItemsSource = MainMenu = MenuFactory.Generate<ShellViewMenu>();
 
         Minimize.Click += (s, e) => WindowState = WindowState.Minimized;
         Fullscreen.Click += (s, e) => WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;

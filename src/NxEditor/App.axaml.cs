@@ -8,6 +8,7 @@ using Cead.Interop;
 using CsMsbt;
 using CsRestbl;
 using Native.IO.Services;
+using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Generators;
 using NxEditor.Models;
@@ -90,7 +91,7 @@ public partial class App : Application
     public static void ToastError(Exception ex)
     {
         NotificationManager?.Show(new Notification(
-            ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellMenu.OpenLogs));
+            ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
     }
 
     public static void Log(object obj, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)

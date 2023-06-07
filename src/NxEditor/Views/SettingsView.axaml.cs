@@ -4,10 +4,10 @@ using Avalonia.SettingsFactory;
 using Avalonia.SettingsFactory.Core;
 using Avalonia.SettingsFactory.ViewModels;
 using Avalonia.Styling;
+using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
 using NxEditor.Helpers;
-using NxEditor.Models;
 using System.Reflection;
 
 namespace NxEditor.Views;
