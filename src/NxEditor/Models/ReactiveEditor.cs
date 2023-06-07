@@ -2,6 +2,7 @@
 using Dock.Model.Mvvm.Controls;
 using NxEditor.Core;
 using NxEditor.Dialogs;
+using NxEditor.Helpers;
 
 namespace NxEditor.Models;
 
@@ -38,6 +39,12 @@ public abstract class ReactiveEditor : Document
 
         // Cache the open editor
         OpenEditors.Add(this);
+    }
+
+    public override void OnSelected()
+    {
+        App.Desktop?.ActivateGlobalShortcuts();
+        base.OnSelected();
     }
 
     public override bool OnClose()
