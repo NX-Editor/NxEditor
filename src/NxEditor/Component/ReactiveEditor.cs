@@ -49,15 +49,12 @@ public abstract class ReactiveEditor : Document
 
     public override bool OnClose()
     {
-        if (HasChanged())
-        {
-            if (new ContentDialog
-            {
+        if (HasChanged()) {
+            if (new ContentDialog {
                 Title = "Warning",
                 Content = "You have unsaved changes.\nAre you sure you wish to exit?",
                 PrimaryButtonContent = "Yes"
-            }.ShowAsync().WaitSynchronously() == ContentDialogResult.Secondary)
-            {
+            }.ShowAsync().WaitSynchronously() == ContentDialogResult.Secondary) {
                 return false;
             }
         }
@@ -83,12 +80,10 @@ public abstract class ReactiveEditor : Document
 
     protected void WriteToSource(Span<byte> data)
     {
-        if (_setSource != null)
-        {
+        if (_setSource != null) {
             _setSource.Invoke(data.ToArray());
         }
-        else
-        {
+        else {
             using FileStream fs = File.Create(_file);
             fs.Write(data);
         }

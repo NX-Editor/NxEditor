@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using NxEditor.Generators;
 using NxEditor.Models;
-using NxEditor.Models.Editors;
+using NxEditor.Models.Menus;
 using NxEditor.ViewModels.Editors;
 
 namespace NxEditor.Views.Editors;
@@ -17,7 +17,7 @@ public partial class SarcView : UserControl
     {
         InitializeComponent();
 
-        _extension = MenuFactory.Generate(new SarcMenu(this))[0];
+        _extension = MenuFactory.Generate(new SarcViewMenu(this))[0];
 
         DetachedFromVisualTree += (s, e) => ShellView.ClearOverflowMenu();
         AttachedToVisualTree += (s, e) => {

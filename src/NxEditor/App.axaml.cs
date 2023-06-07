@@ -11,7 +11,7 @@ using Native.IO.Services;
 using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Generators;
-using NxEditor.Models;
+using NxEditor.Models.Menus;
 using NxEditor.ViewModels;
 using NxEditor.Views;
 using System.Runtime.CompilerServices;

@@ -6,7 +6,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using NxEditor.Component;
 using NxEditor.Generators;
-using NxEditor.Models;
+using NxEditor.Models.Menus;
 using System.Collections.ObjectModel;
 
 namespace NxEditor.Views;

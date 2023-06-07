@@ -1,6 +1,5 @@
 ﻿using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
-using NxEditor.Helpers;
 using NxEditor.Views.Dialogs;
 
 namespace NxEditor.Dialogs;

@@ -4,7 +4,6 @@ using Cead.Handles;
 using NxEditor.Component;
 using NxEditor.Core;
 using System.Buffers.Binary;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NxEditor.ViewModels.Editors;
 

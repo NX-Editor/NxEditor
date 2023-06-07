@@ -27,7 +27,7 @@ public partial class RestblViewModel : ReactiveEditor
     public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         _table = Restbl.FromBinary(_data);
-        
+
         SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
     }
 
@@ -60,7 +60,7 @@ public partial class RestblViewModel : ReactiveEditor
             App.Toast("Name entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
             return false;
         }
-        
+
         if (CurrentSize == null || CurrentSize < 0) {
             App.Toast("Size entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
             return false;
@@ -81,7 +81,7 @@ public partial class RestblViewModel : ReactiveEditor
             _table.NameTable[CurrentName] = (uint)CurrentSize!;
             return;
         }
-        
+
         // Overwrite or add the value
         // in the CrcTable
         uint hash = Crc32.Compute(CurrentName);

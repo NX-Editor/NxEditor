@@ -1,8 +1,8 @@
 ﻿using AvaloniaEdit;
 using CsMsbt;
-using NxEditor.Core;
 using Native.IO.Handles;
 using NxEditor.Component;
+using NxEditor.Core;
 
 namespace NxEditor.ViewModels.Editors;
 

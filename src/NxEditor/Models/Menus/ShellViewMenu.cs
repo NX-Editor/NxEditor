@@ -12,7 +12,7 @@ using System.Text;
 
 namespace NxEditor.Models.Menus;
 
-public class ShellMenu
+public class ShellViewMenu
 {
     // 
     // File
@@ -21,10 +21,8 @@ public class ShellMenu
     public static async Task OpenFile()
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
-        if (await dialog.ShowDialog() is string path)
-        {
-            if (!EditorMgr.TryLoadEditorSafe(path))
-            {
+        if (await dialog.ShowDialog() is string path) {
+            if (!EditorMgr.TryLoadEditorSafe(path)) {
                 // TODO: throw message dialog
             }
         }
@@ -41,17 +39,14 @@ public class ShellMenu
     {
         List<string>? supportedExtensions = EditorMgr.Current?.SupportedExtensions;
         StringBuilder extensionsFilterString = new();
-        if (supportedExtensions?.Any() == true)
-        {
-            foreach (var ext in supportedExtensions)
-            {
+        if (supportedExtensions?.Any() == true) {
+            foreach (var ext in supportedExtensions) {
                 extensionsFilterString.Append(ext);
             }
         }
 
         BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorMgr.Current?.FilePath), "save-file");
-        if (await dialog.ShowDialog() is string path)
-        {
+        if (await dialog.ShowDialog() is string path) {
             EditorMgr.Current?.SaveAs(path);
         }
     }
@@ -149,10 +144,8 @@ public class ShellMenu
     [Menu("Clear Logs Folder", "Tools", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
     public static void ClearLogsFolder()
     {
-        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.log"))
-        {
-            if (file != Logger.CurrentLog)
-            {
+        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.log")) {
+            if (file != Logger.CurrentLog) {
                 File.Delete(file);
             }
         }
@@ -163,8 +156,7 @@ public class ShellMenu
     [Menu("Clear Editor Cache", "Tools", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
     public static void ClearEditorCache()
     {
-        if (Directory.Exists(ReactiveEditor.CacheDirectory))
-        {
+        if (Directory.Exists(ReactiveEditor.CacheDirectory)) {
             Directory.Delete(ReactiveEditor.CacheDirectory, true);
         }
 
@@ -183,11 +175,9 @@ public class ShellMenu
     [Menu("About", "About", "F12", "fa-solid fa-circle-info")]
     public static async Task About()
     {
-        await new ContentDialog
-        {
+        await new ContentDialog {
             Title = "About",
-            Content = new StackPanel
-            {
+            Content = new StackPanel {
                 Spacing = 5,
                 Children = {
                     new TextBlock {

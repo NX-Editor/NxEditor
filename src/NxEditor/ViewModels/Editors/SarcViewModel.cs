@@ -26,7 +26,7 @@ public partial class SarcViewModel : ReactiveEditor
     public SarcHistoryStack History { get; }
 
     public SarcView? View { get; set; }
-    
+
     [ObservableProperty]
     private FileItemNode _root = new("__root__");
 
