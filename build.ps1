@@ -6,7 +6,7 @@ function Start-Iterate($path) {
 
 function Invoke-Build-Native($path) {
     if (@(Test-Path "$path\lib\") -eq $True) {
-        Iterate "$path\lib\"
+        Start-Iterate "$path\lib\"
     }
 
     if (@(Test-Path ($path = "$path\native")) -eq $False) {
