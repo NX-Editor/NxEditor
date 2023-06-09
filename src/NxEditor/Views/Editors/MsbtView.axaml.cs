@@ -20,18 +20,6 @@ public partial class MsbtView : UserControl
         textMateInstallation.SetGrammar("source.yaml");
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        App.Desktop?.DisableGlobalShortcuts("Edit");
-        base.OnAttachedToVisualTree(e);
-    }
-
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        App.Desktop?.ActivateGlobalShortcuts();
-        base.OnDetachedFromVisualTree(e);
-    }
-
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);

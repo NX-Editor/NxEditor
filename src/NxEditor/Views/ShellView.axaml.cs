@@ -12,9 +12,6 @@ using System.Collections.ObjectModel;
 namespace NxEditor.Views;
 public partial class ShellView : Window
 {
-    private List<KeyBinding> _keyBindings = new();
-
-    public Dictionary<KeyGesture, string> KeyBindingHeaders { get; } = new();
     public static ObservableCollection<Control>? MainMenu { get; private set; }
     public static int MenuOverflow { get; set; } = 0;
 
@@ -67,37 +64,6 @@ public partial class ShellView : Window
         DropClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
         DropClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
-    }
-
-    public void ActivateGlobalShortcuts()
-    {
-        if (_keyBindings != null) {
-            foreach (var binding in _keyBindings) {
-                KeyBindings.Add(binding);
-            }
-        }
-
-        _keyBindings = new();
-    }
-
-    public void DisableGlobalShortcuts() => DisableGlobalShortcuts(Array.Empty<string>());
-    public void DisableGlobalShortcuts(params string[] targets)
-    {
-        if (targets.Length <= 0) {
-            _keyBindings = KeyBindings.ToList();
-            KeyBindings.Clear();
-            return;
-        }
-
-        for (int i = 0; i < KeyBindings.Count; i++) {
-            KeyBinding key = KeyBindings[i];
-            foreach (var target in targets) {
-                if (KeyBindingHeaders[key.Gesture].StartsWith(target)) {
-                    _keyBindings.Add(key);
-                    KeyBindings.RemoveAt(i);
-                }
-            }
-        }
     }
 
     public static void ClearOverflowMenu()

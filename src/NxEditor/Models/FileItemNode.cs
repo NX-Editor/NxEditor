@@ -51,7 +51,6 @@ public partial class FileItemNode : ObservableObject
 
     public void BeginRename()
     {
-        App.Desktop?.DisableGlobalShortcuts();
         _renameClient?.SelectAll();
         _renameClient?.Focus();
         PrevName = Header;
@@ -61,7 +60,6 @@ public partial class FileItemNode : ObservableObject
 
     public void EndRename(SarcViewModel owner)
     {
-        App.Desktop?.ActivateGlobalShortcuts();
         owner.History.StageChange(SarcChange.Rename, new List<(FileItemNode, object?)>() {
             (this, PrevName)
         });

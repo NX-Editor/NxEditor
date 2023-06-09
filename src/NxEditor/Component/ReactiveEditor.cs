@@ -41,12 +41,6 @@ public abstract class ReactiveEditor : Document
         OpenEditors.Add(this);
     }
 
-    public override void OnSelected()
-    {
-        App.Desktop?.ActivateGlobalShortcuts();
-        base.OnSelected();
-    }
-
     public override bool OnClose()
     {
         if (HasChanged()) {

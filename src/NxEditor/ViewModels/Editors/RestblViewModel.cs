@@ -103,12 +103,6 @@ public partial class RestblViewModel : ReactiveEditor
         _table.CrcTable[hash] = (uint)CurrentSize!;
     }
 
-    public override void OnSelected()
-    {
-        base.OnSelected();
-        App.Desktop?.DisableGlobalShortcuts("Edit");
-    }
-
     public override void SaveAs(string path)
     {
         string ext = Path.GetExtension(path);
