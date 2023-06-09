@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using NxEditor.Attributes;
+using NxEditor.Component;
 using NxEditor.Models;
 using NxEditor.Views;
 using System.Collections.ObjectModel;
@@ -119,13 +120,7 @@ public class MenuFactory
                 };
 
                 if (shortcut != null) {
-                    KeyBinding keyBinding = new() {
-                        Gesture = shortcut,
-                        Command = command
-                    };
-
-                    _visualRoot?.KeyBindings.Add(keyBinding);
-                    _visualRoot?.KeyBindingHeaders.TryAdd(keyBinding.Gesture, menu.Path);
+                    _visualRoot?.RegisterHotKey(shortcut, menu.Path, command);
                 }
 
                 if (func.Name == "Recent") {
