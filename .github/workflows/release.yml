@@ -62,7 +62,7 @@ jobs:
         run: |
           cmake --build ./lib/Cead/native/build/${{ matrix.config.build }} --config Release --target all -j 4
 
-      - name: Configure NativeIO
+      - name: Configure NativeIO (cs-msbt)
         shell: bash
         run: |
           mkdir ./lib/cs-msbt/lib/NativeIO/native/build
@@ -74,7 +74,7 @@ jobs:
             -B ./lib/cs-msbt/lib/NativeIO/native/build/${{ matrix.config.build }} \
             -G "Ninja"
 
-      - name: Build NativeIO
+      - name: Build NativeIO (cs-msbt)
         shell: bash
         run: |
           cmake --build ./lib/cs-msbt/lib/NativeIO/native/build/${{ matrix.config.build }} --config Release --target all -j 4
@@ -95,6 +95,40 @@ jobs:
         shell: bash
         run: |
           cmake --build ./lib/cs-msbt/native/build/${{ matrix.config.build }} --config Release --target all -j 4
+
+      - name: Configure NativeIO (cs-restbl)
+        shell: bash
+        run: |
+          mkdir ./lib/cs-restbl/lib/NativeIO/native/build
+          ${{ matrix.config.vars }} \
+          cmake --no-warn-unused-cli \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+            -DCMAKE_BUILD_TYPE:STRING=Release \
+            -S ./lib/cs-restbl/lib/NativeIO/native \
+            -B ./lib/cs-restbl/lib/NativeIO/native/build/${{ matrix.config.build }} \
+            -G "Ninja"
+
+      - name: Build NativeIO (cs-restbl)
+        shell: bash
+        run: |
+          cmake --build ./lib/cs-restbl/lib/NativeIO/native/build/${{ matrix.config.build }} --config Release --target all -j 4
+
+      - name: Configure cs-restbl
+        shell: bash
+        run: |
+          mkdir ./lib/cs-restbl/native/build
+          ${{ matrix.config.vars }} \
+          cmake --no-warn-unused-cli \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
+            -DCMAKE_BUILD_TYPE:STRING=Release \
+            -S ./lib/cs-restbl/native \
+            -B ./lib/cs-restbl/native/build/${{ matrix.config.build }} \
+            -G "Ninja"
+
+      - name: Build cs-restbl
+        shell: bash
+        run: |
+          cmake --build ./lib/cs-restbl/native/build/${{ matrix.config.build }} --config Release --target all -j 4
 
       - name: Install DotNET
         uses: actions/setup-dotnet@v3
