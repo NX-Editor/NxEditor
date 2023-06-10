@@ -95,7 +95,7 @@ public partial class FileItemNode : ObservableObject
     {
         Stack<string> parts = new();
 
-        if (!IsFile) {
+        if (!IsFile && Header != "__root__") {
             parts.Push(Header);
         }
 

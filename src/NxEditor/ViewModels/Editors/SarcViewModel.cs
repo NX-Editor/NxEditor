@@ -418,7 +418,7 @@ public partial class SarcViewModel : ReactiveEditor
     internal (NodeMap, NodeMap) RemoveNodeFromMap(FileItemNode node, string? key = null)
     {
         key ??= node.Header;
-        NodeMap? map = FindNodeMap(node);
+        NodeMap? map = FindNodeMap(node.Parent!);
         if (map != null) {
             NodeMap child = (NodeMap)map[key].map;
             map?.Remove(key);
