@@ -99,19 +99,19 @@ jobs:
       - name: Configure NativeIO (cs-restbl)
         shell: bash
         run: |
-          mkdir ./lib/cs-restbl/lib/NativeIO/native/build
+          mkdir ./lib/cs-restbl/lib/Native.IO/native/build
           ${{ matrix.config.vars }} \
           cmake --no-warn-unused-cli \
             -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE \
             -DCMAKE_BUILD_TYPE:STRING=Release \
-            -S ./lib/cs-restbl/lib/NativeIO/native \
-            -B ./lib/cs-restbl/lib/NativeIO/native/build/${{ matrix.config.build }} \
+            -S ./lib/cs-restbl/lib/Native.IO/native \
+            -B ./lib/cs-restbl/lib/Native.IO/native/build/${{ matrix.config.build }} \
             -G "Ninja"
 
       - name: Build NativeIO (cs-restbl)
         shell: bash
         run: |
-          cmake --build ./lib/cs-restbl/lib/NativeIO/native/build/${{ matrix.config.build }} --config Release --target all -j 4
+          cmake --build ./lib/cs-restbl/lib/Native.IO/native/build/${{ matrix.config.build }} --config Release --target all -j 4
 
       - name: Configure cs-restbl
         shell: bash
