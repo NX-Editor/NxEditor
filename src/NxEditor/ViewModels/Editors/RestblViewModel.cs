@@ -18,13 +18,16 @@ public partial class RestblViewModel : ReactiveEditor
     public Restbl Table => _table;
 
     [ObservableProperty]
-    private ObservableCollection<RestblEntry> _pinned = new();
+    private ObservableCollection<RestblEntry> _items = new();
 
     [ObservableProperty]
     private string _currentName = string.Empty;
 
     [ObservableProperty]
     private uint? _currentSize = 0;
+
+    [ObservableProperty]
+    private RestblEntry? _current;
 
     public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
@@ -42,18 +45,12 @@ public partial class RestblViewModel : ReactiveEditor
             return;
         }
 
-        for (int i = 0; i < Pinned.Count; i++) {
-            if (!Pinned[i].IsPinned) {
-                Pinned.RemoveAt(i);
-                i--;
-            }
+        if (_strings.Length == 0 && !Items.Select(x => x.Name).Contains(CurrentName) && TryGetEntry(CurrentName) is RestblEntry entry) {
+            Items.Add(entry);
+            return;
         }
 
-        if (!Pinned.Select(x => x.Name).Contains(CurrentName)) {
-            if (TryGetEntry(CurrentName) is RestblEntry entry) {
-                Pinned.Add(entry);
-            }
-        }
+        Items = new(_strings.Where(x => x.Contains(CurrentName)).Select(x => TryGetEntry(x)!).Where(x => x != null));
     }
 
     public async Task Import()
@@ -68,12 +65,12 @@ public partial class RestblViewModel : ReactiveEditor
     public bool IsEntryValid(string action)
     {
         if (string.IsNullOrEmpty(CurrentName)) {
-            App.Toast("Name entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
+            App.Toast($"Name entry cannot be empty when {action}", $"Error {action}", NotificationType.Error);
             return false;
         }
 
         if (CurrentSize == null || CurrentSize < 0) {
-            App.Toast("Size entry cannot be empty when saving an entry", $"Error {action}", NotificationType.Error);
+            App.Toast($"Size entry cannot be empty when {action}", $"Error {action}", NotificationType.Error);
             return false;
         }
 
@@ -82,7 +79,7 @@ public partial class RestblViewModel : ReactiveEditor
 
     public void SaveEntry()
     {
-        if (!IsEntryValid("saving entry")) {
+        if (!IsEntryValid("saving an entry")) {
             return;
         }
 
@@ -105,7 +102,7 @@ public partial class RestblViewModel : ReactiveEditor
 
     public void AddEntry()
     {
-        if (!IsEntryValid("adding entry")) {
+        if (!IsEntryValid("adding an entry")) {
             return;
         }
 
@@ -120,8 +117,19 @@ public partial class RestblViewModel : ReactiveEditor
 
     public void RemoveEntry()
     {
-        if (!IsEntryValid("removing entry")) {
+        if (!IsEntryValid("removing an entry")) {
             return;
+        }
+
+        if (Current != null) {
+            if (Current.Hash is uint _hash && _table.CrcTable.Contains(_hash)) {
+                _table.CrcTable.Remove(_hash);
+                Items.Remove(Current);
+            }
+            else if (_table.NameTable.Contains(Current.Name)) {
+                _table.NameTable.Remove(Current.Name);
+                Items.Remove(Current);
+            }
         }
 
         // Check the string table first
@@ -224,7 +232,7 @@ public partial class RestblViewModel : ReactiveEditor
 
     private void ResetPinned()
     {
-        Pinned = new(_strings.Select(x => TryGetEntry(x)!).Where(x => x != null).ToList());
+        Items = new(_strings.Select(x => TryGetEntry(x)!).Where(x => x != null).ToList());
     }
 
     private RestblEntry? TryGetEntry(string name)

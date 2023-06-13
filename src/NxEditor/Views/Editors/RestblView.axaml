@@ -18,11 +18,11 @@
                  Padding="10"
                  Background="Transparent"
                  Focusable="False"
-                 Items="{Binding Pinned}"
+                 Items="{Binding Items}"
                  SelectionMode="Toggle">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Padding="5,2">
+                    <Border Padding="5,2" Background="Transparent">
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Command="{Binding Edit}"
@@ -30,13 +30,6 @@
                                           Header="Edit">
                                     <MenuItem.Icon>
                                         <pi:Icon Value="fa-pen-to-square" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Command="{Binding Pin}"
-                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
-                                          Header="{Binding PinHeaderText}">
-                                    <MenuItem.Icon>
-                                        <pi:Icon Value="fa-thumbtack" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />
@@ -49,19 +42,8 @@
                                 </MenuItem>
                             </ContextMenu>
                         </Border.ContextMenu>
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <ToggleButton Margin="0"
-                                          Padding="0"
-                                          Classes="Hyperlink"
-                                          Command="{Binding Pin}"
-                                          CommandParameter="{Binding $parent[UserControl].DataContext}"
-                                          IsChecked="{Binding IsPinned, Mode=OneWay}"
-                                          IsHitTestVisible="True">
-                                <pi:Icon Value="fa-thumbtack" />
-                            </ToggleButton>
-                            <TextBlock Grid.Column="1"
-                                       Margin="10,0"
-                                       HorizontalAlignment="Left"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        Text="{Binding Name}"
                                        TextWrapping="WrapWithOverflow" />
@@ -79,35 +61,6 @@
                     <Setter Property="CornerRadius" Value="3" />
                     <Setter Property="Margin" Value="0,2" />
                     <Setter Property="Padding" Value="3" />
-
-                    <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                        <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                    </Style>
-
-                    <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                        <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                    </Style>
-
-                    <Style Selector="^:selected">
-                        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                        </Style>
-                        <Style Selector="^:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                        </Style>
-                        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                        </Style>
-                        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
-                            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-                        </Style>
-                    </Style>
                 </Style>
             </ListBox.Styles>
         </ListBox>
@@ -138,7 +91,11 @@
                          Margin="0,0,5,0"
                          Text="{Binding CurrentName}"
                          ToolTip.Tip="Entry Name"
-                         Watermark="Entry name" />
+                         Watermark="Entry name">
+                    <TextBox.KeyBindings>
+                        <KeyBinding Command="{Binding Search}" Gesture="Enter" />
+                    </TextBox.KeyBindings>
+                </TextBox>
                 <NumericUpDown Grid.Column="3"
                                Margin="0,0,5,0"
                                Minimum="0"
@@ -160,7 +117,7 @@
                         VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding SaveEntry}"
+                        Command="{Binding AddEntry}"
                         ToolTip.Tip="Add New Entry">
                     <pi:Icon Value="fa-plus" />
                 </Button>
@@ -175,7 +132,7 @@
             </Grid>
         </Border>
 
-        <Grid IsVisible="{Binding !Pinned.Count}" Opacity="0.5">
+        <Grid IsVisible="{Binding !Items.Count}" Opacity="0.5">
             <TextBlock Margin="100,0,0,15"
                        VerticalAlignment="Bottom"
                        FontWeight="Light"

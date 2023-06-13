@@ -6,9 +6,6 @@ namespace NxEditor.Models;
 public partial class RestblEntry : ObservableObject
 {
     [ObservableProperty]
-    private string _pinHeaderText = "Pin";
-
-    [ObservableProperty]
     private string _name;
 
     [ObservableProperty]
@@ -16,9 +13,6 @@ public partial class RestblEntry : ObservableObject
 
     [ObservableProperty]
     private uint _size;
-
-    [ObservableProperty]
-    private bool _isPinned;
 
     public RestblEntry(string name, uint? hash, uint size)
     {
@@ -33,17 +27,6 @@ public partial class RestblEntry : ObservableObject
         parent.CurrentSize = Size;
     }
 
-    public void Pin(RestblViewModel parent)
-    {
-        if (IsPinned = !IsPinned) {
-            PinHeaderText = "Unpin";
-        }
-        else {
-            PinHeaderText = "Pin";
-            parent.Pinned.Remove(this);
-        }
-    }
-
     public void Remove(RestblViewModel parent)
     {
         if (Hash is uint hash) {
@@ -53,6 +36,6 @@ public partial class RestblEntry : ObservableObject
             parent.Table.NameTable.Remove(Name);
         }
 
-        parent.Pinned.Remove(this);
+        parent.Items.Remove(this);
     }
 }
