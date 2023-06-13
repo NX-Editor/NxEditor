@@ -14,7 +14,7 @@ namespace NxEditor.ViewModels.Editors;
 public partial class RestblViewModel : ReactiveEditor
 {
     private readonly Restbl _table;
-    private string[] _strings;
+    private List<string> _strings;
     public Restbl Table => _table;
 
     [ObservableProperty]
@@ -32,7 +32,7 @@ public partial class RestblViewModel : ReactiveEditor
     public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         _table = Restbl.FromBinary(_data);
-        _strings = File.Exists(Config.Shared.DefaultHashTable) ? File.ReadAllLines(Config.Shared.DefaultHashTable) : Array.Empty<string>();
+        _strings = File.Exists(Config.Shared.DefaultHashTable) ? File.ReadAllLines(Config.Shared.DefaultHashTable).ToList() : new();
         ResetPinned();
 
         SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
@@ -45,7 +45,7 @@ public partial class RestblViewModel : ReactiveEditor
             return;
         }
 
-        if (_strings.Length == 0 && !Items.Select(x => x.Name).Contains(CurrentName) && TryGetEntry(CurrentName) is RestblEntry entry) {
+        if (_strings.Count == 0 && !Items.Select(x => x.Name).Contains(CurrentName) && TryGetEntry(CurrentName) is RestblEntry entry) {
             Items.Add(entry);
             return;
         }
@@ -57,7 +57,7 @@ public partial class RestblViewModel : ReactiveEditor
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Import Hash Table", instanceBrowserKey: "import-hash-table");
         if (await dialog.ShowDialog() is string path && File.Exists(path)) {
-            _strings = File.ReadAllLines(path);
+            _strings = File.ReadAllLines(path).ToList();
             ResetPinned();
         }
     }
@@ -83,13 +83,11 @@ public partial class RestblViewModel : ReactiveEditor
             return;
         }
 
-        // TODO: Update matching RestblEntry
-
         // Check the string table first
         // as it's more accurate
         if (_table.NameTable.Contains(CurrentName)) {
             _table.NameTable[CurrentName] = (uint)CurrentSize!;
-            return;
+            goto UpdateCurrentEntry;
         }
 
         // Overwrite or add the value
@@ -97,10 +95,15 @@ public partial class RestblViewModel : ReactiveEditor
         uint hash = Crc32.Compute(CurrentName);
         if (_table.CrcTable.Contains(hash)) {
             _table.CrcTable[hash] = (uint)CurrentSize!;
-            return;
+            goto UpdateCurrentEntry;
         }
 
         App.Toast("The entry could not be found. Did you mean to add (+) instead?", $"Warning", NotificationType.Warning);
+
+        UpdateCurrentEntry:
+        if (Items.FirstOrDefault(x => x.Name == CurrentName) is RestblEntry entry) {
+            entry.Size = (uint)CurrentSize!;
+        }
     }
 
     public void AddEntry()
@@ -111,11 +114,21 @@ public partial class RestblViewModel : ReactiveEditor
 
         uint hash = Crc32.Compute(CurrentName);
         if (_table.CrcTable.Contains(hash)) {
+            if (_table.NameTable.Contains(CurrentName)) {
+                App.Toast("The entry already exists. Did you mean to save instead?", $"Warning", NotificationType.Warning);
+                return;
+            }
+
             _table.NameTable[CurrentName] = (uint)CurrentSize!;
-            return;
+            goto AddCurrentString;
         }
 
         _table.CrcTable[hash] = (uint)CurrentSize!;
+
+        AddCurrentString:
+        if (!_strings.Contains(CurrentName)) {
+            _strings.Add(CurrentName);
+        }
     }
 
     public void RemoveEntry()
