@@ -158,12 +158,6 @@
                          Text="{Binding FindField}"
                          Watermark="Find...">
                     <i:Interaction.Behaviors>
-                        <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">
-                            <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                        </ia:EventTriggerBehavior>
-                        <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
-                            <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                        </ia:EventTriggerBehavior>
                         <ia:DataTriggerBehavior Binding="{Binding IsReplacing}"
                                                 ComparisonCondition="Equal"
                                                 Value="False">
@@ -189,16 +183,7 @@
                          IsVisible="{Binding IsReplacing, Mode=TwoWay}"
                          KeyDown="FieldKeyDown"
                          Text="{Binding ReplaceField}"
-                         Watermark="Replace...">
-                    <i:Interaction.Behaviors>
-                        <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding $parent[TextBox]}">
-                            <ia:CallMethodAction MethodName="DisableGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                        </ia:EventTriggerBehavior>
-                        <ia:EventTriggerBehavior EventName="LostFocus" SourceObject="{Binding $parent[TextBox]}">
-                            <ia:CallMethodAction MethodName="ActivateGlobalShortcuts" TargetObject="{x:Static app:App.Desktop}" />
-                        </ia:EventTriggerBehavior>
-                    </i:Interaction.Behaviors>
-                </TextBox>
+                         Watermark="Replace..." />
 
                 <Button Grid.Column="2"
                         Margin="3,0,0,0"
