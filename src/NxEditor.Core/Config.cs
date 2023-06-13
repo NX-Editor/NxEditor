@@ -30,6 +30,9 @@ public class Config : ISettingsBase
     [Setting("Single File Lock", "Restrict two files with the same path to be loaded concurrently", Category = "Lock Settings")]
     public bool UseSingleFileLock { get; set; } = false;
 
+    [Setting("Default RESTBL Hash Table", "The absolue path to the hash table loaded when a RESTBL file is opened", Category = "Hashes")]
+    public string DefaultHashTable { get; set; } = string.Empty;
+
     [Setting(UiType.Dropdown, "Dark", "Light", Category = "Appearance")]
     public string Theme { get; set; } = "Dark";
 

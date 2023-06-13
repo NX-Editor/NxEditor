@@ -14,7 +14,8 @@
              mc:Ignorable="d">
     <Grid RowDefinitions="*,Auto">
 
-        <ListBox Padding="10"
+        <ListBox Name="PinnedListBox"
+                 Padding="10"
                  Background="Transparent"
                  Focusable="False"
                  Items="{Binding Pinned}"
@@ -26,14 +27,26 @@
                             <ContextMenu>
                                 <MenuItem Command="{Binding Edit}"
                                           CommandParameter="{Binding $parent[UserControl].DataContext}"
-                                          Header="Edit" />
+                                          Header="Edit">
+                                    <MenuItem.Icon>
+                                        <pi:Icon Value="fa-pen-to-square" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                                 <MenuItem Command="{Binding Pin}"
                                           CommandParameter="{Binding $parent[UserControl].DataContext}"
-                                          Header="{Binding PinHeaderText}" />
+                                          Header="{Binding PinHeaderText}">
+                                    <MenuItem.Icon>
+                                        <pi:Icon Value="fa-thumbtack" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                                 <Separator />
                                 <MenuItem Command="{Binding Remove}"
                                           CommandParameter="{Binding $parent[UserControl].DataContext}"
-                                          Header="Remove" />
+                                          Header="Remove">
+                                    <MenuItem.Icon>
+                                        <pi:Icon Value="fa-trash" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </Border.ContextMenu>
                         <Grid ColumnDefinitions="Auto,*,Auto">
@@ -103,39 +116,89 @@
                 Padding="10"
                 BorderBrush="{DynamicResource SystemChromeMediumColor}"
                 BorderThickness="0,1,0,0">
-            <Grid ColumnDefinitions="Auto,*,120,Auto,Auto">
+            <Grid ColumnDefinitions="Auto,Auto,*,120,Auto,Auto,Auto">
                 <Button Margin="0,0,5,0"
                         VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding Search}">
-                    <pi:Icon Value="fa-magnifying-glass" />
+                        Command="{Binding Import}"
+                        ToolTip.Tip="Import Hash Table">
+                    <pi:Icon Value="fa-arrow-right-from-bracket" />
                 </Button>
-                <TextBox Grid.Column="1"
-                         Margin="0,0,5,0"
-                         Text="{Binding CurrentName}"
-                         Watermark="(Make sure to use forward slashes when searching keys)" />
-                <NumericUpDown Grid.Column="2"
-                               Margin="0,0,5,0"
-                               Minimum="0"
-                               ShowButtonSpinner="False"
-                               Value="{Binding CurrentSize}" />
-                <Button Grid.Column="3"
+                <Button Grid.Column="1"
                         Margin="0,0,5,0"
                         VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding SaveEntry}">
-                    <pi:Icon Value="fa-floppy-disk" />
+                        Command="{Binding Search}"
+                        ToolTip.Tip="Search for Entry">
+                    <pi:Icon Value="fa-magnifying-glass" />
                 </Button>
+                <TextBox Grid.Column="2"
+                         Margin="0,0,5,0"
+                         Text="{Binding CurrentName}"
+                         ToolTip.Tip="Entry Name"
+                         Watermark="Entry name" />
+                <NumericUpDown Grid.Column="3"
+                               Margin="0,0,5,0"
+                               Minimum="0"
+                               ShowButtonSpinner="False"
+                               ToolTip.Tip="Entry Size Value"
+                               Watermark="Entry value"
+                               Value="{Binding CurrentSize}" />
                 <Button Grid.Column="4"
+                        Margin="0,0,5,0"
                         VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Command="{Binding SaveEntry}">
+                        Command="{Binding SaveEntry}"
+                        ToolTip.Tip="Save Entry">
+                    <pi:Icon Value="fa-floppy-disk" />
+                </Button>
+                <Button Grid.Column="5"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding SaveEntry}"
+                        ToolTip.Tip="Add New Entry">
                     <pi:Icon Value="fa-plus" />
+                </Button>
+                <Button Grid.Column="6"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Command="{Binding RemoveEntry}"
+                        ToolTip.Tip="Remove Entry">
+                    <pi:Icon Value="fa-trash" />
                 </Button>
             </Grid>
         </Border>
+
+        <Grid IsVisible="{Binding !Pinned.Count}" Opacity="0.5">
+            <TextBlock Margin="100,0,0,15"
+                       VerticalAlignment="Bottom"
+                       FontWeight="Light"
+                       Text="Use the sreach bar to lookup a key"
+                       TextWrapping="Wrap" />
+            <Border Width="1"
+                    Height="30"
+                    Margin="92,0,0,-5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Background="{DynamicResource SystemBaseHighColor}" />
+
+            <TextBlock Margin="30,0,0,50"
+                       VerticalAlignment="Bottom"
+                       FontWeight="Light"
+                       Text="Import a hash table to enable verbose query searches"
+                       TextWrapping="Wrap" />
+            <Border Width="1"
+                    Height="65"
+                    Margin="22,0,0,-5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Background="{DynamicResource SystemBaseHighColor}" />
+        </Grid>
     </Grid>
 </UserControl>

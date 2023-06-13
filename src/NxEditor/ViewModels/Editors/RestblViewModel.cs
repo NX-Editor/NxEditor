@@ -5,6 +5,7 @@ using Native.IO.Handles;
 using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Utils;
+using NxEditor.Helpers;
 using NxEditor.Models;
 using System.Collections.ObjectModel;
 
@@ -13,6 +14,7 @@ namespace NxEditor.ViewModels.Editors;
 public partial class RestblViewModel : ReactiveEditor
 {
     private readonly Restbl _table;
+    private string[] _strings;
     public Restbl Table => _table;
 
     [ObservableProperty]
@@ -27,12 +29,19 @@ public partial class RestblViewModel : ReactiveEditor
     public RestblViewModel(string file, byte[] data, Action<byte[]>? setSource = null) : base(file, data, setSource)
     {
         _table = Restbl.FromBinary(_data);
+        _strings = File.Exists(Config.Shared.DefaultHashTable) ? File.ReadAllLines(Config.Shared.DefaultHashTable) : Array.Empty<string>();
+        ResetPinned();
 
         SupportedExtensions.Add("Yaml:*.yml;*.yaml|");
     }
 
     public void Search()
     {
+        if (CurrentName == null) {
+            ResetPinned();
+            return;
+        }
+
         for (int i = 0; i < Pinned.Count; i++) {
             if (!Pinned[i].IsPinned) {
                 Pinned.RemoveAt(i);
@@ -41,16 +50,18 @@ public partial class RestblViewModel : ReactiveEditor
         }
 
         if (!Pinned.Select(x => x.Name).Contains(CurrentName)) {
-            if (_table.NameTable.Contains(CurrentName)) {
-                Pinned.Add(new(CurrentName, null, _table.NameTable[CurrentName]));
-                return;
+            if (TryGetEntry(CurrentName) is RestblEntry entry) {
+                Pinned.Add(entry);
             }
+        }
+    }
 
-            uint hash = Crc32.Compute(CurrentName);
-            if (_table.CrcTable.Contains(hash)) {
-                Pinned.Add(new(CurrentName, hash, _table.CrcTable[hash]));
-                return;
-            }
+    public async Task Import()
+    {
+        BrowserDialog dialog = new(BrowserMode.OpenFile, "Import Hash Table", instanceBrowserKey: "import-hash-table");
+        if (await dialog.ShowDialog() is string path && File.Exists(path)) {
+            _strings = File.ReadAllLines(path);
+            ResetPinned();
         }
     }
 
@@ -85,7 +96,11 @@ public partial class RestblViewModel : ReactiveEditor
         // Overwrite or add the value
         // in the CrcTable
         uint hash = Crc32.Compute(CurrentName);
-        _table.CrcTable[hash] = (uint)CurrentSize!;
+        if (_table.CrcTable.Contains(hash)) {
+            _table.CrcTable[hash] = (uint)CurrentSize!;
+        }
+
+        App.Toast("The entry could not be found. Did you mean to add (+) instead?", $"Warning", NotificationType.Warning);
     }
 
     public void AddEntry()
@@ -101,6 +116,29 @@ public partial class RestblViewModel : ReactiveEditor
         }
 
         _table.CrcTable[hash] = (uint)CurrentSize!;
+    }
+
+    public void RemoveEntry()
+    {
+        if (!IsEntryValid("removing entry")) {
+            return;
+        }
+
+        // Check the string table first
+        // as it's more accurate
+        if (_table.NameTable.Contains(CurrentName)) {
+            _table.NameTable.Remove(CurrentName);
+            return;
+        }
+
+        // If the entry is not in the string
+        // table remove the hash entry
+        uint hash = Crc32.Compute(CurrentName);
+        if (_table.CrcTable.Contains(hash)) {
+            _table.CrcTable.Remove(hash);
+        }
+
+        App.Toast("The entry could not be found", $"Error", NotificationType.Error);
     }
 
     public override void SaveAs(string path)
@@ -182,5 +220,24 @@ public partial class RestblViewModel : ReactiveEditor
     public override bool HasChanged()
     {
         return true;
+    }
+
+    private void ResetPinned()
+    {
+        Pinned = new(_strings.Select(x => TryGetEntry(x)!).Where(x => x != null).ToList());
+    }
+
+    private RestblEntry? TryGetEntry(string name)
+    {
+        if (_table.NameTable.Contains(name)) {
+            return new(name, null, _table.NameTable[name]);
+        }
+
+        uint hash = Crc32.Compute(name);
+        if (_table.CrcTable.Contains(hash)) {
+            return new(name, hash, _table.CrcTable[hash]);
+        }
+
+        return null;
     }
 }
