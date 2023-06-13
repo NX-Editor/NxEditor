@@ -30,7 +30,8 @@ public class Config : ISettingsBase
     [Setting("Single File Lock", "Restrict two files with the same path to be loaded concurrently", Category = "Lock Settings")]
     public bool UseSingleFileLock { get; set; } = false;
 
-    [Setting("Default RESTBL Hash Table", "The absolue path to the hash table loaded when a RESTBL file is opened", Category = "Hashes")]
+    // TODO: Support file dialog in place of folder dialog
+    [Setting("Default RESTBL Hash Table", "The absolue path to the hash table loaded when a RESTBL file is opened\n\n(Please paste the file path in, file browsing is currently not supported)", Category = "RESTBL", Folder = "Editor Config", ShowBrowseButton = false)]
     public string DefaultHashTable { get; set; } = string.Empty;
 
     [Setting(UiType.Dropdown, "Dark", "Light", Category = "Appearance")]
