@@ -83,6 +83,8 @@ public partial class RestblViewModel : ReactiveEditor
             return;
         }
 
+        // TODO: Update matching RestblEntry
+
         // Check the string table first
         // as it's more accurate
         if (_table.NameTable.Contains(CurrentName)) {
@@ -95,6 +97,7 @@ public partial class RestblViewModel : ReactiveEditor
         uint hash = Crc32.Compute(CurrentName);
         if (_table.CrcTable.Contains(hash)) {
             _table.CrcTable[hash] = (uint)CurrentSize!;
+            return;
         }
 
         App.Toast("The entry could not be found. Did you mean to add (+) instead?", $"Warning", NotificationType.Warning);
@@ -117,19 +120,22 @@ public partial class RestblViewModel : ReactiveEditor
 
     public void RemoveEntry()
     {
-        if (!IsEntryValid("removing an entry")) {
-            return;
-        }
-
         if (Current != null) {
             if (Current.Hash is uint _hash && _table.CrcTable.Contains(_hash)) {
                 _table.CrcTable.Remove(_hash);
                 Items.Remove(Current);
+                return;
             }
-            else if (_table.NameTable.Contains(Current.Name)) {
+
+            if (_table.NameTable.Contains(Current.Name)) {
                 _table.NameTable.Remove(Current.Name);
                 Items.Remove(Current);
+                return;
             }
+        }
+
+        if (!IsEntryValid("removing an entry")) {
+            return;
         }
 
         // Check the string table first
@@ -144,9 +150,10 @@ public partial class RestblViewModel : ReactiveEditor
         uint hash = Crc32.Compute(CurrentName);
         if (_table.CrcTable.Contains(hash)) {
             _table.CrcTable.Remove(hash);
+            return;
         }
 
-        App.Toast("The entry could not be found", $"Error", NotificationType.Error);
+        App.Toast("The entry could not be found", $"Error removing an entry", NotificationType.Error);
     }
 
     public override void SaveAs(string path)
