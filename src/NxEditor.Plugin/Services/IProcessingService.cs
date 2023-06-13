@@ -1,6 +1,6 @@
 ﻿using NxEditor.Plugin.Models;
 
-namespace NxEditor.Plugin.Generics;
+namespace NxEditor.Plugin.Services;
 
 /// <summary>
 /// Processes the request <see cref="IFileHandle"/> before being sent to a <see cref="IFormatService"/>

@@ -1,6 +1,6 @@
 ﻿using NxEditor.Plugin.Models;
 
-namespace NxEditor.Plugin.Generics;
+namespace NxEditor.Plugin.Services;
 
 /// <summary>
 /// Handles an <see cref="IFileHandle"/> request as a file format specification
