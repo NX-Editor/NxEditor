@@ -17,9 +17,10 @@
         <ListBox Name="PinnedListBox"
                  Padding="10"
                  Background="Transparent"
+                 DoubleTapped="EditEvent"
                  Focusable="False"
                  Items="{Binding Items}"
-                 SelectionMode="Toggle">
+                 SelectedItem="{Binding Current}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border Padding="5,2" Background="Transparent">
