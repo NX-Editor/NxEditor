@@ -1,12 +1,12 @@
-﻿using NxEditor.Plugin.Generics;
-using NxEditor.Plugin.Models;
+﻿using NxEditor.Plugin.Models;
+using NxEditor.Plugin.Services;
 
 namespace NxEditor.Plugin;
 
 public interface IServiceManager
 {
-    public void RequestService(IFileHandle handle);
-    public void Register(IProcessingService dataProcessor);
-    public void Register(IFormatService formatService);
-    public void Register(IConfigService configService);
+    public IFormatService RequestService(IFileHandle handle);
+    public IServiceManager Register(IProcessingService dataProcessor);
+    public IServiceManager Register(IFormatService formatService);
+    public IServiceManager Register(IConfigService configService);
 }
