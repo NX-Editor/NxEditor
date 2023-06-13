@@ -18,7 +18,7 @@ internal class Program
     [STAThread]
     public static unsafe void Main(string[] args)
     {
-        if (Config.Shared.UseSingleInstance && !SingleInstanceManager.Start(args, Attach)) {
+        if (Config.Shared.UseSingleInstance && !SingleInstanceMgr.Start(args, Attach)) {
             return;
         }
 

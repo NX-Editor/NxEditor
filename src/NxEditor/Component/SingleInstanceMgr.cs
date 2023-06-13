@@ -1,9 +1,9 @@
 ﻿using System.IO.Pipes;
 using System.Text;
 
-namespace NxEditor.Core.Utils;
+namespace NxEditor.Component;
 
-public static class SingleInstanceManager
+public static class SingleInstanceMgr
 {
     private static readonly string _appId = "NX-Editor(cf981f5b-5063-46a3-9e98-219f25ec0005)";
     private static Action<string[]>? _attach;
