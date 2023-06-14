@@ -7,3 +7,6 @@
 [submodule "lib/cs-msbt"]
 	path = lib/cs-msbt
 	url = https://github.com/EPD-Libraries/cs-msbt
+[submodule "src/NxEditor.Plugin"]
+	path = src/NxEditor.Plugin
+	url = https://github.com/NX-Editor/NxEditor.Plugin
