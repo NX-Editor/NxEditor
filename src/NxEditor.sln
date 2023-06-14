@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Native.IO", "..\lib\cs-msbt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsRestbl", "..\lib\cs-restbl\src\CsRestbl\CsRestbl.csproj", "{245A5EAC-6677-466C-82F9-B2B52FCE7481}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxEditor.Plugin", "NxEditor.Plugin\NxEditor.Plugin.csproj", "{9E26A5A5-3672-4E0C-B183-9829BBF3E265}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +47,6 @@ Global
 		{245A5EAC-6677-466C-82F9-B2B52FCE7481}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{245A5EAC-6677-466C-82F9-B2B52FCE7481}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{245A5EAC-6677-466C-82F9-B2B52FCE7481}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E26A5A5-3672-4E0C-B183-9829BBF3E265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E26A5A5-3672-4E0C-B183-9829BBF3E265}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E26A5A5-3672-4E0C-B183-9829BBF3E265}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E26A5A5-3672-4E0C-B183-9829BBF3E265}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
