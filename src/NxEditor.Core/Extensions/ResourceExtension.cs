@@ -6,7 +6,7 @@ namespace NxEditor.Core.Extensions;
 
 public static class ResourceExtension
 {
-    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NX-Editor", "Resources");
+    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor", "resources");
 
     static ResourceExtension()
     {

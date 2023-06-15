@@ -5,7 +5,7 @@ namespace NxEditor.Core;
 
 public class TotkConfig
 {
-    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Totk", "config.json");
+    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "totk", "config.json");
 
     [JsonIgnore]
     public static TotkConfig Shared { get; } = Load();
