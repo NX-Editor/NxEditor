@@ -35,15 +35,16 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            Logger.Initialize();
+            Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
+
             DllManager.LoadCead();
             NativeLibraryManager.RegisterAssembly(typeof(App).Assembly, out bool isCommonLoaded)
                 .Register(new RestblLibrary(), out bool isRestblLoaded)
                 .Register(new MsbtLibrary(), out bool isMsbtLoaded);
 
+            PluginLoader.LoadInstalledPlugins();
             ShellViewModel.InitDock();
-
-            Logger.Initialize();
-            Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
 
             Log($"Loaded native io library: {isCommonLoaded}");
             Log($"Loaded native cs_msbt: {isMsbtLoaded}");
