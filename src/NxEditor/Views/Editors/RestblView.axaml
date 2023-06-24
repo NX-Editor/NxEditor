@@ -137,7 +137,7 @@
             <TextBlock Margin="100,0,0,15"
                        VerticalAlignment="Bottom"
                        FontWeight="Light"
-                       Text="Use the sreach bar to lookup a key"
+                       Text="Use the search bar to lookup a key"
                        TextWrapping="Wrap" />
             <Border Width="1"
                     Height="30"
