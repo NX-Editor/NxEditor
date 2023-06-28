@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using NxEditor.Views.Dialogs;
 
-namespace NxEditor.Dialogs;
+namespace NxEditor.ViewModels.Dialogs;
 
 public enum ContentDialogResult
 {

@@ -4,7 +4,7 @@ using NxEditor.Attributes;
 using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
-using NxEditor.Dialogs;
+using NxEditor.ViewModels.Dialogs;
 using NxEditor.Generators;
 using NxEditor.Helpers;
 using NxEditor.PluginBase.Component;
