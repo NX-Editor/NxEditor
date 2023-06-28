@@ -1,5 +1,5 @@
 ﻿using NxEditor.Core.Models;
-using NxEditor.Plugin;
+using NxEditor.PluginBase;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text.Json;
@@ -55,7 +55,7 @@ public static class PluginLoader
         foreach (var type in asm.GetExportedTypes().Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
             try {
                 IServiceExtension service = (IServiceExtension)Activator.CreateInstance(type)!;
-                service.RegisterExtension(ServiceManager.Shared);
+                service.RegisterExtension(ServiceMgr.Shared);
                 Logger.Write($"Loaded {service.Name}");
             }
             catch (Exception ex) {
