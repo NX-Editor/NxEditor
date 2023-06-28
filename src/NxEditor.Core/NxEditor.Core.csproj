@@ -16,9 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\Cead\src\Cead.csproj" />
-    <ProjectReference Include="..\..\lib\cs-msbt\src\CsMsbt.csproj" />
-    <ProjectReference Include="..\..\lib\cs-restbl\src\CsRestbl\CsRestbl.csproj" />
     <ProjectReference Include="..\NxEditor.PluginBase\src\NxEditor.PluginBase.csproj" />
   </ItemGroup>
 
