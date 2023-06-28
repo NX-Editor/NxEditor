@@ -166,11 +166,9 @@ public partial class ShellView : Window
 
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                bool canEdit = EditorMgr.CanEdit(path, out string? editor);
                 DragFadeMaskInfo.Children.Add(new TextBlock {
-                    Text = $"{(canEdit ? editor?.Replace("ViewModel", "") : "Unknown")}: " +
-                           Path.GetFileName(path),
-                    Foreground = canEdit ? Brushes.LightGreen : Brushes.Orange,
+                    Text = Path.GetFileName(path),
+                    Foreground = Brushes.Orange,
                 });
             }
         }
