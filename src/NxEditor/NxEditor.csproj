@@ -14,7 +14,6 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
-    <EmbeddedResource Include="Resources\**" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\icon.ico" />
