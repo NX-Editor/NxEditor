@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor", "NxEditor\NxEdit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor.PluginBase", "NxEditor.PluginBase\src\NxEditor.PluginBase.csproj", "{C44EBFA0-67BD-446A-88C2-0EDA5655249E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxEditor.Launcher", "NxEditor.Launcher\NxEditor.Launcher.csproj", "{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
