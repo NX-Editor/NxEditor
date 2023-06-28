@@ -3,8 +3,7 @@ using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using NxEditor.Component;
 using NxEditor.Core;
-using NxEditor.Core.Utils;
-using NxEditor.Generators.UI;
+using NxEditor.PluginBase.Models;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 
@@ -29,7 +28,7 @@ internal class Program
     {
         Dispatcher.UIThread.InvokeAsync(() => {
             App.Desktop?.Activate();
-            EditorMgr.TryLoadEditorSafe(args[0]);
+            EditorMgr.TryLoadEditorSafe(new FileHandle(args[0]));
         });
     }
 

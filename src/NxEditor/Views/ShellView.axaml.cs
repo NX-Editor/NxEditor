@@ -7,6 +7,7 @@ using Avalonia.Platform.Storage;
 using NxEditor.Component;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
+using NxEditor.PluginBase.Models;
 using System.Collections.ObjectModel;
 
 namespace NxEditor.Views;
@@ -149,7 +150,7 @@ public partial class ShellView : Window
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                if (!EditorMgr.TryLoadEditorSafe(path)) {
+                if (!EditorMgr.TryLoadEditorSafe(new FileHandle(path))) {
                     // TODO: throw message dialog
                 }
             }

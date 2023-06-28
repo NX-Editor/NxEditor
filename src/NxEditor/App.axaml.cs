@@ -12,6 +12,7 @@ using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
+using NxEditor.PluginBase.Models;
 using NxEditor.ViewModels;
 using NxEditor.Views;
 using System.Runtime.CompilerServices;
@@ -75,7 +76,7 @@ public partial class App : Application
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
-                    EditorMgr.TryLoadEditorSafe(arg);
+                    EditorMgr.TryLoadEditorSafe(new FileHandle(arg));
                 }
             }
         }

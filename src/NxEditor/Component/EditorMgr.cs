@@ -1,22 +1,23 @@
 ﻿using Dock.Model.Core;
+using Dock.Model.Mvvm.Controls;
 using NxEditor.Core;
-using NxEditor.Core.Extensions;
 using NxEditor.Generators;
 using NxEditor.Models;
-using System.Runtime.CompilerServices;
+using NxEditor.PluginBase;
+using NxEditor.PluginBase.Component;
+using NxEditor.PluginBase.Models;
+using NxEditor.PluginBase.Services;
 
 namespace NxEditor.Component;
 
 public static class EditorMgr
 {
-    private static Dictionary<string, string> _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
+    public static IEditor? Current => ShellDockFactory.Current() as IEditor;
 
-    public static ReactiveEditor? Current => ShellDockFactory.Current() as ReactiveEditor;
-
-    public static bool TryLoadEditorSafe(string path, byte[]? data = null, Action<byte[]>? setSource = null)
+    public static bool TryLoadEditorSafe(IFileHandle handle)
     {
         try {
-            return TryLoadEditor(path, data, setSource);
+            return TryLoadEditor(handle);
         }
         catch (Exception ex) {
             App.Log(ex);
@@ -25,58 +26,27 @@ public static class EditorMgr
         return false;
     }
 
-    public static bool TryLoadEditor(string path, byte[]? data = null, Action<byte[]>? setSource = null)
+    public static bool TryLoadEditor(IFileHandle handle)
     {
-        App.Log($"Processing {Path.GetFileName(path)}");
+        App.Log($"Processing {handle.Name}");
 
-        if (Config.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(path, out IDockable? dock) && dock is ReactiveEditor) {
+        if (Config.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(handle.Name, out IDockable? dock) && dock is IEditor) {
             return true;
         }
 
-        data ??= File.ReadAllBytes(path);
+        IFormatService service = ServiceMgr.Shared
+            .RequestService(handle);
 
-        // Decompress if necessary
-        data = path.EndsWith(".zs") ? TotkZstd.Decompress(path, data).ToArray() : data;
-
-        string ext = GetExt(path);
-        string? editorName = _editors.TryGetValue(ext, out editorName) ? editorName : "TextViewModel";
-
-        object? instance = Activator.CreateInstance(Type.GetType($"{nameof(NxEditor)}.ViewModels.Editors.{editorName}")
-            ?? throw new InvalidDataException($"Invalid editor type for '{ext}' - '{editorName}' was not found"), path, data, setSource);
-
-        if (instance is ReactiveEditor editor) {
-            ShellDockFactory.AddDoc(editor);
-            StateMgr.Shared.Recent.AddPath(path);
+        if (service is IEditor editor) {
+            editor.Read();
+            ShellDockFactory.AddDoc((Document)editor);
+            if (handle.Path is not null) {
+                RecentFiles.Shared.AddPath(handle.Path);
+            }
 
             return true;
         }
 
-        throw new InvalidCastException($"Could not cast the found type of {instance} to {nameof(ReactiveEditor)}");
-    }
-
-    public static bool CanEdit(string file, out string? editor)
-    {
-        return _editors.TryGetValue(GetExt(file), out editor);
-    }
-
-    public static bool CanEdit(string file)
-    {
-        return _editors.ContainsKey(GetExt(file));
-    }
-
-    public static bool? ReloadEditorsConfig()
-    {
-        _editors = ResourceExtension.Parse<App, Dictionary<string, string>>("Editors.json")!;
-        return null;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static string GetExt(string file)
-    {
-        if (file.EndsWith(".zs")) {
-            file = file[..^3];
-        }
-
-        return Path.GetExtension(file);
+        throw new InvalidCastException($"Could not cast the found type of {service} to {typeof(Editor<,>).Name}");
     }
 }
