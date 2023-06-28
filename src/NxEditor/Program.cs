@@ -38,8 +38,6 @@ internal class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
-            .WithIcons(x => x
-                .Register(new FontAwesomeIconProvider())
-                .Register(new MaterialSymbolsIconProvider()))
+            .WithIcons(x => x.Register(new FontAwesomeIconProvider()))
             .UseReactiveUI();
 }

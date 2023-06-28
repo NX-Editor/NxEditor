@@ -3,13 +3,16 @@ using System.Collections.ObjectModel;
 
 namespace NxEditor.Models;
 
-public class RecentList : ObservableCollection<MenuItem>
+public class RecentFiles : ObservableCollection<MenuItem>
 {
+    public static RecentFiles Shared { get; } = new();
+
     public void AddPath(string path)
     {
         // TODO: impl proper ordering
 
-        MenuItem item = new() {
+        MenuItem item = new()
+        {
             Header = Path.GetFileName(path),
         };
 
