@@ -12,6 +12,7 @@ using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
+using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
 using NxEditor.ViewModels;
 using NxEditor.Views;
@@ -21,6 +22,8 @@ namespace NxEditor;
 
 public partial class App : Application
 {
+    private static readonly List<IEditor> _openEditors = new();
+
     public static string Title { get; } = "NX-Editor";
     public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
     public static TopLevel? VisualRoot { get; private set; }
@@ -69,8 +72,8 @@ public partial class App : Application
             }
 
             desktop.MainWindow.Closed += (s, e) => {
-                for (int i = 0; i < ReactiveEditor.OpenEditors.Count; i++) {
-                    ReactiveEditor.OpenEditors[i].Dispose();
+                for (int i = 0; i < _openEditors.Count; i++) {
+                    _openEditors[i].Dispose();
                 }
             };
 
