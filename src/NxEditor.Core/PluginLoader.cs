@@ -1,12 +1,10 @@
 ﻿using NxEditor.Core.Models;
 using NxEditor.PluginBase;
+using System.Collections.ObjectModel;
 using System.IO.Compression;
 using System.Reflection;
-using System.Text.Json;
 
 namespace NxEditor.Core;
-
-public record PluginMeta(string Name, string Path);
 
 public static class PluginLoader
 {
@@ -21,6 +19,14 @@ public static class PluginLoader
         LoadFolder(_path);
     }
 
+    public static ObservableCollection<PluginInfo> GetPluginInfo() => GetPluginInfo(_path);
+    public static ObservableCollection<PluginInfo> GetPluginInfo(string path)
+    {
+        return new(Directory
+            .EnumerateFiles(path, "meta.json", SearchOption.AllDirectories)
+            .Select(PluginInfo.FromPath));
+    }
+
     public static void InstallPlugin(string pluginPack)
     {
         string pluginPath = Path.Combine(_path, Path.GetFileNameWithoutExtension(pluginPack));
@@ -33,23 +39,21 @@ public static class PluginLoader
 
     private static void LoadFolder(string path)
     {
-        foreach (var pluginMeta in Directory.EnumerateFiles(path, "meta.json", SearchOption.AllDirectories)) {
-            using FileStream fs = File.OpenRead(pluginMeta);
-            PluginMeta meta = JsonSerializer.Deserialize<PluginMeta>(fs)!;
-            
-            string pluginPath = Path.Combine(Path.GetDirectoryName(pluginMeta)!, meta.Path);
-            Load(pluginPath, meta.Name);
+        foreach (var info in GetPluginInfo(path)) {
+            Load(info);
         }
     }
 
-    private static void Load(string pluginPath, string pluginName)
+    private static void Load(PluginInfo info)
     {
-        if (PluginConfig.Shared.TryGetValue(pluginName, out bool isEnabled) && !isEnabled) {
+        if (!info.IsEnabled) {
             return;
         }
 
-        PluginLoadContext loader = new(pluginPath);
-        using FileStream fs = File.OpenRead(pluginPath);
+        string assemblyPath = Path.Combine(info.Folder, info.Assembly);
+
+        PluginLoadContext loader = new(assemblyPath);
+        using FileStream fs = File.OpenRead(assemblyPath);
         Assembly asm = loader.LoadFromStream(fs);
 
         foreach (var type in asm.GetExportedTypes().Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
@@ -59,7 +63,7 @@ public static class PluginLoader
                 Logger.Write($"Loaded {service.Name}");
             }
             catch (Exception ex) {
-                Logger.Write(new Exception($"Failed to load plugin: {pluginName}", ex));
+                Logger.Write(new Exception($"Failed to load plugin: {info.Name}", ex));
             }
         }
     }
