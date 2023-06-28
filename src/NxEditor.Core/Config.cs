@@ -1,6 +1,5 @@
 ﻿using Avalonia.SettingsFactory.Core;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace NxEditor.Core;
 
@@ -10,13 +9,6 @@ public class Config : ISettingsBase
 
     public static Config Shared { get; } = Load();
     public bool RequiresInput { get; set; } = true;
-
-    [JsonIgnore]
-    [Setting("Game Path", "The absolute path to your Totk game dump\n(e.g. F:\\Games\\Totk\\RomFS)")]
-    public static string GamePath {
-        get => TotkConfig.Shared.GamePath;
-        set => TotkConfig.Shared.GamePath = value;
-    }
 
     [Setting(UiType.Dropdown, "Resource:Langs", Name = "Game Region/Language")]
     public required string Lang { get; set; }
@@ -39,7 +31,6 @@ public class Config : ISettingsBase
 
     public ISettingsBase Save()
     {
-        TotkConfig.Shared.Save();
         RequiresInput = false;
 
         Directory.CreateDirectory(Path.GetDirectoryName(_path)!);

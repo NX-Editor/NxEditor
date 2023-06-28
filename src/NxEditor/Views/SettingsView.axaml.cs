@@ -38,7 +38,6 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     public bool? ValidateBool(string key, bool value)
     {
         return key switch {
-            "LoadResourcesFromDisk" => EditorMgr.ReloadEditorsConfig(),
             _ => null
         };
     }
@@ -47,7 +46,6 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
     {
         value ??= string.Empty;
         return key switch {
-            "GamePath" => Config.ValidatePath(value, key),
             "Theme" => ValidateTheme(value!),
             _ => null,
         };
@@ -78,10 +76,6 @@ public partial class SettingsView : SettingsFactory, ISettingsValidator
 
     public string? ValidateSave(Dictionary<string, bool?> validated)
     {
-        if (validated["GamePath"] == false) {
-            return "The game path is invalid.\nMake sure the path points directly to the game files (not a folder with romfs or the title id folder).";
-        }
-
         return null;
     }
 }
