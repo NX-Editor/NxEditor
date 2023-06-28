@@ -31,7 +31,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Xaml.Interactions" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview6" />
@@ -45,9 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NxEditor.Core\NxEditor.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="ReactiveUI" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\Dialogs\ContentDialogView.axaml.cs">

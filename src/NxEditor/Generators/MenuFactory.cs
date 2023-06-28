@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
+using CommunityToolkit.Mvvm.Input;
 using NxEditor.Attributes;
 using NxEditor.Component;
 using NxEditor.Models;
@@ -99,7 +100,7 @@ public class MenuFactory
 
                 KeyGesture? shortcut = string.IsNullOrEmpty(menu.HotKey) ? null : KeyGesture.Parse(menu.HotKey);
 
-                var command = ReactiveCommand.Create(() => {
+                var command = new RelayCommand(() => {
                     try {
                         if (ShellView.MainMenu?.Any(x => x.Name == $"MenuItem__{menu.PathRoot()}") == true) {
                             func.Invoke(obj, Array.Empty<object>());
@@ -129,7 +130,7 @@ public class MenuFactory
                         if (e.NewItems != null) {
                             foreach (var item in e.NewItems) {
                                 if (item is MenuItem menuItem) {
-                                    menuItem.Command = ReactiveCommand.Create(() => {
+                                    menuItem.Command = new RelayCommand(() => {
                                         func.Invoke(obj, new object?[] {
                                             ToolTip.GetTip(menuItem)
                                         });

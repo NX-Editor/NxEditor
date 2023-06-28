@@ -11,6 +11,7 @@ using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
 using NxEditor.ViewModels;
 using System.Text;
+using CommunityToolkit.Mvvm.Input;
 
 namespace NxEditor.Models.Menus;
 
@@ -197,7 +198,7 @@ public class ShellViewMenu
                     new Button {
                         Content = "nx-editor.github.io",
                         Classes = { "Hyperlink" },
-                        Command = ReactiveCommand.Create(async () => {
+                        Command = new RelayCommand(async () => {
                             await BrowserExtension.OpenUrl("https://nx-editor.github.io");
                         })
                     }

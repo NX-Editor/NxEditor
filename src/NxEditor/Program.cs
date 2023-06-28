@@ -37,6 +37,5 @@ internal class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
-            .WithIcons(x => x.Register(new FontAwesomeIconProvider()))
-            .UseReactiveUI();
+            .WithIcons(x => x.Register(new FontAwesomeIconProvider()));
 }
