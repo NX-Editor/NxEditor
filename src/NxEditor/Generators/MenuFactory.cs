@@ -124,8 +124,8 @@ public class MenuFactory
                 }
 
                 if (func.Name == "Recent") {
-                    child.ItemsSource = StateMgr.Shared.Recent;
-                    StateMgr.Shared.Recent.CollectionChanged += (s, e) => {
+                    child.ItemsSource = RecentFiles.Shared;
+                    RecentFiles.Shared.CollectionChanged += (s, e) => {
                         if (e.NewItems != null) {
                             foreach (var item in e.NewItems) {
                                 if (item is MenuItem menuItem) {
