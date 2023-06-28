@@ -4,10 +4,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
-using Cead.Interop;
-using CsMsbt;
-using CsRestbl;
-using Native.IO.Services;
 using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Generators;
@@ -42,17 +38,8 @@ public partial class App : Application
             Logger.Initialize();
             Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
 
-            DllManager.LoadCead();
-            NativeLibraryManager.RegisterAssembly(typeof(App).Assembly, out bool isCommonLoaded)
-                .Register(new RestblLibrary(), out bool isRestblLoaded)
-                .Register(new MsbtLibrary(), out bool isMsbtLoaded);
-
             PluginLoader.LoadInstalledPlugins();
             ShellViewModel.InitDock();
-
-            Log($"Loaded native io library: {isCommonLoaded}");
-            Log($"Loaded native cs_msbt: {isMsbtLoaded}");
-            Log($"Loaded native cs_restbl: {isRestblLoaded}");
 
             desktop.MainWindow = Desktop = new ShellView() {
                 DataContext = ShellViewModel.Shared
