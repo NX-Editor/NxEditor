@@ -5,7 +5,9 @@ namespace NxEditor.Core;
 
 public class Config : ISettingsBase
 {
-    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor", "config.json");
+    public static string AppFolder { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor");
+
+    private static readonly string _path = Path.Combine(AppFolder, "config.json");
 
     public static Config Shared { get; } = Load();
     public bool RequiresInput { get; set; } = true;
