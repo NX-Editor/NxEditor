@@ -1,21 +1,20 @@
-﻿using Dock.Model.Controls;
-using NxEditor.Component;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Dock.Model.Controls;
 using NxEditor.Generators;
 
 namespace NxEditor.ViewModels;
 
-public class ShellViewModel : ReactiveSingleton<ShellViewModel>
+public partial class ShellViewModel : ObservableObject
 {
+    public static ShellViewModel Shared { get; } = new();
+
     //
     // Layout
 
     private readonly ShellDockFactory _factory = new();
 
+    [ObservableProperty]
     private IRootDock? _layout;
-    public IRootDock? Layout {
-        get => _layout;
-        set => this.RaiseAndSetIfChanged(ref _layout, value);
-    }
 
     public static void InitDock()
     {
