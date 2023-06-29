@@ -15,7 +15,9 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            // impl shell view
+            desktop.MainWindow = new ShellView {
+                DataContext = new ShellViewModel(),
+            };
         }
 
         base.OnFrameworkInitializationCompleted();
