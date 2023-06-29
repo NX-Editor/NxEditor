@@ -8,7 +8,7 @@ namespace NxEditor.Core;
 
 public static class PluginLoader
 {
-    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor", "plugins");
+    private static readonly string _path = Path.Combine(Config.AppFolder, "plugins");
 
     public static void LoadInstalledPlugins()
     {
