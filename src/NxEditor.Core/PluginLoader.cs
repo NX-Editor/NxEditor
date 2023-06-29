@@ -22,9 +22,9 @@ public static class PluginLoader
     public static ObservableCollection<PluginInfo> GetPluginInfo() => GetPluginInfo(_path);
     public static ObservableCollection<PluginInfo> GetPluginInfo(string path)
     {
-        return new(Directory
+        return Directory.Exists(path) ? new(Directory
             .EnumerateFiles(path, "meta.json", SearchOption.AllDirectories)
-            .Select(PluginInfo.FromPath));
+            .Select(PluginInfo.FromPath)) : new();
     }
 
     public static void InstallPlugin(string pluginPack)
