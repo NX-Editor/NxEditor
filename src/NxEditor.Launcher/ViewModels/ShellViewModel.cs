@@ -3,16 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using NxEditor.Core;
 using NxEditor.Core.Models;
 using Octokit;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace NxEditor.Launcher.ViewModels;
 
@@ -150,7 +144,7 @@ public partial class ShellViewModel : ObservableObject
         IsLoading = false;
     }
 
-    private async Task InstallBinary()
+    private static async Task InstallBinary()
     {
         string appName = Environment.OSVersion.Platform == PlatformID.Unix ? "nxe" : "nxe.exe";
         string binPath = Path.Combine(Config.AppFolder, "bin");
