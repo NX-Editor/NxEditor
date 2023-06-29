@@ -11,9 +11,9 @@ public partial class PluginInfo : ObservableObject
     private string _name = string.Empty;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: System.Text.Json.Serialization.JsonIgnore]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
+    private string _description = string.Empty;
+
+    [ObservableProperty]
     private string _folder = string.Empty;
 
     [ObservableProperty]
@@ -21,6 +21,18 @@ public partial class PluginInfo : ObservableObject
 
     [ObservableProperty]
     private bool _isEnabled;
+
+    [ObservableProperty]
+    private long _gitHubRepoId = -1;
+
+    [ObservableProperty]
+    private string _version = string.Empty;
+
+    [ObservableProperty]
+    private bool _isOnline = false;
+
+    [ObservableProperty]
+    private bool _canUpdate = false;
 
     public PluginInfo() { }
 
@@ -34,11 +46,13 @@ public partial class PluginInfo : ObservableObject
         return info;
     }
 
-    partial void OnIsEnabledChanged(bool value)
+    public void Serialize()
     {
         if (!_isLoading) {
             using FileStream fs = File.Create(Path.Combine(Folder, "meta.json"));
             JsonSerializer.Serialize(fs, this);
         }
     }
+
+    partial void OnIsEnabledChanged(bool value) => Serialize();
 }
