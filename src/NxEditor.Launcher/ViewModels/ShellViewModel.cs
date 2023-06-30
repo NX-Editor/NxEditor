@@ -189,7 +189,7 @@ public partial class ShellViewModel : ObservableObject
         }
 
         IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(info.GitHubRepoId);
-        if (releases.Count > 0 && releases[0].Assets.FirstOrDefault(x => x.Name == (Environment.OSVersion.Platform == PlatformID.Unix ? "unix.zip" : "win.zip")) is ReleaseAsset asset) {
+        if (releases.Count > 0 && releases[0].Assets.FirstOrDefault(x => x.Name == (Environment.OSVersion.Platform == PlatformID.Unix ? "linux-x64.zip" : "win-x64.zip")) is ReleaseAsset asset) {
             using HttpClient client = new();
             Stream stream = await client.GetStreamAsync(asset.BrowserDownloadUrl);
 
