@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AvaloniaSettingsFactory.Core" Version="11.0.0-preview6" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NxEditor.PluginBase\src\NxEditor.PluginBase.csproj" />
   </ItemGroup>
 
