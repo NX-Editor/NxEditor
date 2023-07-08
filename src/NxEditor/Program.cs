@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using NxEditor.Component;
 using NxEditor.Core;
@@ -34,8 +33,11 @@ internal class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        IconProvider.Current.Register(new FontAwesomeIconProvider());
+
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace()
-            .WithIcons(x => x.Register(new FontAwesomeIconProvider()));
+            .LogToTrace();
+    }
 }
