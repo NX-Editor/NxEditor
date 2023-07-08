@@ -12,24 +12,6 @@ namespace NxEditor.Generators;
 
 public class MenuFactory
 {
-    /// <summary>
-    /// Defaults:<br/>
-    /// - <i>MenuFactor-TopLevel</i><br/>
-    /// - <i>MenuFactor-MenuItem</i>
-    /// </summary>
-    public static Classes TopLevelClasses { get; set; } = new() {
-        "MenuFactor-TopLevel",
-        "MenuFactor-MenuItem"
-    };
-
-    /// <summary>
-    /// Defaults:<br/>
-    /// - <i>MenuFactor-MenuItem</i>
-    /// </summary>
-    public static Classes MenuItemClasses { get; set; } = new() {
-        "MenuFactor-MenuItem"
-    };
-
     private static ShellView? _visualRoot;
     public static ObservableCollection<Control>? ItemsSource { get; set; }
 
@@ -116,7 +98,9 @@ public class MenuFactory
                     Icon = new Projektanker.Icons.Avalonia.Icon() { Value = menu.Icon },
                     InputGesture = shortcut!,
                     Height = (menu.Name ?? func.Name).StartsWith("_") ? 30 : double.NaN,
-                    Classes = MenuItemClasses,
+                    Classes = {
+                        "MenuFactor-MenuItem"
+                    },
                     Command = command
                 };
 
@@ -140,17 +124,16 @@ public class MenuFactory
                         }
                     };
                 }
-
-                foreach (var cls in MenuItemClasses) {
-                    child.Classes.Add(cls);
-                }
             }
             else if (childData is Dictionary<string, dynamic> dict) {
                 child = new() {
                     Name = $"MenuItem__{name}",
                     Header = name,
                     ItemsSource = SetChildItems(dict, obj),
-                    Classes = TopLevelClasses
+                    Classes = {
+                        "MenuFactor-TopLevel",
+                        "MenuFactor-MenuItem"
+                    }
                 };
             }
             else {
