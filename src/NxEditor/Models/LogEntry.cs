@@ -15,4 +15,19 @@ public partial class LogEntry : ObservableObject
         _meta = meta;
         _message = message;
     }
+
+    public async Task Copy()
+    {
+        await App.Desktop!.Clipboard!.SetTextAsync($"{Meta}\n{Message}");
+    }
+
+    public async Task CopyMarkdown()
+    {
+        await App.Desktop!.Clipboard!.SetTextAsync($"""
+            **{Meta}**
+            ```
+            {Message}
+            ```
+            """);
+    }
 }

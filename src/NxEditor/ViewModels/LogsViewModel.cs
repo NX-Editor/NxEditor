@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Dock.Model.Mvvm.Controls;
 using NxEditor.Helpers;
@@ -44,21 +43,6 @@ public partial class LogsViewModel : Document
         Dispatcher.UIThread.InvokeAsync(() => {
             _view?.LogsClient.ScrollIntoView(LogTrace.Count - 1);
         });
-    }
-
-    public async Task Copy()
-    {
-        await Application.Current!.Clipboard!.SetTextAsync($"{Selected?.Meta}\n{Selected?.Message}");
-    }
-
-    public async Task CopyMarkdown()
-    {
-        await Application.Current!.Clipboard!.SetTextAsync($"""
-            **{Selected?.Meta}**
-            ```
-            {Selected?.Message}
-            ```
-            """);
     }
 
     internal void InjectView(LogsView logsView)
