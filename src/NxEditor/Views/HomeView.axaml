@@ -4,9 +4,11 @@
              xmlns:app="using:NxEditor"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+             xmlns:local="using:NxEditor.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             x:DataType="local:HomeViewModel"
              mc:Ignorable="d">
     <Viewbox MaxWidth="800" MaxHeight="600">
         <ContentControl HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
