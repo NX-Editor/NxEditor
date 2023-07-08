@@ -33,7 +33,6 @@
                         Margin="5"
                         Background="Transparent"
                         BorderBrush="{DynamicResource SystemBaseLowColor}"
-                        BorderDashArray="10,10"
                         BorderThickness="1"
                         DragDrop.AllowDrop="True">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

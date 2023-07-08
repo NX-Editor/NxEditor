@@ -104,7 +104,6 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     BorderBrush="{DynamicResource SystemBaseHighColor}"
-                    BorderDashArray="10,10"
                     BorderThickness="1">
                 <ContentControl FontFamily="{StaticResource Ubuntu}">
                     <StackPanel Name="DragFadeMaskInfo"

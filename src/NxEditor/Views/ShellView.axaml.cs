@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using NxEditor.Component;
@@ -124,21 +125,24 @@ public partial class ShellView : Window
         return false;
     }
 
-    protected override void HandleWindowStateChanged(WindowState state)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
-        if (state == WindowState.Normal) {
-            ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
-        }
-        else {
-            ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+        if (change.Property == WindowStateProperty && change.NewValue is WindowState state) {
+            if (state == WindowState.Normal) {
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
+            }
+            else {
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+            }
         }
 
-        base.HandleWindowStateChanged(state);
+        base.OnPropertyChanged(change);
     }
 
-    protected override void OnLoaded()
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnLoaded();
+        base.OnLoaded(e);
+
         App.NotificationManager = new(GetTopLevel(this)) {
             Position = NotificationPosition.BottomRight,
             MaxItems = 3,
