@@ -59,7 +59,7 @@ public static class PluginLoader
         foreach (var type in asm.GetExportedTypes().Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
             try {
                 IServiceExtension service = (IServiceExtension)Activator.CreateInstance(type)!;
-                service.RegisterExtension(ServiceMgr.Shared);
+                service.RegisterExtension(ServiceLoader.Shared);
                 Logger.Write($"Loaded {service.Name}");
             }
             catch (Exception ex) {

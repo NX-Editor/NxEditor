@@ -34,7 +34,7 @@ public static class EditorMgr
             return true;
         }
 
-        IFormatService service = ServiceMgr.Shared
+        IFormatService service = ServiceLoader.Shared
             .RequestService(handle);
 
         if (service is IEditor editor) {
