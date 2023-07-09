@@ -1,9 +1,10 @@
-﻿using Dock.Model.Mvvm.Controls;
+﻿using NxEditor.Components;
 using NxEditor.Core.Extensions;
+using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 
-public class HomeViewModel : Document
+public class HomeViewModel : StaticPage<HomeViewModel, HomeView>
 {
     public HomeViewModel()
     {

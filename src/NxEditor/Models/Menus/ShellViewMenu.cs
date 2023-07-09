@@ -129,7 +129,7 @@ public class ShellViewMenu
     [Menu("Settings", "Tools", "Ctrl + Alt + W", "fa-solid fa-cog")]
     public static void Settings()
     {
-        ShellDockFactory.AddDoc<ConfigViewModel>();
+        ShellDockFactory.AddDoc(ConfigViewModel.Shared);
     }
 
     [Menu("Open Logs", "Tools", "Ctrl + L", "fa-solid fa-file-circle-check", IsSeparator = true)]

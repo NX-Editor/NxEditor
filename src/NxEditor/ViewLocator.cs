@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using CommunityToolkit.Mvvm.ComponentModel;
+using NxEditor.Components;
 using NxEditor.PluginBase.Component;
 
 namespace NxEditor;
@@ -11,6 +12,10 @@ public class ViewLocator : IDataTemplate
     {
         if (param is IEditor editor) {
             return editor.View;
+        }
+        
+        if (param is IStaticPage page) {
+            return page.View;
         }
 
         var name = param!.GetType().FullName!.Replace("ViewModel", "View");
