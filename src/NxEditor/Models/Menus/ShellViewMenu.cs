@@ -1,17 +1,17 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.Input;
 using NxEditor.Attributes;
 using NxEditor.Component;
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
-using NxEditor.ViewModels.Dialogs;
 using NxEditor.Generators;
 using NxEditor.Helpers;
 using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
 using NxEditor.ViewModels;
+using NxEditor.ViewModels.Dialogs;
 using System.Text;
-using CommunityToolkit.Mvvm.Input;
 
 namespace NxEditor.Models.Menus;
 

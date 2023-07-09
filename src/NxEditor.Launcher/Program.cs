@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using System;
 
 namespace NxEditor.Launcher;
 internal class Program

@@ -9,7 +9,7 @@ public static class Logger
     private static readonly string SourceRoot = Path.Combine("D:", "a", "NX-Editor", "src", "NxEditor");
 
     public static string? CurrentLog { get; set; }
-    public static string LogsPath => _path; 
+    public static string LogsPath => _path;
 
     public static void Initialize()
     {

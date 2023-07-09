@@ -11,8 +11,7 @@ public class RecentFiles : ObservableCollection<MenuItem>
     {
         // TODO: impl proper ordering
 
-        MenuItem item = new()
-        {
+        MenuItem item = new() {
             Header = Path.GetFileName(path),
         };
 

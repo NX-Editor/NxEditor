@@ -196,7 +196,7 @@ public partial class ShellViewModel : ObservableObject
             ZipArchive arc = new(stream);
             Directory.CreateDirectory(info.Folder);
             arc.ExtractToDirectory(info.Folder, true);
-            
+
             string meta = Path.Combine(info.Folder, "meta.json");
             if (File.Exists(meta)) {
                 info = PluginInfo.FromPath(meta);

@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
 
 namespace NxEditor.Launcher;
 public class ViewLocator : IDataTemplate
