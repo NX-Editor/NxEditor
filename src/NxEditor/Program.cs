@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Threading;
-using NxEditor.Component;
+using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.PluginBase.Models;
 using Projektanker.Icons.Avalonia;

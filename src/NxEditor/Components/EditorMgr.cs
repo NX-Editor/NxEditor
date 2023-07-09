@@ -8,7 +8,7 @@ using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
 using NxEditor.PluginBase.Services;
 
-namespace NxEditor.Component;
+namespace NxEditor.Components;
 
 public static class EditorMgr
 {

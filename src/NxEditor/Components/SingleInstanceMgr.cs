@@ -1,7 +1,7 @@
 ﻿using System.IO.Pipes;
 using System.Text;
 
-namespace NxEditor.Component;
+namespace NxEditor.Components;
 
 public static class SingleInstanceMgr
 {

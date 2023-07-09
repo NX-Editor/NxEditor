@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using NxEditor.Component;
+using NxEditor.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase.Models;

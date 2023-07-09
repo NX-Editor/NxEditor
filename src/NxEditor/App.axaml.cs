@@ -4,7 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
-using NxEditor.Component;
+using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase.Component;

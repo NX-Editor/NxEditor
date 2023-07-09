@@ -2,7 +2,7 @@
 using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.Attributes;
-using NxEditor.Component;
+using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.Core.Extensions;
 using NxEditor.Generators;

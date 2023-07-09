@@ -1,7 +1,7 @@
 ﻿using Avalonia.Input;
 using System.Windows.Input;
 
-namespace NxEditor.Component;
+namespace NxEditor.Components;
 
 public static class HotKeyMgr
 {

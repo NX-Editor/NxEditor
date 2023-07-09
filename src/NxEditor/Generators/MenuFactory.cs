@@ -2,7 +2,7 @@
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.Attributes;
-using NxEditor.Component;
+using NxEditor.Components;
 using NxEditor.Models;
 using NxEditor.Views;
 using System.Collections.ObjectModel;
