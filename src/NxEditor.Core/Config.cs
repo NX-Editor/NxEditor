@@ -62,9 +62,9 @@ public partial class Config : ConfigModule<Config>
         };
     }
 
-    partial void OnThemeChanged(string? oldValue, string newValue)
+    partial void OnThemeChanged(string value)
     {
-        SetTheme(newValue);
+        SetTheme(value);
     }
 
     public static void SetTheme(string variant)
