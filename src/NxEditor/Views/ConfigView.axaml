@@ -9,5 +9,5 @@
              d:DesignWidth="800"
              x:DataType="local:ConfigViewModel"
              mc:Ignorable="d">
-    <cfg:ConfigPage />
+    <cfg:ConfigPage Name="ConfigPage" />
 </UserControl>

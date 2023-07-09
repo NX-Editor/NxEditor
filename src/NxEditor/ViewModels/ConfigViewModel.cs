@@ -9,9 +9,7 @@ public class ConfigViewModel : ConfigPageModel
     public ConfigViewModel()
     {
         Id = nameof(ConfigViewModel);
-        Title = "Configuration";
+        Title = "Settings";
         CanFloat = false;
-
-        this.Append<Config>();
     }
 }
