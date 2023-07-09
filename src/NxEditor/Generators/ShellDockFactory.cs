@@ -46,7 +46,8 @@ public class ShellDockFactory : Factory
         DocumentDock _default = null!;
 
         if (root is DocumentDock documentDock) {
-            return (documentDock, documentDock.VisibleDockables?.Select((_, i) => i).First() ?? -1);
+            // TODO: avoid copy ToList
+            return (documentDock, documentDock.VisibleDockables?.Select(x => x.Id).ToList().IndexOf(id) ?? -1);
         }
         else if (root is ProportionalDock proportionalDock && proportionalDock.VisibleDockables != null) {
             foreach (var dockable in proportionalDock.VisibleDockables) {
