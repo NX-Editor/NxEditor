@@ -6,7 +6,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using NxEditor.Component;
 using NxEditor.Core;
-using NxEditor.Generators;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
@@ -32,7 +31,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override async void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             Logger.Initialize();
@@ -45,18 +44,8 @@ public partial class App : Application
                 DataContext = ShellViewModel.Shared
             };
 
+            Config.SetTheme(Config.Shared.Theme);
             VisualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
-
-            // Make sure settings are always set
-            SettingsView settings = new();
-            if (Config.Shared.RequiresInput || settings.ValidateSave() != null) {
-                ShellDockFactory.AddDoc<SettingsViewModel>();
-                await Task.Run(() => {
-                    while (Config.Shared.RequiresInput) {
-                        // Wait for setting to save successfully
-                    }
-                });
-            }
 
             desktop.MainWindow.Closed += (s, e) => {
                 for (int i = 0; i < _openEditors.Count; i++) {
