@@ -1,10 +1,11 @@
-﻿using NxEditor.Components;
+﻿using CommunityToolkit.Mvvm.Input;
+using NxEditor.Components;
 using NxEditor.Core.Extensions;
 using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 
-public class HomeViewModel : StaticPage<HomeViewModel, HomeView>
+public partial class HomeViewModel : StaticPage<HomeViewModel, HomeView>
 {
     public HomeViewModel()
     {
@@ -15,8 +16,9 @@ public class HomeViewModel : StaticPage<HomeViewModel, HomeView>
         CanPin = false;
     }
 
+    [RelayCommand]
     public static async Task VersionLink()
     {
-        await BrowserExtension.OpenUrl("https://github.com/NX-Editor/NX-Editor/releases/latest");
+        await BrowserExtension.OpenUrl("https://github.com/NX-Editor/NxEditor/releases/latest");
     }
 }
