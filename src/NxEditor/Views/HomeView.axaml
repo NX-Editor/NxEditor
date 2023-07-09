@@ -30,12 +30,15 @@
                         FontFamily="{StaticResource Ubuntu}"
                         FontSize="20"
                         Foreground="{DynamicResource SystemAccentColor}" />
+                <Rectangle Grid.Row="1"
+                           Margin="5"
+                           Stroke="{DynamicResource SystemBaseLowColor}"
+                           StrokeDashArray="7,7"
+                           StrokeThickness="2" />
                 <Border Name="DragRegion"
                         Grid.Row="1"
                         Margin="5"
                         Background="Transparent"
-                        BorderBrush="{DynamicResource SystemBaseLowColor}"
-                        BorderThickness="1"
                         DragDrop.AllowDrop="True">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <i:Icon Margin="25"

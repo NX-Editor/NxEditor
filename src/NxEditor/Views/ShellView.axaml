@@ -102,18 +102,18 @@
                 IsHitTestVisible="False"
                 IsVisible="False"
                 Opacity="0.7">
-            <Border Padding="15"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    BorderBrush="{DynamicResource SystemBaseHighColor}"
-                    BorderThickness="1">
-                <ContentControl FontFamily="{StaticResource Ubuntu}">
-                    <StackPanel Name="DragFadeMaskInfo"
-                                MaxHeight="450"
-                                Spacing="5" />
-                </ContentControl>
-            </Border>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Rectangle Stroke="{DynamicResource SystemBaseLowColor}"
+                           StrokeDashArray="4,4"
+                           StrokeThickness="2" />
+                <Border Padding="15">
+                    <ContentControl FontFamily="{StaticResource Ubuntu}">
+                        <StackPanel Name="DragFadeMaskInfo"
+                                    MaxHeight="450"
+                                    Spacing="5" />
+                    </ContentControl>
+                </Border>
+            </Grid>
         </Border>
-
     </Grid>
 </Window>
