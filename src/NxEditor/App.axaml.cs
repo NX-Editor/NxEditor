@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
+using ConfigFactory.Avalonia.Helpers;
 using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.Models.Menus;
@@ -46,6 +47,7 @@ public partial class App : Application
 
             Config.SetTheme(Config.Shared.Theme);
             VisualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
+            BrowserDialog.StorageProvider = VisualRoot?.StorageProvider ?? null;
 
             desktop.MainWindow.Closed += (s, e) => {
                 for (int i = 0; i < _openEditors.Count; i++) {
