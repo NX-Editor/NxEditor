@@ -7,6 +7,7 @@
         xmlns:local="using:NxEditor.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+        xmlns:plugin="clr-namespace:NxEditor.PluginBase;assembly=NxEditor.PluginBase"
         Title="{x:Static app:App.Title}"
         Width="850"
         Height="550"
@@ -21,7 +22,7 @@
         mc:Ignorable="d">
     <Grid Name="PointerClient"
           Background="Transparent"
-          RowDefinitions="30,*">
+          RowDefinitions="30,*,20">
 
         <Border Name="ChromeClient"
                 Background="{DynamicResource SystemChromeHighColor}"
@@ -115,5 +116,24 @@
                 </Border>
             </Grid>
         </Border>
+
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*,Auto">
+            <Border Grid.ColumnSpan="10"
+                    Background="{DynamicResource SystemAccentColor}"
+                    Opacity="0.7" />
+            <pi:Icon Margin="5,0" Value="{Binding Icon, Source={x:Static plugin:StatusModal.Shared}}" />
+            <TextBlock Grid.Column="1"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       Text="{Binding Status, Source={x:Static plugin:StatusModal.Shared}}" />
+            <TextBlock Grid.Column="3"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       FontSize="11"
+                       FontWeight="Bold"
+                       Text="{x:Static app:App.Version}" />
+        </Grid>
     </Grid>
 </Window>
