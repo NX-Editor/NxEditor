@@ -19,11 +19,6 @@ public partial class LogsViewModel : StaticPage<LogsViewModel, LogsView>
 
     public void AddLog(string message)
     {
-        // Ignore avalonia errors
-        if (message.Contains("[Visual]") == true || message.Contains("[Binding]") == true) {
-            return;
-        }
-
         int idx = message.LastIndexOf('|');
         if (idx >= 0) {
             string meta = message[..idx];

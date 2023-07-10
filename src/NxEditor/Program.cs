@@ -37,7 +37,6 @@ internal class Program
         IconProvider.Current.Register(new FontAwesomeIconProvider());
 
         return AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .LogToTrace();
+            .UsePlatformDetect();
     }
 }
