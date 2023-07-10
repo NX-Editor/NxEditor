@@ -3,7 +3,7 @@ using Dock.Model.Mvvm.Controls;
 
 namespace NxEditor.Components;
 
-public partial class StaticPage<T, TView> : Document, IStaticPage<T, TView> where T : notnull, new() where TView : UserControl, new()
+public partial class StaticPage<T, TView> : Document, IStaticPage<T, TView> where T : notnull, new() where TView : Control, new()
 {
     public TView View { get; }
 
