@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.PluginBase.Models;
+using NxEditor.ViewModels;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 
@@ -26,7 +27,7 @@ internal class Program
     public static void Attach(string[] args)
     {
         Dispatcher.UIThread.InvokeAsync(() => {
-            App.Desktop?.Activate();
+            ShellViewModel.Shared.View?.Activate();
             EditorMgr.TryLoadEditorSafe(new FileHandle(args[0]));
         });
     }

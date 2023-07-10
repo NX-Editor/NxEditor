@@ -19,13 +19,10 @@ namespace NxEditor;
 public partial class App : Application
 {
     private static readonly List<IEditor> _openEditors = new();
+    private static WindowNotificationManager? _notificationManager;
 
     public static string Title { get; } = "NX-Editor";
     public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
-    public static TopLevel? VisualRoot { get; private set; }
-    public static WindowNotificationManager? NotificationManager { get; set; }
-
-    public static ShellView? Desktop { get; private set; }
 
     public override void Initialize()
     {
@@ -34,25 +31,34 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Logger.Initialize();
+        Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
+
+        PluginLoader.LoadInstalledPlugins();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            Logger.Initialize();
-            Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
-
-            PluginLoader.LoadInstalledPlugins();
-            ShellViewModel.InitDock();
-
-            desktop.MainWindow = Desktop = new ShellView() {
-                DataContext = ShellViewModel.Shared
-            };
+            ShellViewModel.Shared.InitDock();
+            desktop.MainWindow = ShellViewModel.Shared.View;
 
             Config.SetTheme(Config.Shared.Theme);
-            VisualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
-            BrowserDialog.StorageProvider = VisualRoot?.StorageProvider ?? null;
+            
+            // Set ConfigFactory.Avalonia StorageProvider (for browsable configurations)
+            TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
+            BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
 
+            // Cleanup open editors
             desktop.MainWindow.Closed += (s, e) => {
                 for (int i = 0; i < _openEditors.Count; i++) {
                     _openEditors[i].Dispose();
                 }
+            };
+
+            desktop.MainWindow.Loaded += (s, e) => {
+                _notificationManager = new(visualRoot) {
+                    Position = NotificationPosition.BottomRight,
+                    MaxItems = 3,
+                    Margin = new(0, 0, 4, 0)
+                };
             };
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
@@ -67,13 +73,13 @@ public partial class App : Application
 
     public static void Toast(string message, string title = "Notice", NotificationType type = NotificationType.Information, TimeSpan? expiration = null)
     {
-        NotificationManager?.Show(
+        _notificationManager?.Show(
             new Notification(title, message, type, expiration));
     }
 
     public static void ToastError(Exception ex)
     {
-        NotificationManager?.Show(new Notification(
+        _notificationManager?.Show(new Notification(
             ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
     }
 

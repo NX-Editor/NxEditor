@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using NxEditor.ViewModels;
 
 namespace NxEditor.Models;
 
@@ -18,16 +19,20 @@ public partial class LogEntry : ObservableObject
 
     public async Task Copy()
     {
-        await App.Desktop!.Clipboard!.SetTextAsync($"{Meta}\n{Message}");
+        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync($"{Meta}\n{Message}") is Task task) {
+            await task;
+        }
     }
 
     public async Task CopyMarkdown()
     {
-        await App.Desktop!.Clipboard!.SetTextAsync($"""
+        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync($"""
             **{Meta}**
             ```
             {Message}
             ```
-            """);
+            """) is Task task) {
+            await task;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using NxEditor.ViewModels;
 using NxEditor.ViewModels.Dialogs;
 
 namespace NxEditor.Views.Dialogs;
@@ -14,12 +15,12 @@ public partial class ContentDialogView : UserControl
 
     public void Show()
     {
-        App.Desktop?.DropClient.Children.Add(this);
+        ShellViewModel.Shared.View?.DropClient.Children.Add(this);
         PrimaryButton.Focus();
     }
 
     public void Hide()
     {
-        App.Desktop?.DropClient.Children.Remove(this);
+        ShellViewModel.Shared.View?.DropClient.Children.Remove(this);
     }
 }

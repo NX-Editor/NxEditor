@@ -1,13 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Dock.Model.Controls;
+using NxEditor.Components;
 using NxEditor.Generators;
+using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 
-public partial class ShellViewModel : ObservableObject
+public partial class ShellViewModel : StaticPage<ShellViewModel, ShellView>
 {
-    public static ShellViewModel Shared { get; } = new();
-
     //
     // Layout
 
@@ -16,9 +16,9 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty]
     private IRootDock? _layout;
 
-    public static void InitDock()
+    public void InitDock()
     {
-        Shared.Layout = Shared._factory.CreateLayout();
-        Shared._factory.InitLayout(Shared.Layout);
+        Layout = _factory.CreateLayout();
+        _factory.InitLayout(Layout);
     }
 }

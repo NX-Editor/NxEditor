@@ -139,17 +139,6 @@ public partial class ShellView : Window
         base.OnPropertyChanged(change);
     }
 
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-
-        App.NotificationManager = new(GetTopLevel(this)) {
-            Position = NotificationPosition.BottomRight,
-            MaxItems = 3,
-            Margin = new(0, 0, 4, 0)
-        };
-    }
-
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
