@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using NxEditor.ViewModels;
-
-namespace NxEditor.Models;
+﻿namespace NxEditor.Models;
 
 public partial class LogEntry : ObservableObject
 {

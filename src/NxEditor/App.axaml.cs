@@ -5,13 +5,8 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
-using NxEditor.Components;
-using NxEditor.Core;
 using NxEditor.Models.Menus;
-using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
-using NxEditor.ViewModels;
-using NxEditor.Views;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor;
@@ -41,7 +36,7 @@ public partial class App : Application
             desktop.MainWindow = ShellViewModel.Shared.View;
 
             Config.SetTheme(Config.Shared.Theme);
-            
+
             // Set ConfigFactory.Avalonia StorageProvider (for browsable configurations)
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;

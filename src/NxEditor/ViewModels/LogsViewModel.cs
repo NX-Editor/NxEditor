@@ -1,8 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using NxEditor.Components;
-using NxEditor.Helpers;
+﻿using NxEditor.Helpers;
 using NxEditor.Models;
-using NxEditor.Views;
 using System.Collections.ObjectModel;
 
 namespace NxEditor.ViewModels;

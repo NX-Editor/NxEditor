@@ -41,4 +41,13 @@
   <ItemGroup>
     <ProjectReference Include="..\NxEditor.Core\NxEditor.Core.csproj" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+    <Using Include="NxEditor.Components" />
+    <Using Include="NxEditor.Core" />
+    <Using Include="NxEditor.PluginBase.Components" />
+    <Using Include="NxEditor.ViewModels" />
+    <Using Include="NxEditor.Views" />
+  </ItemGroup>
 </Project>

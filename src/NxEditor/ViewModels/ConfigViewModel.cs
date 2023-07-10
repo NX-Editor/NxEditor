@@ -1,6 +1,4 @@
 ﻿using ConfigFactory.Models;
-using NxEditor.Components;
-using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 

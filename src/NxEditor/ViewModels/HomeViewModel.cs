@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using NxEditor.Components;
 using NxEditor.Core.Extensions;
-using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 

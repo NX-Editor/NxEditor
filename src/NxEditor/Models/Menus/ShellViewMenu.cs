@@ -4,13 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Core.Attributes;
 using NxEditor.Attributes;
-using NxEditor.Components;
-using NxEditor.Core;
 using NxEditor.Core.Extensions;
 using NxEditor.Generators;
-using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
-using NxEditor.ViewModels;
 using NxEditor.ViewModels.Dialogs;
 using System.Text;
 

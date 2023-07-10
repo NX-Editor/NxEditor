@@ -1,8 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Dock.Model.Controls;
-using NxEditor.Components;
+﻿using Dock.Model.Controls;
 using NxEditor.Generators;
-using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 

@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using ConfigFactory;
 using ConfigFactory.Avalonia;
 using ConfigFactory.Models;
-using NxEditor.Core;
 
 namespace NxEditor.Views;
 

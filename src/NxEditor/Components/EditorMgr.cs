@@ -1,10 +1,8 @@
 ﻿using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
-using NxEditor.Core;
 using NxEditor.Generators;
 using NxEditor.Models;
 using NxEditor.PluginBase;
-using NxEditor.PluginBase.Component;
 using NxEditor.PluginBase.Models;
 using NxEditor.PluginBase.Services;
 

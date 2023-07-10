@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using NxEditor.ViewModels;
 using NxEditor.ViewModels.Dialogs;
 
 namespace NxEditor.Views.Dialogs;
