@@ -82,8 +82,7 @@ public class PluginManager
             IConfigModule module = (IConfigModule)Activator.CreateInstance(type)!;
             isConfigValid = isConfigValid && module.Shared.Validate(out _);
             _configPageModel.Append(module.Shared);
-
-            ConfigModules.Add(module.Shared);
+            _configPageModel.ConfigModules.Add(type.Name, module.Shared);
         }
 
         foreach (var type in types.Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {

@@ -57,7 +57,6 @@ public partial class App : Application
                 };
             };
 
-            ConfigViewModel.Shared.ConfigModules = pluginMgr.ConfigModules;
             ConfigViewModel.Shared.IsValid = isConfigValid;
 
             if (!ConfigViewModel.Shared.IsValid) {
