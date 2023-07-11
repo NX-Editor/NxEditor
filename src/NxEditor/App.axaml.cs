@@ -5,6 +5,8 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
+using NxEditor.Core.Components;
+using NxEditor.Generators;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase.Models;
 using System.Runtime.CompilerServices;
@@ -24,24 +26,23 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         Logger.Initialize();
         Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
 
-        PluginLoader.LoadInstalledPlugins();
+        PluginManager pluginMgr = new(ConfigViewModel.Shared);
+        pluginMgr.LoadInstalled(out bool isConfigValid);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             ShellViewModel.Shared.InitDock();
-            desktop.MainWindow = ShellViewModel.Shared.View;
-
             Config.SetTheme(Config.Shared.Theme);
 
-            // Set ConfigFactory.Avalonia StorageProvider (for browsable configurations)
+            desktop.MainWindow = ShellViewModel.Shared.View;
+
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
 
-            // Cleanup open editors
             desktop.MainWindow.Closed += (s, e) => {
                 for (int i = 0; i < _openEditors.Count; i++) {
                     _openEditors[i].Dispose();
@@ -55,6 +56,19 @@ public partial class App : Application
                     Margin = new(0, 0, 4, 0)
                 };
             };
+
+            ConfigViewModel.Shared.ConfigModules = pluginMgr.ConfigModules;
+            ConfigViewModel.Shared.IsValid = isConfigValid;
+
+            if (!ConfigViewModel.Shared.IsValid) {
+                ShellDockFactory.AddDoc(ConfigViewModel.Shared);
+
+                await Task.Run(() => {
+                    while (!ConfigViewModel.Shared.IsValid) { }
+                });
+            }
+
+            pluginMgr.Register();
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
