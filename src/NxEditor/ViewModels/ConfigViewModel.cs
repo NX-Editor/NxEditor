@@ -56,13 +56,25 @@ public class ConfigViewModel : ConfigPageModel, IStaticPage<ConfigViewModel, Con
 
     public bool ValidateModules()
     {
-        foreach (var module in ConfigModules) {
-            if (!module.Validate(out string? msg)) {
-                App.Toast(msg ?? "Please review your settings", $"Invalid Configuration", NotificationType.Error);
+        foreach ((_, var module) in ConfigModules) {
+            if (!module.Validate(out string? msg, out ConfigProperty target)) {
+                App.Toast($"""
+                    {msg ?? "Please review your settings"}
+                    Error at '{target.Attribute.Category}/{target.Attribute.Group}/{target.Attribute.Header}'
+                    """, $"Invalid Config", NotificationType.Error);
+                FocusGroup(target.Attribute);
+
                 return IsValid = CanClose = false;
             }
         }
 
         return IsValid = CanClose = true;
+    }
+
+    public void FocusGroup(ConfigAttribute attribute)
+    {
+        SelectedGroup = Categories
+            .Where(x => x.Header == attribute.Category).First().Groups
+            .Where(x => x.Header == attribute.Group).First();
     }
 }
