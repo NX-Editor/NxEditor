@@ -12,9 +12,7 @@ public class PluginManager
 {
     private static readonly string _path = Path.Combine(Config.AppFolder, "plugins");
     private readonly ConfigPageModel _configPageModel = new();
-
-    public List<IServiceExtension> Extensions { get; } = new();
-    public List<IConfigModule> ConfigModules { get; } = new();
+    private List<IServiceExtension> _extensions = new();
 
     public PluginManager(ConfigPageModel configPageModel)
     {
@@ -43,7 +41,7 @@ public class PluginManager
 
     public void Register()
     {
-        foreach (var ext in Extensions) {
+        foreach (var ext in _extensions) {
             try {
                 ext.RegisterExtension(ServiceLoader.Shared);
             }
@@ -87,7 +85,7 @@ public class PluginManager
 
         foreach (var type in types.Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
             try {
-                Extensions.Add((IServiceExtension)Activator.CreateInstance(type)!);
+                _extensions.Add((IServiceExtension)Activator.CreateInstance(type)!);
             }
             catch (Exception ex) {
                 Logger.Write(new Exception($"Failed to load plugin: {info.Name}", ex));
