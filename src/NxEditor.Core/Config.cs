@@ -13,12 +13,6 @@ public partial class Config : ConfigModule<Config>
 
     [ObservableProperty]
     [property: Config(
-        Header = "Load Resources from Disk",
-        Description = "Loads a customizable copy of the resource files from disk instead of donwloading the latest version from the live server")]
-    private bool _loadResourcesFromDisk;
-
-    [ObservableProperty]
-    [property: Config(
         Header = "Single Instance Lock",
         Description = "Files opened through the shell will be opened as a tab in the current instance, rather than starting a second running application",
         Group = "Lock Settings")]
@@ -30,17 +24,6 @@ public partial class Config : ConfigModule<Config>
         Description = "Restrict two files with the same path to be loaded concurrently",
         Group = "Lock Settings")]
     private bool _useSingleFileLock = false;
-
-    [ObservableProperty]
-    [property: Config(
-        Header = "Default RESTBL Hash Table",
-        Description = "The absolue path to the hash table loaded when a RESTBL file is opened\n\n(Please paste the file path in, file browsing is currently not supported)",
-        Group = "RESTBL",
-        Category = "Editor Config")]
-    [property: BrowserConfig(
-        BrowserMode = BrowserMode.OpenFile,
-        Title = "Browse for a RESTBl string table")]
-    private string _defaultHashTable = string.Empty;
 
     [ObservableProperty]
     [property: Config(
