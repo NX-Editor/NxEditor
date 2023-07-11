@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.Core;
+using NxEditor.Core.Components;
 using NxEditor.Core.Models;
 using Octokit;
 using System.Collections.ObjectModel;
@@ -34,7 +35,7 @@ public partial class ShellViewModel : ObservableObject
     private bool _isLoading = false;
 
     [ObservableProperty]
-    private ObservableCollection<PluginInfo> _plugins = PluginLoader.GetPluginInfo();
+    private ObservableCollection<PluginInfo> _plugins = PluginManager.GetPluginInfo();
 
     public ShellViewModel()
     {
