@@ -92,6 +92,6 @@ public class PluginManager
             }
         }
 
-        StatusModal.Set($"Loaded {info.Assembly}.dll", temporaryStatusTime: 2);
+        StatusModal.Set($"Loaded {info.Assembly}", isWorkingStatus: false, temporaryStatusTime: 2);
     }
 }
