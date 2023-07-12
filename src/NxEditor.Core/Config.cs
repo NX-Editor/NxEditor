@@ -2,7 +2,6 @@
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ConfigFactory.Core;
-using ConfigFactory.Core.Attributes;
 
 namespace NxEditor.Core;
 
