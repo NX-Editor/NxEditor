@@ -37,7 +37,7 @@ public class RecentFiles : ObservableCollection<MenuItem>
         using FileStream fs = File.OpenRead(_path);
         List<string> paths = JsonSerializer.Deserialize<List<string>>(fs) ?? new();
 
-        foreach (var path in paths) {
+        foreach (var path in paths.Where(File.Exists)) {
             Add(FromPath(path));
         }
     }

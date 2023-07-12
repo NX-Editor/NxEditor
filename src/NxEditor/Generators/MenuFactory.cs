@@ -106,6 +106,7 @@ public class MenuFactory
                     _visualRoot?.RegisterHotKey(shortcut, menu.Path, command);
                 }
 
+                // TODO: What the heck is this?
                 if (func.Name == "Recent") {
                     child.ItemsSource = RecentFiles.Shared;
                     RecentFiles.Shared.CollectionChanged += (s, e) => {
@@ -113,9 +114,11 @@ public class MenuFactory
                             foreach (var item in e.NewItems) {
                                 if (item is MenuItem menuItem) {
                                     menuItem.Command = new RelayCommand(() => {
-                                        func.Invoke(obj, new object?[] {
-                                            menuItem.Tag
-                                        });
+                                        if (File.Exists(menuItem.Tag as string)) {
+                                            func.Invoke(obj, new object?[] {
+                                                menuItem.Tag
+                                            });
+                                        }
                                     });
                                 }
                             }
