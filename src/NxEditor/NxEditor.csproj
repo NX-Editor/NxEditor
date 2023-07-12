@@ -31,8 +31,8 @@
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0" />
     <PackageReference Include="Dock.Serializer" Version="11.0.0" />
-    <PackageReference Include="Projektanker.Icons.Avalonia" Version="6.6.0-rc1.1" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="6.6.0-rc1.1" />
+    <PackageReference Include="Projektanker.Icons.Avalonia" Version="6.6.0" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="6.6.0" />
 	  
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0" />
