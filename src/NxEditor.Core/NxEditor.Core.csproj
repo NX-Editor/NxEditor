@@ -11,14 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AvaloniaSettingsFactory.Core" Version="11.0.0-preview6" />
-    <PackageReference Include="ZstdSharp.Port" Version="0.7.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\Cead\src\Cead.csproj" />
-    <ProjectReference Include="..\..\lib\cs-msbt\src\CsMsbt.csproj" />
-    <ProjectReference Include="..\..\lib\cs-restbl\src\CsRestbl\CsRestbl.csproj" />
+    <ProjectReference Include="..\NxEditor.PluginBase\src\NxEditor.PluginBase.csproj" />
   </ItemGroup>
 
 </Project>

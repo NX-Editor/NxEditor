@@ -4,8 +4,10 @@
         xmlns:app="using:NxEditor"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:idc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
+        xmlns:local="using:NxEditor.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+        xmlns:plugin="clr-namespace:NxEditor.PluginBase;assembly=NxEditor.PluginBase"
         Title="{x:Static app:App.Title}"
         Width="850"
         Height="550"
@@ -13,13 +15,14 @@
         MinHeight="450"
         d:DesignHeight="450"
         d:DesignWidth="800"
+        x:DataType="local:ShellViewModel"
         Background="{DynamicResource SystemChromeLowColor}"
         Icon="/Assets/icon.ico"
         SystemDecorations="BorderOnly"
         mc:Ignorable="d">
     <Grid Name="PointerClient"
           Background="Transparent"
-          RowDefinitions="30,*">
+          RowDefinitions="30,*,20">
 
         <Border Name="ChromeClient"
                 Background="{DynamicResource SystemChromeHighColor}"
@@ -100,19 +103,37 @@
                 IsHitTestVisible="False"
                 IsVisible="False"
                 Opacity="0.7">
-            <Border Padding="15"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    BorderBrush="{DynamicResource SystemBaseHighColor}"
-                    BorderDashArray="10,10"
-                    BorderThickness="1">
-                <ContentControl FontFamily="{StaticResource Ubuntu}">
-                    <StackPanel Name="DragFadeMaskInfo"
-                                MaxHeight="450"
-                                Spacing="5" />
-                </ContentControl>
-            </Border>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Rectangle Stroke="{DynamicResource SystemBaseLowColor}"
+                           StrokeDashArray="4,4"
+                           StrokeThickness="2" />
+                <Border Padding="15">
+                    <ContentControl FontFamily="{StaticResource Ubuntu}">
+                        <StackPanel Name="DragFadeMaskInfo"
+                                    MaxHeight="450"
+                                    Spacing="5" />
+                    </ContentControl>
+                </Border>
+            </Grid>
         </Border>
 
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*,Auto">
+            <Border Grid.ColumnSpan="10"
+                    Background="{DynamicResource SystemAccentColor}"
+                    Opacity="0.7" />
+            <pi:Icon Margin="5,0" Value="{Binding Icon, Source={x:Static plugin:StatusModal.Shared}}" />
+            <TextBlock Grid.Column="1"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       Text="{Binding Status, Source={x:Static plugin:StatusModal.Shared}}" />
+            <TextBlock Grid.Column="3"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       FontSize="11"
+                       FontWeight="Bold"
+                       Text="{x:Static app:App.Version}" />
+        </Grid>
     </Grid>
 </Window>

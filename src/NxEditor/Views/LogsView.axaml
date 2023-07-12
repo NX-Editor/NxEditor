@@ -2,10 +2,12 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:NxEditor.ViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             x:DataType="local:LogsViewModel"
              mc:Ignorable="d">
     <ListBox Name="LogsClient"
              Margin="10"
@@ -26,12 +28,12 @@
                                TextWrapping="WrapWithOverflow" />
                     <Border.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Command="{Binding $parent[UserControl].DataContext.Copy}" Header="Copy">
+                            <MenuItem Command="{Binding Copy}" Header="Copy">
                                 <MenuItem.Icon>
                                     <pi:Icon Value="fa-solid fa-copy" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding $parent[UserControl].DataContext.CopyMarkdown}" Header="Copy Markdown">
+                            <MenuItem Command="{Binding CopyMarkdown}" Header="Copy Markdown">
                                 <MenuItem.Icon>
                                     <pi:Icon Value="fa-solid fa-brush" />
                                 </MenuItem.Icon>

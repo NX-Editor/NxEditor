@@ -1,73 +1,37 @@
-﻿using Avalonia.SettingsFactory.Core;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using Avalonia;
+using Avalonia.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
+using ConfigFactory.Core;
+using ConfigFactory.Core.Attributes;
 
 namespace NxEditor.Core;
 
-public class Config : ISettingsBase
+public partial class Config : ConfigModule<Config>
 {
-    private static readonly string _path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor", "config.json");
+    public override string Name => "nx-editor";
+    public static string AppFolder { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor");
 
-    public static Config Shared { get; } = Load();
-    public bool RequiresInput { get; set; } = true;
+    [ObservableProperty]
+    [property: Config(
+        Header = "Single Instance Lock",
+        Description = "Files opened through the shell will be opened as a tab in the current instance, rather than starting a second running application",
+        Group = "Lock Settings")]
+    private bool _useSingleInstance = true;
 
-    [JsonIgnore]
-    [Setting("Game Path", "The absolute path to your Totk game dump\n(e.g. F:\\Games\\Totk\\RomFS)")]
-    public static string GamePath {
-        get => TotkConfig.Shared.GamePath;
-        set => TotkConfig.Shared.GamePath = value;
-    }
+    [ObservableProperty]
+    [property: Config(
+        Header = "Single File Lock",
+        Description = "Restrict two files with the same path to be loaded concurrently",
+        Group = "Lock Settings")]
+    private bool _useSingleFileLock = false;
 
-    [Setting(UiType.Dropdown, "Resource:Langs", Name = "Game Region/Language")]
-    public required string Lang { get; set; }
-
-    [Setting("Load Resources from Disk", "Loads a customizable copy of the resource files from disk instead of donwloading the latest version from the live server")]
-    public bool LoadResourcesFromDisk { get; set; }
-
-    [Setting("Single Instance Lock", "Files opened through the shell will be opened as a tab in the current instance, rather than starting a second running application", Category = "Lock Settings")]
-    public bool UseSingleInstance { get; set; } = true;
-
-    [Setting("Single File Lock", "Restrict two files with the same path to be loaded concurrently", Category = "Lock Settings")]
-    public bool UseSingleFileLock { get; set; } = false;
-
-    // TODO: Support file dialog in place of folder dialog
-    [Setting("Default RESTBL Hash Table", "The absolue path to the hash table loaded when a RESTBL file is opened\n\n(Please paste the file path in, file browsing is currently not supported)", Category = "RESTBL", Folder = "Editor Config", ShowBrowseButton = false)]
-    public string DefaultHashTable { get; set; } = string.Empty;
-
-    [Setting(UiType.Dropdown, "Dark", "Light", Category = "Appearance")]
-    public string Theme { get; set; } = "Dark";
-
-    public ISettingsBase Save()
-    {
-        TotkConfig.Shared.Save();
-        RequiresInput = false;
-
-        Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
-        using FileStream fs = File.Create(_path);
-        JsonSerializer.Serialize(fs, this);
-        return this;
-    }
-
-    public static Config Load()
-    {
-        if (!File.Exists(_path)) {
-            return Create();
-        }
-
-        using FileStream fs = File.OpenRead(_path);
-        return JsonSerializer.Deserialize<Config>(fs) ?? Create();
-    }
-
-    private static Config Create()
-    {
-        Config config = new() {
-            Lang = "USen",
-            RequiresInput = true,
-        };
-
-        config.Save();
-        return config;
-    }
+    [ObservableProperty]
+    [property: Config(
+        Header = "Theme",
+        Description = "",
+        Group = "Appearance")]
+    [property: DropdownConfig("Dark", "Light")]
+    private string _theme = "Dark";
 
     public static bool ValidatePath(string path, string key)
     {
@@ -79,5 +43,17 @@ public class Config : ISettingsBase
             "GamePath" => File.Exists(Path.Combine(path, "Pack", "ZsDic.pack.zs")),
             _ => false,
         };
+    }
+
+    partial void OnThemeChanged(string value)
+    {
+        SetTheme(value);
+    }
+
+    public static void SetTheme(string variant)
+    {
+        if (Application.Current is Application app) {
+            app.RequestedThemeVariant = variant == "Dark" ? ThemeVariant.Dark : ThemeVariant.Light;
+        }
     }
 }

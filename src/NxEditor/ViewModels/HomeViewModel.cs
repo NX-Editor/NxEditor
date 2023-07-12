@@ -1,9 +1,9 @@
-﻿using Dock.Model.Mvvm.Controls;
+﻿using CommunityToolkit.Mvvm.Input;
 using NxEditor.Core.Extensions;
 
 namespace NxEditor.ViewModels;
 
-public class HomeViewModel : Document
+public partial class HomeViewModel : StaticPage<HomeViewModel, HomeView>
 {
     public HomeViewModel()
     {
@@ -14,8 +14,9 @@ public class HomeViewModel : Document
         CanPin = false;
     }
 
+    [RelayCommand]
     public static async Task VersionLink()
     {
-        await BrowserExtension.OpenUrl("https://github.com/NX-Editor/NX-Editor/releases/latest");
+        await BrowserExtension.OpenUrl("https://github.com/NX-Editor/NxEditor/releases/latest");
     }
 }

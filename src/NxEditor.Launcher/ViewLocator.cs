@@ -1,20 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace NxEditor;
-
+namespace NxEditor.Launcher;
 public class ViewLocator : IDataTemplate
 {
     public Control? Build(object? param)
     {
-        if (param is IEditor editor) {
-            return editor.View;
-        }
-
-        if (param is IStaticPage page) {
-            return page.View;
-        }
-
         var name = param!.GetType().FullName!.Replace("ViewModel", "View");
         var type = Type.GetType(name);
 

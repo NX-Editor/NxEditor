@@ -1,12 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using NxEditor.Component;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
+using NxEditor.PluginBase.Models;
 using System.Collections.ObjectModel;
 
 namespace NxEditor.Views;
@@ -123,33 +122,25 @@ public partial class ShellView : Window
         return false;
     }
 
-    protected override void HandleWindowStateChanged(WindowState state)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
-        if (state == WindowState.Normal) {
-            ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
-        }
-        else {
-            ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+        if (change.Property == WindowStateProperty && change.NewValue is WindowState state) {
+            if (state == WindowState.Normal) {
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
+            }
+            else {
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+            }
         }
 
-        base.HandleWindowStateChanged(state);
-    }
-
-    protected override void OnLoaded()
-    {
-        base.OnLoaded();
-        App.NotificationManager = new(GetTopLevel(this)) {
-            Position = NotificationPosition.BottomRight,
-            MaxItems = 3,
-            Margin = new(0, 0, 4, 0)
-        };
+        base.OnPropertyChanged(change);
     }
 
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                if (!EditorMgr.TryLoadEditorSafe(path)) {
+                if (!EditorMgr.TryLoadEditorSafe(new FileHandle(path))) {
                     // TODO: throw message dialog
                 }
             }
@@ -165,11 +156,9 @@ public partial class ShellView : Window
 
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                bool canEdit = EditorMgr.CanEdit(path, out string? editor);
                 DragFadeMaskInfo.Children.Add(new TextBlock {
-                    Text = $"{(canEdit ? editor?.Replace("ViewModel", "") : "Unknown")}: " +
-                           Path.GetFileName(path),
-                    Foreground = canEdit ? Brushes.LightGreen : Brushes.Orange,
+                    Text = Path.GetFileName(path),
+                    Foreground = Brushes.Orange,
                 });
             }
         }

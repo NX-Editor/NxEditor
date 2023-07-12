@@ -1,0 +1,96 @@
+<Window x:Class="NxEditor.Launcher.Views.ShellView"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:NxEditor.Launcher.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="NX Editor Launcher"
+        Width="650"
+        Height="400"
+        d:DesignHeight="400"
+        d:DesignWidth="650"
+        x:CompileBindings="True"
+        x:DataType="local:ShellViewModel"
+        Background="{DynamicResource SystemChromeLowColor}"
+        Icon="/Assets/icon.ico"
+        SystemDecorations="BorderOnly"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
+    <Grid Name="WindowChromeClient" Background="Transparent">
+        <Image VerticalAlignment="Top"
+               Source="/Assets/background.jpg"
+               Stretch="Fill" />
+
+        <Border Background="{DynamicResource SystemChromeLowColor}" Opacity="0.8" />
+
+        <Grid Margin="25" RowDefinitions="Auto,*,Auto,Auto">
+            <Grid Margin="0,0,0,25"
+                  Background="Transparent"
+                  ColumnDefinitions="Auto,*">
+                <Image Margin="0,5,15,0" Source="/Assets/icon.ico" />
+                <TextBlock Grid.Column="1"
+                           FontSize="30"
+                           FontWeight="Bold"
+                           Text="Nintendo Extended Editor" />
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Plugins}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="Transparent" ToolTip.Tip="{Binding Description}">
+                                    <StackPanel Margin="0,0,200,0"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                        <TextBlock Margin="0,0,0,5"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Name}" />
+                                        <Ellipse Width="10"
+                                                 Height="10"
+                                                 Margin="5,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 IsVisible="{Binding IsOnline}"
+                                                 Stroke="{DynamicResource SystemAccentColor}"
+                                                 StrokeThickness="2" />
+                                        <Ellipse Width="10"
+                                                 Height="10"
+                                                 Margin="5,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 IsVisible="{Binding CanUpdate}"
+                                                 Stroke="#ffa15a"
+                                                 StrokeThickness="2" />
+                                    </StackPanel>
+                                    <ToggleSwitch Grid.Column="1"
+                                                  HorizontalAlignment="Right"
+                                                  IsChecked="{Binding IsEnabled}"
+                                                  OffContent=""
+                                                  OnContent="" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+            <ProgressBar Grid.Row="2"
+                         Margin="0,15"
+                         IsIndeterminate="True"
+                         IsVisible="{Binding IsLoading}" />
+            <StackPanel Grid.Row="3"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        Spacing="10">
+                <Button Command="{Binding InstallUpdatesCommand}" Content="{Binding FoundUpdates, StringFormat='Install Updates ({0})'}" />
+                <Button Command="{Binding PrimaryButtonCommand}" Content="{Binding PrimaryButtonContent}" />
+            </StackPanel>
+            <StackPanel Grid.Row="3"
+                        HorizontalAlignment="Left"
+                        Orientation="Horizontal"
+                        Spacing="10">
+                <Button Command="{Binding ExitCommand}" Content="Exit" />
+                <Button Command="{Binding UninstallCommand}"
+                        Content="Uninstall"
+                        IsVisible="{Binding IsEditorInstalled}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

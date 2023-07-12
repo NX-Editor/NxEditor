@@ -4,28 +4,22 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
-using Cead.Interop;
-using CsMsbt;
-using CsRestbl;
-using Native.IO.Services;
-using NxEditor.Component;
-using NxEditor.Core;
+using ConfigFactory.Avalonia.Helpers;
+using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
-using NxEditor.ViewModels;
-using NxEditor.Views;
+using NxEditor.PluginBase.Models;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor;
 
 public partial class App : Application
 {
+    private static readonly List<IEditor> _openEditors = new();
+    private static WindowNotificationManager? _notificationManager;
+
     public static string Title { get; } = "NX-Editor";
     public static string? Version { get; } = typeof(App).Assembly.GetName().Version?.ToString(3);
-    public static TopLevel? VisualRoot { get; private set; }
-    public static WindowNotificationManager? NotificationManager { get; set; }
-
-    public static ShellView? Desktop { get; private set; }
 
     public override void Initialize()
     {
@@ -34,47 +28,50 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
+        Logger.Initialize();
+        Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
+
+        PluginManager pluginMgr = new(ConfigViewModel.Shared);
+        pluginMgr.LoadInstalled(out bool isConfigValid);
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            DllManager.LoadCead();
-            NativeLibraryManager.RegisterAssembly(typeof(App).Assembly, out bool isCommonLoaded)
-                .Register(new RestblLibrary(), out bool isRestblLoaded)
-                .Register(new MsbtLibrary(), out bool isMsbtLoaded);
+            ShellViewModel.Shared.InitDock();
+            Config.SetTheme(Config.Shared.Theme);
 
-            ShellViewModel.InitDock();
+            desktop.MainWindow = ShellViewModel.Shared.View;
 
-            Logger.Initialize();
-            Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
-
-            Log($"Loaded native io library: {isCommonLoaded}");
-            Log($"Loaded native cs_msbt: {isMsbtLoaded}");
-            Log($"Loaded native cs_restbl: {isRestblLoaded}");
-
-            desktop.MainWindow = Desktop = new ShellView() {
-                DataContext = ShellViewModel.Shared
-            };
-
-            VisualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
-
-            // Make sure settings are always set
-            SettingsView settings = new();
-            if (Config.Shared.RequiresInput || settings.ValidateSave() != null) {
-                ShellDockFactory.AddDoc<SettingsViewModel>();
-                await Task.Run(() => {
-                    while (Config.Shared.RequiresInput) {
-                        // Wait for setting to save successfully
-                    }
-                });
-            }
+            TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
+            BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
 
             desktop.MainWindow.Closed += (s, e) => {
-                for (int i = 0; i < ReactiveEditor.OpenEditors.Count; i++) {
-                    ReactiveEditor.OpenEditors[i].Dispose();
+                for (int i = 0; i < _openEditors.Count; i++) {
+                    _openEditors[i].Dispose();
                 }
             };
 
+            desktop.MainWindow.Loaded += (s, e) => {
+                _notificationManager = new(visualRoot) {
+                    Position = NotificationPosition.BottomRight,
+                    MaxItems = 3,
+                    Margin = new(0, 0, 4, 0)
+                };
+            };
+
+            ConfigViewModel.Shared.IsValid = isConfigValid;
+
+            if (!ConfigViewModel.Shared.IsValid) {
+                ShellDockFactory.AddDoc(ConfigViewModel.Shared);
+
+                await Task.Run(() => {
+                    while (!ConfigViewModel.Shared.IsValid) { }
+                });
+            }
+
+            pluginMgr.Register();
+
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args) {
-                    EditorMgr.TryLoadEditorSafe(arg);
+                    EditorMgr.TryLoadEditorSafe(new FileHandle(arg));
                 }
             }
         }
@@ -84,13 +81,13 @@ public partial class App : Application
 
     public static void Toast(string message, string title = "Notice", NotificationType type = NotificationType.Information, TimeSpan? expiration = null)
     {
-        NotificationManager?.Show(
+        _notificationManager?.Show(
             new Notification(title, message, type, expiration));
     }
 
     public static void ToastError(Exception ex)
     {
-        NotificationManager?.Show(new Notification(
+        _notificationManager?.Show(new Notification(
             ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
     }
 

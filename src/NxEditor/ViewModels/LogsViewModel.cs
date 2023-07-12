@@ -1,19 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Dock.Model.Mvvm.Controls;
-using NxEditor.Helpers;
+﻿using NxEditor.Helpers;
 using NxEditor.Models;
-using NxEditor.Views;
 using System.Collections.ObjectModel;
 
 namespace NxEditor.ViewModels;
 
-public partial class LogsViewModel : Document
+public partial class LogsViewModel : StaticPage<LogsViewModel, LogsView>
 {
-    private LogsView? _view;
-
-    public static LogsViewModel Shared { get; } = new();
     public LogsViewTraceListener TraceListener { get; }
 
     [ObservableProperty]
@@ -24,13 +16,6 @@ public partial class LogsViewModel : Document
 
     public void AddLog(string message)
     {
-        // Ignore avalonia errors
-        if (message.Contains("[Visual]") == true || message.Contains("[Binding]") == true) {
-            // Write to the system console
-            Console.WriteLine(message);
-            return;
-        }
-
         int idx = message.LastIndexOf('|');
         if (idx >= 0) {
             string meta = message[..idx];
@@ -40,30 +25,6 @@ public partial class LogsViewModel : Document
         else {
             LogTrace.Add(new(message, message));
         }
-
-        Dispatcher.UIThread.InvokeAsync(() => {
-            _view?.LogsClient.ScrollIntoView(LogTrace.Count - 1);
-        });
-    }
-
-    public async Task Copy()
-    {
-        await Application.Current!.Clipboard!.SetTextAsync($"{Selected?.Meta}\n{Selected?.Message}");
-    }
-
-    public async Task CopyMarkdown()
-    {
-        await Application.Current!.Clipboard!.SetTextAsync($"""
-            **{Selected?.Meta}**
-            ```
-            {Selected?.Message}
-            ```
-            """);
-    }
-
-    internal void InjectView(LogsView logsView)
-    {
-        _view = logsView;
     }
 
     public LogsViewModel()

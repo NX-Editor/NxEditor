@@ -1,13 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.Input;
+using ConfigFactory.Avalonia.Helpers;
+using ConfigFactory.Core.Attributes;
 using NxEditor.Attributes;
-using NxEditor.Component;
-using NxEditor.Core;
 using NxEditor.Core.Extensions;
-using NxEditor.Dialogs;
 using NxEditor.Generators;
-using NxEditor.Helpers;
-using NxEditor.ViewModels;
+using NxEditor.PluginBase.Models;
+using NxEditor.ViewModels.Dialogs;
 using System.Text;
 
 namespace NxEditor.Models.Menus;
@@ -22,7 +22,7 @@ public class ShellViewMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (!EditorMgr.TryLoadEditorSafe(path)) {
+            if (!EditorMgr.TryLoadEditorSafe(new FileHandle(path))) {
                 // TODO: throw message dialog
             }
         }
@@ -37,7 +37,7 @@ public class ShellViewMenu
     [Menu("Save As", "File", "Ctrl + Shift + S", "fa-regular fa-floppy-disk")]
     public static async Task SaveAs()
     {
-        List<string>? supportedExtensions = EditorMgr.Current?.SupportedExtensions;
+        string[]? supportedExtensions = EditorMgr.Current?.ExportExtensions;
         StringBuilder extensionsFilterString = new();
         if (supportedExtensions?.Any() == true) {
             foreach (var ext in supportedExtensions) {
@@ -45,22 +45,22 @@ public class ShellViewMenu
             }
         }
 
-        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorMgr.Current?.FilePath), "save-file");
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorMgr.Current?.Handle.Path), "save-file");
         if (await dialog.ShowDialog() is string path) {
-            EditorMgr.Current?.SaveAs(path);
+            EditorMgr.Current?.Save(path);
         }
     }
 
     [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
     public static void Recent(string path)
     {
-        EditorMgr.TryLoadEditorSafe(path);
+        EditorMgr.TryLoadEditorSafe(new FileHandle(path));
     }
 
     [Menu("Clear Recent", "File", icon: "fa-regular fa-circle-xmark")]
     public static void ClearRecent()
     {
-        StateMgr.Shared.Recent.Clear();
+        RecentFiles.Shared.Clear();
     }
 
     [Menu("Exit", "File", "Alt + F4", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
@@ -126,7 +126,7 @@ public class ShellViewMenu
     [Menu("Settings", "Tools", "Ctrl + Alt + W", "fa-solid fa-cog")]
     public static void Settings()
     {
-        ShellDockFactory.AddDoc<SettingsViewModel>();
+        ShellDockFactory.AddDoc(ConfigViewModel.Shared);
     }
 
     [Menu("Open Logs", "Tools", "Ctrl + L", "fa-solid fa-file-circle-check", IsSeparator = true)]
@@ -156,8 +156,8 @@ public class ShellViewMenu
     [Menu("Clear Editor Cache", "Tools", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
     public static void ClearEditorCache()
     {
-        if (Directory.Exists(ReactiveEditor.CacheDirectory)) {
-            Directory.Delete(ReactiveEditor.CacheDirectory, true);
+        if (Directory.Exists(EditorConfig.CacheFolder)) {
+            Directory.Delete(EditorConfig.CacheFolder, true);
         }
 
         App.Toast("Editor cache cleared successfully", "Clear Editor Cache", NotificationType.Success);
@@ -195,7 +195,7 @@ public class ShellViewMenu
                     new Button {
                         Content = "nx-editor.github.io",
                         Classes = { "Hyperlink" },
-                        Command = ReactiveCommand.Create(async () => {
+                        Command = new RelayCommand(async () => {
                             await BrowserExtension.OpenUrl("https://nx-editor.github.io");
                         })
                     }

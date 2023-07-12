@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace NxEditor.Models;
+﻿namespace NxEditor.Models;
 
 public partial class LogEntry : ObservableObject
 {
@@ -14,5 +12,24 @@ public partial class LogEntry : ObservableObject
     {
         _meta = meta;
         _message = message;
+    }
+
+    public async Task Copy()
+    {
+        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync($"{Meta}\n{Message}") is Task task) {
+            await task;
+        }
+    }
+
+    public async Task CopyMarkdown()
+    {
+        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync($"""
+            **{Meta}**
+            ```
+            {Message}
+            ```
+            """) is Task task) {
+            await task;
+        }
     }
 }
