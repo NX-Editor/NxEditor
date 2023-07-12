@@ -114,13 +114,15 @@ public class MenuFactory
                                 if (item is MenuItem menuItem) {
                                     menuItem.Command = new RelayCommand(() => {
                                         func.Invoke(obj, new object?[] {
-                                            ToolTip.GetTip(menuItem)
+                                            menuItem.Tag
                                         });
                                     });
                                 }
                             }
                         }
                     };
+
+                    RecentFiles.Shared.Load();
                 }
             }
             else if (childData is Dictionary<string, dynamic> dict) {
