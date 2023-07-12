@@ -6,7 +6,6 @@ namespace NxEditor.Core;
 public static class Logger
 {
     private static readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-    private static readonly string SourceRoot = Path.Combine("D:", "a", "NX-Editor", "src", "NxEditor");
 
     public static string? CurrentLog { get; set; }
     public static string LogsPath => _path;
@@ -25,9 +24,9 @@ public static class Logger
         Trace.AutoFlush = true;
     }
 
-    public static void Write(object obj, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Write(object obj, [CallerMemberName] string method = "")
     {
-        string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}] | \"{Path.GetRelativePath(SourceRoot, filepath)}\":{lineNumber} | ";
+        string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}] | ";
         Trace.WriteLine($"{meta}{obj.ToString()?.Replace("\n", $"\n{new string(' ', meta.Length)}")}".Replace('\\', '/'));
     }
 

@@ -91,12 +91,12 @@ public partial class App : Application
             ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
     }
 
-    public static void Log(object obj, [CallerMemberName] string method = "", [CallerFilePath] string filepath = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Log(object obj, [CallerMemberName] string method = "")
     {
         if (obj is Exception ex) {
             ToastError(ex);
         }
 
-        Logger.Write(obj, method, filepath, lineNumber);
+        Logger.Write(obj, method);
     }
 }

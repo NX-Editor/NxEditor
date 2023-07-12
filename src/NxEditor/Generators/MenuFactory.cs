@@ -87,7 +87,7 @@ public class MenuFactory
                         }
                     }
                     catch (Exception ex) {
-                        App.Log(ex, func.Name, "[ShellMenu]", -1);
+                        App.Log(ex, func.Name);
                     }
                 });
 
