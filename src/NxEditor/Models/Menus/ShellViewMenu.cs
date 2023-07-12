@@ -144,7 +144,7 @@ public class ShellViewMenu
     [Menu("Clear Logs Folder", "Tools", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
     public static void ClearLogsFolder()
     {
-        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.log")) {
+        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.yml")) {
             if (file != Logger.CurrentLog) {
                 File.Delete(file);
             }
