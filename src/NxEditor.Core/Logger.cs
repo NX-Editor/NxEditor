@@ -5,7 +5,7 @@ namespace NxEditor.Core;
 
 public static class Logger
 {
-    private static readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+    private static readonly string _path = Path.Combine(Config.AppFolder, "logs");
 
     public static string? CurrentLog { get; set; }
     public static string LogsPath => _path;
@@ -13,7 +13,7 @@ public static class Logger
     public static void Initialize()
     {
         Directory.CreateDirectory(_path);
-        CurrentLog = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd-HH-mm}.log");
+        CurrentLog = Path.Combine(_path, $"{DateTime.Now:yyyy-MM-dd-HH-mm}.yml");
 
         TextWriterTraceListener listener = new(CurrentLog);
         SetTraceListener(listener, 1);
@@ -26,8 +26,8 @@ public static class Logger
 
     public static void Write(object obj, [CallerMemberName] string method = "")
     {
-        string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}] | ";
-        Trace.WriteLine($"{meta}{obj.ToString()?.Replace("\n", $"\n{new string(' ', meta.Length)}")}".Replace('\\', '/'));
+        string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}]: |- ";
+        Trace.WriteLine($"{meta}\n  {obj.ToString()?.Replace("\n", "\n  ")}".Replace('\\', '/'));
     }
 
     public static void SetTraceListener(TraceListener listener, int? pos = null)

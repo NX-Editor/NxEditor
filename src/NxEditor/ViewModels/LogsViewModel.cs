@@ -16,7 +16,7 @@ public partial class LogsViewModel : StaticPage<LogsViewModel, LogsView>
 
     public void AddLog(string message)
     {
-        int idx = message.LastIndexOf('|');
+        int idx = message.LastIndexOf('-');
         if (idx >= 0) {
             string meta = message[..idx];
             string msg = message[(idx + 1)..].Replace(new string(' ', meta.Length + 2), "");
