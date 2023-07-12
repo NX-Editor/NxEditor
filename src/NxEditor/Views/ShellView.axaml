@@ -30,7 +30,7 @@
                 Opacity="0.4" />
 
         <Border Name="ResizeClient"
-                Grid.RowSpan="2"
+                Grid.RowSpan="3"
                 BorderBrush="Transparent"
                 BorderThickness="3" />
 
@@ -117,7 +117,9 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="2" ColumnDefinitions="Auto,Auto,*,Auto">
+        <Grid Grid.Row="2"
+              ColumnDefinitions="Auto,Auto,*,Auto"
+              IsHitTestVisible="False">
             <Border Grid.ColumnSpan="10"
                     Background="{DynamicResource SystemAccentColor}"
                     Opacity="0.7" />
