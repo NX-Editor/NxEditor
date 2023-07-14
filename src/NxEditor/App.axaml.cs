@@ -28,11 +28,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        Logger.Initialize();
         Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
-
-        PluginManager pluginMgr = new(ConfigViewModel.Shared);
-        pluginMgr.LoadInstalled(out bool isConfigValid);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             ShellViewModel.Shared.InitDock();
@@ -57,20 +53,21 @@ public partial class App : Application
                 };
             };
 
-            ConfigViewModel.Shared.IsValid = isConfigValid;
+            ConfigViewModel.Shared.IsValid = PluginManager.RegisterModules(ConfigViewModel.Shared);
 
             if (!ConfigViewModel.Shared.IsValid) {
                 ShellDockFactory.AddDoc(ConfigViewModel.Shared);
 
+                await ConfigViewModel.Shared.PrimaryRelay();
                 await Task.Run(() => {
                     while (!ConfigViewModel.Shared.IsValid) { }
                 });
             }
 
-            pluginMgr.Register();
+            PluginManager.RegisterExtensions();
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
-                foreach (var arg in desktop.Args) {
+                foreach (var arg in desktop.Args.Where(File.Exists)) {
                     EditorMgr.TryLoadEditorSafe(new FileHandle(arg));
                 }
             }

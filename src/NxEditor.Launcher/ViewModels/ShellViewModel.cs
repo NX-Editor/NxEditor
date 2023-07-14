@@ -35,7 +35,7 @@ public partial class ShellViewModel : ObservableObject
     private bool _isLoading = false;
 
     [ObservableProperty]
-    private ObservableCollection<PluginInfo> _plugins = PluginManager.GetPluginInfo();
+    private ObservableCollection<PluginInfo> _plugins = new(PluginManager.GetPluginInfo());
 
     public ShellViewModel()
     {
