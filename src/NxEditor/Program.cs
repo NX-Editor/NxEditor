@@ -13,7 +13,7 @@ internal class Program
     // SynchronizationContext-reliant code before AppMain is called: things
     // aren't initialized yet and stuff might break.
     [STAThread]
-    public static unsafe void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         // Forward to running process
         if (Config.Shared.UseSingleInstance && !SingleInstanceMgr.Start(args, Attach)) {
@@ -36,7 +36,7 @@ internal class Program
         }
 
         PluginManager.RegisterExtensions();
-        // Process CLI
+        await Console.Out.WriteLineAsync("Processing Arguments...");
 
         return;
 
