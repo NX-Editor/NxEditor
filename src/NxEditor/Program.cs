@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Threading;
+using NxEditor.Core.Components;
 using NxEditor.PluginBase.Models;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
@@ -14,10 +15,32 @@ internal class Program
     [STAThread]
     public static unsafe void Main(string[] args)
     {
+        // Forward to running process
         if (Config.Shared.UseSingleInstance && !SingleInstanceMgr.Start(args, Attach)) {
             return;
         }
 
+        Logger.Initialize();
+        PluginManager.Load();
+
+        // Check if the args match
+        // a shell process command
+        if (args.Length <= 0 || args.All(File.Exists)) {
+            goto GUI;
+        }
+
+        // Validate the modules, if it
+        // fails open the user interface
+        if (!PluginManager.ValidateModules()) {
+            goto GUI;
+        }
+
+        PluginManager.RegisterExtensions();
+        // Process CLI
+
+        return;
+
+    GUI:
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
