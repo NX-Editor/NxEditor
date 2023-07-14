@@ -163,6 +163,19 @@ public class ShellViewMenu
         App.Toast("Editor cache cleared successfully", "Clear Editor Cache", NotificationType.Success);
     }
 
+    //
+    // View
+
+    [Menu("Show/Hide Console", "View", "Ctrl + F12", "fa-solid fa-terminal")]
+    public static void ShowHideConsole()
+    {
+#if WIN_X64
+        ConsoleExtension.SwapWindowMode();
+#else
+        App.Toast("This action is only supported on Win32 platforms", "OS Error", NotificationType.Error);
+#endif
+    }
+
     // 
     // About
 
