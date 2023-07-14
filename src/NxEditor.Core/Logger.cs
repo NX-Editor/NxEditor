@@ -26,8 +26,21 @@ public static class Logger
 
     public static void Write(object obj, [CallerMemberName] string method = "")
     {
-        string meta = $"{DateTime.Now:dd:mm:ss:fff} [{method}]: |- ";
-        Trace.WriteLine($"{meta}\n  {obj.ToString()?.Replace("\n", "\n  ")}".Replace('\\', '/'));
+        string? msg = obj.ToString();
+
+        if (msg?.Contains('\n') == true) {
+            Trace.WriteLine($"""
+                {DateTime.Now:dd:mm:ss:fff} [{method}]: |- 
+                  {obj.ToString()?
+                    .Replace("\n", "\n  ")
+                    .Replace('\\', '/')}
+                """);
+        }
+        else {
+            Trace.WriteLine($"""
+                {DateTime.Now:dd:mm:ss:fff} [{method}]: {obj.ToString()?.Replace("\n", "\n  ").Replace('\\', '/')}
+                """);
+        }
     }
 
     public static void SetTraceListener(TraceListener listener, int? pos = null)
