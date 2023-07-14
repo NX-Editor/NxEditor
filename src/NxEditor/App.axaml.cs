@@ -51,6 +51,11 @@ public partial class App : Application
                     MaxItems = 3,
                     Margin = new(0, 0, 4, 0)
                 };
+
+#if WIN_X64
+                Core.Extensions.ConsoleExtension.SetWindowMode(
+                    Core.Extensions.WindowMode.Hidden);
+#endif
             };
 
             ConfigViewModel.Shared.IsValid = PluginManager.RegisterModules(ConfigViewModel.Shared);
