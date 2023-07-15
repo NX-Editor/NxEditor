@@ -58,6 +58,7 @@ internal class Program
         IconProvider.Current.Register(new FontAwesomeIconProvider());
 
         return AppBuilder.Configure<App>()
+            .WithInterFont()
             .UsePlatformDetect();
     }
 }
