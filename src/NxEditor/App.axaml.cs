@@ -39,9 +39,9 @@ public partial class App : Application
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
 
-            desktop.MainWindow.Closed += (s, e) => {
+            desktop.MainWindow.Closed += async (s, e) => {
                 for (int i = 0; i < _openEditors.Count; i++) {
-                    _openEditors[i].Dispose();
+                    await _openEditors[i].Cleanup();
                 }
             };
 
