@@ -12,7 +12,6 @@ public class ShellDockFactory : Factory
 {
     private static IDock Root => ((ShellViewModel.Shared.Layout?.ActiveDockable as IDock)?.ActiveDockable as IDock)!;
 
-    public static void AddDoc<T>() where T : Document, new() => AddDoc(new T());
     public static T AddDoc<T>(T doc) where T : Document
     {
         (var dock, var index) = CheckDockable(Root, doc.Id);
