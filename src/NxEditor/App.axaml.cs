@@ -15,7 +15,6 @@ namespace NxEditor;
 
 public partial class App : Application
 {
-    private static readonly List<IEditor> _openEditors = new();
     private static WindowNotificationManager? _notificationManager;
 
     public static string Title { get; } = "NX-Editor";
@@ -38,12 +37,6 @@ public partial class App : Application
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
-
-            desktop.MainWindow.Closed += async (s, e) => {
-                for (int i = 0; i < _openEditors.Count; i++) {
-                    await _openEditors[i].Cleanup();
-                }
-            };
 
             desktop.MainWindow.Loaded += (s, e) => {
                 _notificationManager = new(visualRoot) {
