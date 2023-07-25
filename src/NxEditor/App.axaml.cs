@@ -52,7 +52,7 @@ public partial class App : Application
                     Margin = new(0, 0, 4, 0)
                 };
 
-#if WIN_X64
+#if WIN_X64 && RELEASE
                 Core.Extensions.ConsoleExtension.SetWindowMode(
                     Core.Extensions.WindowMode.Hidden);
 #endif
