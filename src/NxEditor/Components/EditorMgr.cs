@@ -12,10 +12,11 @@ public static class EditorMgr
 {
     public static IEditor? Current => ShellDockFactory.Current() as IEditor;
 
-    public static bool TryLoadEditorSafe(IFileHandle handle)
+    public static bool TryLoadEditor(IFileHandle handle)
     {
         try {
-            return TryLoadEditor(handle);
+            LoadEditor(handle);
+            return true;
         }
         catch (Exception ex) {
             App.Log(ex);
@@ -24,25 +25,25 @@ public static class EditorMgr
         return false;
     }
 
-    public static bool TryLoadEditor(IFileHandle handle)
+    public static void LoadEditor(IFileHandle handle)
     {
         App.Log($"Processing {handle.Name}");
 
-        if (Config.Shared.UseSingleFileLock && ShellDockFactory.TryFocus(handle.Name, out IDockable? dock) && dock is IEditor) {
-            return true;
+        if (ShellDockFactory.TryFocus(handle.Path ?? handle.Name, out IDockable? dock) && dock is IEditor) {
+            return;
         }
 
         IFormatService service = ServiceLoader.Shared
             .RequestService(handle);
 
         if (service is IEditor editor) {
-            editor.Read();
+            _ = editor.Read();
             ShellDockFactory.AddDoc((Document)editor);
             if (handle.Path is not null) {
                 RecentFiles.Shared.AddPath(handle.Path);
             }
 
-            return true;
+            return;
         }
 
         throw new InvalidCastException($"Could not cast the found type of {service} to {typeof(Editor<,>).Name}");
