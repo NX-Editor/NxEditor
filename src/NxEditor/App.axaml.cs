@@ -8,6 +8,7 @@ using ConfigFactory.Avalonia.Helpers;
 using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
+using NxEditor.PluginBase;
 using NxEditor.PluginBase.Models;
 using System.Runtime.CompilerServices;
 
@@ -28,6 +29,7 @@ public partial class App : Application
     public override async void OnFrameworkInitializationCompleted()
     {
         Logger.SetTraceListener(LogsViewModel.Shared.TraceListener);
+        Frontend.Register<IEditorManager>(EditorManager.Shared);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             ShellViewModel.Shared.InitDock();
@@ -36,7 +38,11 @@ public partial class App : Application
             desktop.MainWindow = ShellViewModel.Shared.View;
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
-            BrowserDialog.StorageProvider = visualRoot?.StorageProvider ?? null;
+            Frontend.Register(visualRoot?.Clipboard!);
+            Frontend.Register(
+                BrowserDialog.StorageProvider = visualRoot?.StorageProvider!
+            );
+
 
             desktop.MainWindow.Loaded += (s, e) => {
                 _notificationManager = new(visualRoot) {

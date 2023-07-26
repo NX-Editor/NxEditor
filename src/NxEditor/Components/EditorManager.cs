@@ -12,11 +12,6 @@ public class EditorManager : IEditorManager
 {
     public static EditorManager Shared { get; } = new();
 
-    static EditorManager()
-    {
-        Fontend.Register<IEditorManager>(Shared);
-    }
-
     public IEditor? Current => ShellDockFactory.Current() as IEditor;
 
     public bool TryLoadEditor(IFileHandle handle)
