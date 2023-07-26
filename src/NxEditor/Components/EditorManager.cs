@@ -31,7 +31,7 @@ public class EditorManager : IEditorManager
     {
         App.Log($"Processing {handle.Name}");
 
-        if (ShellDockFactory.TryFocus(handle.Path ?? handle.Name, out IDockable? dock) && dock is IEditor) {
+        if (ShellDockFactory.TryFocus(handle.FilePath ?? handle.Name, out IDockable? dock) && dock is IEditor) {
             return;
         }
 
@@ -41,8 +41,8 @@ public class EditorManager : IEditorManager
         if (service is IEditor editor) {
             _ = editor.Read();
             ShellDockFactory.AddDoc((Document)editor);
-            if (handle.Path is not null) {
-                RecentFiles.Shared.AddPath(handle.Path);
+            if (handle.FilePath is not null) {
+                RecentFiles.Shared.AddPath(handle.FilePath);
             }
 
             return;

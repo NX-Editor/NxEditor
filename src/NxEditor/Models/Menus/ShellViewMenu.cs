@@ -45,7 +45,7 @@ public class ShellViewMenu
             }
         }
 
-        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorManager.Shared.Current?.Handle.Path), "save-file");
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorManager.Shared.Current?.Handle.FilePath), "save-file");
         if (await dialog.ShowDialog() is string path) {
             EditorManager.Shared.Current?.Save(path);
         }
