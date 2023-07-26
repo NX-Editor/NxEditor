@@ -8,11 +8,18 @@ using NxEditor.PluginBase.Services;
 
 namespace NxEditor.Components;
 
-public static class EditorMgr
+public class EditorManager : IEditorManager
 {
-    public static IEditor? Current => ShellDockFactory.Current() as IEditor;
+    public static EditorManager Shared { get; } = new();
 
-    public static bool TryLoadEditor(IFileHandle handle)
+    static EditorManager()
+    {
+        Fontend.Register<IEditorManager>(Shared);
+    }
+
+    public IEditor? Current => ShellDockFactory.Current() as IEditor;
+
+    public bool TryLoadEditor(IFileHandle handle)
     {
         try {
             LoadEditor(handle);
@@ -25,7 +32,7 @@ public static class EditorMgr
         return false;
     }
 
-    public static void LoadEditor(IFileHandle handle)
+    public void LoadEditor(IFileHandle handle)
     {
         App.Log($"Processing {handle.Name}");
 

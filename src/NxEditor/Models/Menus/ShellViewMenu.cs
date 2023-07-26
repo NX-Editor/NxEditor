@@ -22,7 +22,7 @@ public class ShellViewMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (!EditorMgr.TryLoadEditor(new FileHandle(path))) {
+            if (!EditorManager.Shared.TryLoadEditor(new FileHandle(path))) {
                 // TODO: throw message dialog
             }
         }
@@ -31,13 +31,13 @@ public class ShellViewMenu
     [Menu("Save", "File", "Ctrl + S", "fa-solid fa-floppy-disk", IsSeparator = true)]
     public static void Save()
     {
-        EditorMgr.Current?.Save();
+        EditorManager.Shared.Current?.Save();
     }
 
     [Menu("Save As", "File", "Ctrl + Shift + S", "fa-regular fa-floppy-disk")]
     public static async Task SaveAs()
     {
-        string[]? supportedExtensions = EditorMgr.Current?.ExportExtensions;
+        string[]? supportedExtensions = EditorManager.Shared.Current?.ExportExtensions;
         StringBuilder extensionsFilterString = new();
         if (supportedExtensions?.Any() == true) {
             foreach (var ext in supportedExtensions) {
@@ -45,16 +45,16 @@ public class ShellViewMenu
             }
         }
 
-        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorMgr.Current?.Handle.Path), "save-file");
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorManager.Shared.Current?.Handle.Path), "save-file");
         if (await dialog.ShowDialog() is string path) {
-            EditorMgr.Current?.Save(path);
+            EditorManager.Shared.Current?.Save(path);
         }
     }
 
     [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
     public static void Recent(string path)
     {
-        EditorMgr.TryLoadEditor(new FileHandle(path));
+        EditorManager.Shared.TryLoadEditor(new FileHandle(path));
     }
 
     [Menu("Clear Recent", "File", icon: "fa-regular fa-circle-xmark")]
@@ -75,49 +75,49 @@ public class ShellViewMenu
     [Menu("Undo", "Edit", "Ctrl + Z", "fa-solid fa-arrow-rotate-left")]
     public static void Undo()
     {
-        EditorMgr.Current?.Undo();
+        EditorManager.Shared.Current?.Undo();
     }
 
     [Menu("Redo", "Edit", "Ctrl + Shift + Z", "fa-solid fa-arrow-rotate-right")]
     public static void Redo()
     {
-        EditorMgr.Current?.Redo();
+        EditorManager.Shared.Current?.Redo();
     }
 
     [Menu("Select All", "Edit", "Ctrl + A", "fa-solid fa-object-group", IsSeparator = true)]
     public static void SelectAll()
     {
-        EditorMgr.Current?.SelectAll();
+        EditorManager.Shared.Current?.SelectAll();
     }
 
     [Menu("Cut", "Edit", "Ctrl + X", "fa-solid fa-scissors", IsSeparator = true)]
     public static async Task Cut()
     {
-        await (EditorMgr.Current?.Cut()).SafeInvoke();
+        await (EditorManager.Shared.Current?.Cut()).SafeInvoke();
     }
 
     [Menu("Copy", "Edit", "Ctrl + C", "fa-solid fa-copy")]
     public static async Task Copy()
     {
-        await (EditorMgr.Current?.Copy()).SafeInvoke();
+        await (EditorManager.Shared.Current?.Copy()).SafeInvoke();
     }
 
     [Menu("Paste", "Edit", "Ctrl + V", "fa-solid fa-paste")]
     public static async Task Paste()
     {
-        await (EditorMgr.Current?.Paste()).SafeInvoke();
+        await (EditorManager.Shared.Current?.Paste()).SafeInvoke();
     }
 
     [Menu("Find", "Edit", "Ctrl + F", "fa-solid fa-magnifying-glass", IsSeparator = true)]
     public static void Find()
     {
-        EditorMgr.Current?.Find();
+        EditorManager.Shared.Current?.Find();
     }
 
     [Menu("Find & Replace", "Edit", "Ctrl + H", "fa-solid fa-arrows-turn-to-dots")]
     public static async Task FindAndReplace()
     {
-        await (EditorMgr.Current?.FindAndReplace()).SafeInvoke();
+        await (EditorManager.Shared.Current?.FindAndReplace()).SafeInvoke();
     }
 
     // 

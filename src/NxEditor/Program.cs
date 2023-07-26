@@ -48,7 +48,7 @@ internal class Program
     {
         Dispatcher.UIThread.InvokeAsync(() => {
             ShellViewModel.Shared.View?.Activate();
-            EditorMgr.TryLoadEditor(new FileHandle(args[0]));
+            EditorManager.Shared.TryLoadEditor(new FileHandle(args[0]));
         });
     }
 
