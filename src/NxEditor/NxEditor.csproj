@@ -28,8 +28,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
-    <PackageReference Include="Avalonia.Xaml.Interactions" Version="11.0.0.1" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0.1" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.0" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0" />
     <PackageReference Include="Dock.Serializer" Version="11.0.0" />
