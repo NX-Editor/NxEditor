@@ -3,10 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using NxEditor.Core;
 using NxEditor.Core.Components;
 using NxEditor.Core.Models;
-using Octokit;
+using NxEditor.Launcher.Helpers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO.Compression;
 using System.Text.Json;
 
 namespace NxEditor.Launcher.ViewModels;
@@ -15,10 +14,7 @@ public record PluginInfoView(long Id, string Name, string Description);
 
 public partial class ShellViewModel : ObservableObject
 {
-    private const long RepoId = 601421384;
-
     private static readonly string _versionFile = Path.Combine(Config.AppFolder, "version.json");
-    private static readonly GitHubClient _githubClient = new(new ProductHeaderValue("NxEditor.Launcher.Updater"));
 
     private bool _canUpdate = false;
 
@@ -52,7 +48,7 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     public async Task ShowOnlinePlugins()
     {
-        byte[] pluginsData = await _githubClient.Repository.Content.GetRawContent("NX-Editor", "Plugins", "public.json");
+        byte[] pluginsData = await GitHubRepo.GetAsset("NX-Editor", "Plugins", "public.json");
         Dictionary<string, PluginInfoView> plugins = JsonSerializer.Deserialize<Dictionary<string, PluginInfoView>>(pluginsData)!;
 
         IEnumerable<string> loaded = Plugins.Select(x => x.Name);
@@ -78,10 +74,11 @@ public partial class ShellViewModel : ObservableObject
         IsLoading = true;
 
         if (_canUpdate) {
-            await InstallBinary();
+            await AppUpdater.Download();
         }
 
-        await InstallPlugins();
+        await PluginUpdater.Download(Plugins);
+
         FoundUpdates = 0;
         IsLoading = false;
     }
@@ -91,9 +88,9 @@ public partial class ShellViewModel : ObservableObject
     {
         IsLoading = true;
         if (IsEditorInstalled) {
-            await InstallPlugins();
+            await PluginUpdater.Download(Plugins);
             Process.Start(
-                Path.Combine(Config.AppFolder, "bin", Environment.OSVersion.Platform == PlatformID.Unix ? "nxe" : "nxe.exe")
+                Path.Combine(Config.AppFolder, "bin", AppPlatform.GetName())
             );
 
             IsLoading = false;
@@ -101,9 +98,8 @@ public partial class ShellViewModel : ObservableObject
         }
 
 
-        await InstallBinary();
-
-        await InstallPlugins();
+        await AppUpdater.Download();
+        await PluginUpdater.Download(Plugins);
 
         IsEditorInstalled = true;
         PrimaryButtonContent = "Open NX Editor";
@@ -126,90 +122,17 @@ public partial class ShellViewModel : ObservableObject
 
     private async Task CheckForUpdates()
     {
-        if (IsEditorInstalled) {
-            using FileStream fs = File.OpenRead(_versionFile);
-            string version = JsonSerializer.Deserialize<string>(fs)!;
-
-            if (await HasUpdate(RepoId, version)) {
-                _canUpdate = true;
-                FoundUpdates++;
-            }
+        if (IsEditorInstalled && await AppUpdater.HasUpdate()) {
+            _canUpdate = true;
+            FoundUpdates++;
         }
 
         foreach (var plugin in Plugins.Where(x => !x.IsOnline && x.GitHubRepoId != -1)) {
-            if (plugin.CanUpdate = await HasUpdate(plugin.GitHubRepoId, plugin.Version)) {
+            if (plugin.CanUpdate = await GitHubRepo.HasUpdate(plugin.GitHubRepoId, plugin.Version)) {
                 FoundUpdates++;
             }
         }
 
         IsLoading = false;
-    }
-
-    private static async Task InstallBinary()
-    {
-        string appName = Environment.OSVersion.Platform == PlatformID.Unix ? "nxe" : "nxe.exe";
-        string binPath = Path.Combine(Config.AppFolder, "bin");
-        string appPath = Path.Combine(binPath, appName);
-
-        Directory.CreateDirectory(binPath);
-
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll("NX-Editor", "NxEditor");
-        Release latest = releases[0];
-
-        using (HttpClient client = new()) {
-            Stream stream = await client.GetStreamAsync(latest.Assets.Where(x => x.Name == appName).First().BrowserDownloadUrl);
-
-            using FileStream fs = File.Create(appPath);
-            await stream.CopyToAsync(fs);
-        }
-
-
-        using (FileStream fs = File.Create(_versionFile)) {
-            await JsonSerializer.SerializeAsync(fs, latest.TagName);
-        }
-
-        if (Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) is string pathEnv && !pathEnv.Contains(binPath)) {
-            Environment.SetEnvironmentVariable("PATH",
-                $"{pathEnv}{binPath}{(Environment.OSVersion.Platform == PlatformID.Unix ? ":" : ";")}",
-                EnvironmentVariableTarget.User);
-        }
-    }
-
-    private async Task InstallPlugins()
-    {
-        foreach (var plugin in Plugins.Where(x => (x.IsOnline || x.CanUpdate) && x.IsEnabled)) {
-            await InstallPlugin(plugin);
-            plugin.IsOnline = plugin.CanUpdate = false;
-        }
-    }
-
-    private static async Task InstallPlugin(PluginInfo info)
-    {
-        if (info.GitHubRepoId == -1) {
-            return;
-        }
-
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(info.GitHubRepoId);
-        if (releases.Count > 0 && releases[0].Assets.FirstOrDefault(x => x.Name == (Environment.OSVersion.Platform == PlatformID.Unix ? "linux-x64.zip" : "win-x64.zip")) is ReleaseAsset asset) {
-            using HttpClient client = new();
-            Stream stream = await client.GetStreamAsync(asset.BrowserDownloadUrl);
-
-            ZipArchive arc = new(stream);
-            Directory.CreateDirectory(info.Folder);
-            arc.ExtractToDirectory(info.Folder, true);
-
-            string meta = Path.Combine(info.Folder, "meta.json");
-            if (File.Exists(meta)) {
-                info = PluginInfo.FromPath(meta);
-                info.Version = releases[0].TagName;
-                info.Serialize();
-            }
-        }
-    }
-
-    private static async Task<bool> HasUpdate(long repoId, string currentTag)
-    {
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(repoId);
-        return releases.Count > 0 && releases[0].TagName != currentTag;
     }
 }
