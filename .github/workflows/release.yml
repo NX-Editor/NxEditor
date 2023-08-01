@@ -80,7 +80,7 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: ../${{ matrix.config.name }}-Launcher.zip
+          filename: ../../${{ matrix.config.name }}-Launcher.zip
           directory: Setup/${{ matrix.config.name }}
           path: ./**
           
