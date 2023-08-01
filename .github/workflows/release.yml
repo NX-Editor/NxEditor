@@ -16,12 +16,15 @@ jobs:
           - name: Linux
             os: ubuntu-20.04
             runtime: linux-x64
+            ext: ~
           - name: Windows
             os: windows-latest
             runtime: win-x64
+            ext: ".exe"
           - name: MacOS
             os: macos-latest
             runtime: osx-x64
+            ext: ~
 
     env:
       proj: "NxEditor"
@@ -47,6 +50,13 @@ jobs:
           --version-suffix ${{ github.event.release.tag_name }} \
           -o ${{ matrix.config.name }} \
           -p:Version=${{ github.event.release.tag_name }}
+
+      - name: Rename executable
+        shell: bash
+        run: |
+          mv \
+          ${{ matrix.config.name }}/NxEditor${{ matrix.config.ext }} \
+          ${{ matrix.config.name }}/nxe${{ matrix.config.ext }}
 
       - name: Archive Build Files
         uses: TheDoctor0/zip-release@0.7.1
