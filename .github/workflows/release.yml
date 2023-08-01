@@ -21,7 +21,7 @@ jobs:
             runtime: win-x64
           - name: MacOS
             os: macos-latest
-            runtime: win-x64
+            runtime: osx-x64
 
     env:
       proj: "NxEditor"
