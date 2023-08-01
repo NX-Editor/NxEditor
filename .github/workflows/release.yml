@@ -15,11 +15,12 @@ jobs:
         config:
           - name: Linux
             os: ubuntu-20.04
-            ext: ""
             runtime: linux-x64
           - name: Windows
             os: windows-latest
-            ext: .exe
+            runtime: win-x64
+          - name: MacOS
+            os: macos-latest
             runtime: win-x64
 
     env:
@@ -36,7 +37,7 @@ jobs:
         with:
           dotnet-version: "7.0.x"
 
-      - name: Publish NX-Editor Binary
+      - name: Publish NX-Editor
         shell: bash
         run: |
           dotnet publish src/${{ env.proj }}/${{ env.proj }}.csproj \
@@ -45,18 +46,22 @@ jobs:
           --sc false \
           --version-suffix ${{ github.event.release.tag_name }} \
           -o ${{ matrix.config.name }} \
-          -p:Version=${{ github.event.release.tag_name }} \
-          -p:PublishSingleFile=true \
-          -p:IncludeNativeLibrariesForSelfExtract=true \
-          -p:PublishReadyToRun=true
+          -p:Version=${{ github.event.release.tag_name }}
 
-      - name: Upload artifacts
-        uses: Shopify/upload-to-release@v1.0.1
+      - name: Archive Build Files
+        uses: TheDoctor0/zip-release@0.7.1
         with:
-          name: nxe${{ matrix.config.ext }}
-          path: ${{ matrix.config.name }}/${{ env.proj }}${{ matrix.config.ext }}
+          type: 'zip'
+          filename: ../${{ matrix.config.runtime }}.zip
+          directory: ${{ matrix.config.name }}
+          path: ./**
+          
+      - name: Upload artifacts
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: ${{ matrix.config.runtime }}.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Publish NX-Editor Launcher
         shell: bash
         run: |
@@ -65,15 +70,22 @@ jobs:
           -c Release \
           --sc false \
           --version-suffix ${{ github.event.release.tag_name }} \
-          -o ${{ matrix.config.name }} \
+          -o Setup/${{ matrix.config.name }} \
           -p:Version=${{ github.event.release.tag_name }} \
           -p:PublishSingleFile=true \
           -p:IncludeNativeLibrariesForSelfExtract=true \
           -p:PublishReadyToRun=true
 
-      - name: Upload artifacts
-        uses: Shopify/upload-to-release@v1.0.1
+      - name: Archive Launcher Build Files
+        uses: TheDoctor0/zip-release@0.7.1
         with:
-          name: NX-Editor-Launcher${{ matrix.config.ext }}
-          path: ${{ matrix.config.name }}/${{ env.launcher }}${{ matrix.config.ext }}
+          type: 'zip'
+          filename: ../Setup-${{ matrix.config.name }}.zip
+          directory: Setup/${{ matrix.config.name }}
+          path: ./**
+          
+      - name: Upload artifacts
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: ${{ matrix.config.runtime }}-Launcher.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
