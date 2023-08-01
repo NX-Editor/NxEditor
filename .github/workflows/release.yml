@@ -80,12 +80,12 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: ../Setup-${{ matrix.config.name }}.zip
+          filename: ../${{ matrix.config.name }}-Launcher.zip
           directory: Setup/${{ matrix.config.name }}
           path: ./**
           
       - name: Upload artifacts
         uses: AButler/upload-release-assets@v2.0
         with:
-          files: ${{ matrix.config.runtime }}-Launcher.zip
+          files: ${{ matrix.config.name }}-Launcher.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
