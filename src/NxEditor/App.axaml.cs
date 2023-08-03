@@ -5,6 +5,8 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
+using ConfigFactory.Models;
+using HarfBuzzSharp;
 using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
@@ -58,6 +60,7 @@ public partial class App : Application
             };
 
             ConfigViewModel.Shared.IsValid = PluginManager.RegisterModules(ConfigViewModel.Shared);
+            Frontend.Register<ConfigPageModel>(ConfigViewModel.Shared);
 
             if (!ConfigViewModel.Shared.IsValid) {
                 ShellDockFactory.AddDoc(ConfigViewModel.Shared);
