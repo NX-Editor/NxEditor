@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿using NxEditor.PluginBase;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor.Core;
 
 public static class Logger
 {
-    private static readonly string _path = Path.Combine(Config.AppFolder, "logs");
+    private static readonly string _path = Path.Combine(GlobalConfig.Shared.StorageFolder, "logs");
 
     public static string? CurrentLog { get; set; }
     public static string LogsPath => _path;

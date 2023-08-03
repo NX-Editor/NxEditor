@@ -4,6 +4,7 @@ using ConfigFactory.Avalonia;
 using ConfigFactory.Core.Attributes;
 using ConfigFactory.Core.Models;
 using ConfigFactory.Models;
+using NxEditor.PluginBase;
 
 namespace NxEditor.ViewModels;
 
@@ -25,6 +26,7 @@ public class ConfigViewModel : ConfigPageModel, IStaticPage<ConfigViewModel, Con
             DataContext = this
         };
 
+        this.Append(GlobalConfig.Shared);
         this.Append(Config.Shared);
         SecondaryButtonIsEnabled = false;
 

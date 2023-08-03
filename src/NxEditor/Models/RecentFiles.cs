@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using NxEditor.PluginBase;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -6,7 +7,7 @@ namespace NxEditor.Models;
 
 public class RecentFiles : ObservableCollection<MenuItem>
 {
-    public static readonly string _path = Path.Combine(Config.AppFolder, "recent.json");
+    public static readonly string _path = Path.Combine(GlobalConfig.Shared.StorageFolder, "recent.json");
 
     public static RecentFiles Shared { get; } = new();
 

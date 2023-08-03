@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using NxEditor.Core;
 using NxEditor.Core.Components;
 using NxEditor.Core.Models;
 using NxEditor.Launcher.Helpers;
+using NxEditor.PluginBase;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
@@ -14,12 +14,10 @@ public record PluginInfoView(long Id, string Name, string Description);
 
 public partial class ShellViewModel : ObservableObject
 {
-    private static readonly string _versionFile = Path.Combine(Config.AppFolder, "version.json");
-
     private bool _canUpdate = false;
 
     [ObservableProperty]
-    private bool _isEditorInstalled = File.Exists(_versionFile);
+    private bool _isEditorInstalled = AppUpdater.IsInstalled;
 
     [ObservableProperty]
     private string _primaryButtonContent = "Install NX Editor";
@@ -56,7 +54,7 @@ public partial class ShellViewModel : ObservableObject
         foreach (var plugin in plugins.Where(x => !loaded.Contains(x.Value.Name))) {
             Plugins.Add(new() {
                 Description = plugin.Value.Description,
-                Folder = Path.Combine(Config.AppFolder, "plugins", plugin.Key),
+                Folder = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins", plugin.Key),
                 GitHubRepoId = plugin.Value.Id,
                 IsOnline = true,
                 Name = plugin.Value.Name
@@ -90,7 +88,7 @@ public partial class ShellViewModel : ObservableObject
         if (IsEditorInstalled) {
             await PluginUpdater.Download(Plugins);
             Process.Start(
-                Path.Combine(Config.AppFolder, "bin", AppPlatform.GetName())
+                Path.Combine(GlobalConfig.StaticPath, "bin", AppPlatform.GetName())
             );
 
             IsLoading = false;

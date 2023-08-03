@@ -9,7 +9,7 @@ namespace NxEditor.Core.Components;
 
 public static class PluginManager
 {
-    private static readonly string _path = Path.Combine(Config.AppFolder, "plugins");
+    private static readonly string _path = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins");
     private static readonly List<IServiceExtension> _extensions = new();
     private static readonly Dictionary<Type, IConfigModule> _modules = new();
 

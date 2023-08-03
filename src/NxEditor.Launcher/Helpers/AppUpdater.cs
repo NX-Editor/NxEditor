@@ -1,4 +1,4 @@
-﻿using NxEditor.Core;
+﻿using NxEditor.PluginBase;
 using System.IO.Compression;
 using System.Text.Json;
 
@@ -8,8 +8,10 @@ public class AppUpdater
 {
     private static readonly char pathEnvChar = Environment.OSVersion.Platform == PlatformID.Win32NT ? ';' : ':';
     private static readonly string _download = AppPlatform.GetDownload();
-    private static readonly string _path = Path.Combine(Config.AppFolder, "bin");
-    private static readonly string _versionFile = Path.Combine(Config.AppFolder, "version.json");
+    private static readonly string _path = Path.Combine(GlobalConfig.StaticPath, "bin");
+    private static readonly string _versionFile = Path.Combine(GlobalConfig.StaticPath, "version.json");
+
+    public static bool IsInstalled => File.Exists(_versionFile);
 
     public static async Task<bool> HasUpdate()
     {

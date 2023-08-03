@@ -3,13 +3,22 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ConfigFactory.Core;
 using ConfigFactory.Core.Attributes;
+using System.Text.Json.Serialization;
 
 namespace NxEditor.Core;
 
 public partial class Config : ConfigModule<Config>
 {
-    public override string Name => "nx-editor";
-    public static string AppFolder { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nx-editor");
+    [JsonIgnore]
+    public override string Name { get; } = "nx-editor-static";
+
+    [ObservableProperty]
+    [property: Config(
+        Header = "Theme",
+        Description = "",
+        Group = "Application")]
+    [property: DropdownConfig("Dark", "Light")]
+    private string _theme = "Dark";
 
     [ObservableProperty]
     [property: Config(
@@ -24,14 +33,6 @@ public partial class Config : ConfigModule<Config>
         Description = "Restrict two files with the same path to be loaded concurrently",
         Group = "Lock Settings")]
     private bool _useSingleFileLock = false;
-
-    [ObservableProperty]
-    [property: Config(
-        Header = "Theme",
-        Description = "",
-        Group = "Appearance")]
-    [property: DropdownConfig("Dark", "Light")]
-    private string _theme = "Dark";
 
     public static bool ValidatePath(string path, string key)
     {
