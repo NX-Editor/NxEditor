@@ -106,9 +106,18 @@ public partial class ShellViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public static Task Uninstall()
+    public async Task Uninstall()
     {
-        return Task.CompletedTask;
+        IsLoading = true;
+
+        await AppUpdater.Uninstall();
+
+        Plugins.Clear();
+        await ShowOnlinePlugins();
+
+        IsEditorInstalled = false;
+        PrimaryButtonContent = "Install NX Editor";
+        IsLoading = false;
     }
 
     [RelayCommand]

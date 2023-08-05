@@ -46,6 +46,36 @@ public class AppUpdater
         }
     }
 
+    public static Task<bool> Uninstall()
+    {
+        try {
+            if (File.Exists(_versionFile)) {
+                File.Delete(_versionFile);
+            }
+
+            if (Directory.Exists(_path)) {
+                Directory.Delete(_path, true);
+            }
+
+            string pluginsDirectory = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins");
+            if (Directory.Exists(pluginsDirectory)) {
+                Directory.Delete(pluginsDirectory, true);
+            }
+
+            string logsDirectory = Path.Combine(GlobalConfig.Shared.StorageFolder, "logs");
+            if (Directory.Exists(logsDirectory)) {
+                Directory.Delete(logsDirectory, true);
+            }
+
+            DeleteShortcuts();
+        }
+        catch (Exception ex) {
+            Console.WriteLine(ex);
+            return Task.FromResult(false);
+        }
+
+        return Task.FromResult(true);
+    }
 
     private static void CopyLauncher()
     {
@@ -61,5 +91,12 @@ public class AppUpdater
         Shortcut.Create("NX Editor", Location.Application, app, "nxe");
         Shortcut.Create("NX Editor Launcher", Location.Application, _launcher, "nxe");
         Shortcut.Create("NX Editor", Location.Desktop, app, "nxe");
+    }
+
+    public static void DeleteShortcuts()
+    {
+        Shortcut.Remove("NX Editor", Location.Application);
+        Shortcut.Remove("NX Editor Launcher", Location.Application);
+        Shortcut.Remove("NX Editor", Location.Desktop);
     }
 }
