@@ -190,6 +190,7 @@ public class ShellViewMenu
     {
         await new DialogBox {
             Title = "About",
+            IsSecondaryButtonVisible = false,
             Content = new StackPanel {
                 Spacing = 5,
                 Children = {
