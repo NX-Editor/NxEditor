@@ -7,8 +7,9 @@ A general editor for editing first-party Nintendo formats. Primary aimed at supp
 ## Setup
 
 1. Install the [.NET 7 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) ([Windows x64 direct download](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-7.0.5-windows-x64-installer))
-2. Download the [latest release](https://github.com/NX-Editor/NxEditor/releases/latest) and run the exe
-3. Fill out the required settings (more info in the app)
+2. Download the [latest release](https://github.com/NX-Editor/NxEditor/releases/latest) (Launcher), extract the zip, and run the exe
+3. Toggle the plugins you would like to install
+4. Click **Install NX Editor** and wait for the install to complete
 
 ## Building from Source (Windows)
 
@@ -16,36 +17,23 @@ A general editor for editing first-party Nintendo formats. Primary aimed at supp
 
 - [git](https://git-scm.com/)
 - [DotNet SDK 7.0+](https://dotnet.microsoft.com/en-us/download)
-- [CMake](https://cmake.org/)
-- [Ninja](https://github.com/ninja-build/ninja/releases)
-- [GCC/MinGW](https://github.com/brechtsanders/winlibs_mingw/releases/)
 
 ### Instructions
 
 1. Clone the [GitHub repository](https://github.com/NX-Editor/NxEditor)
    
    ```powershell
-   git clone "https://github.com/NX-Editor/NxEditor"; cd "NxEditor"
+   git clone --recursive "https://github.com/NX-Editor/NxEditor"; cd "NxEditor"
    ```
-2. Update the submodules
+2. Build the project
    
    ```powershell
-   git submodule update --init --recursive
+   cd "./src/NxEditor/"; dotnet build
    ```
-3. Run the build script (`build.ps1`)
+3. Run the project
    
    ```powershell
-   .\build.ps1
-   ```
-4. Build the project
-   
-   ```powershell
-   dotnet build "./src/NxEditor/NxEditor.csproj"
-   ```
-4. Run the project
-   
-   ```powershell
-   cd "./src/NxEditor/"; dotnet run
+   dotnet run
    ```
 
 ---
@@ -54,17 +42,15 @@ A general editor for editing first-party Nintendo formats. Primary aimed at supp
 <p>
 
 ```powershell
-git clone "https://github.com/NX-Editor/NxEditor"
+git clone --recursive "https://github.com/NX-Editor/NxEditor"
 cd "NxEditor"
-git submodule update --init --recursive
-".\build.ps1"
 cd "./src/NxEditor/"
 dotnet build
 dotnet run
 ```
 
 ```powershell
-git clone "https://github.com/NX-Editor/NxEditor"; cd "NxEditor"; git submodule update --init --recursive; ".\build.ps1"; cd "./src/NxEditor/"; dotnet build; dotnet run
+git clone --recursive "https://github.com/NX-Editor/NxEditor"; cd "NxEditor"; cd "./src/NxEditor/"; dotnet build; dotnet run
 ```
 
 </p>
