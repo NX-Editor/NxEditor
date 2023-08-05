@@ -5,15 +5,15 @@ namespace NxEditor.Launcher.Helpers;
 
 public class PluginUpdater
 {
-    public static async Task Download(IEnumerable<PluginInfo> plugins)
+    public static async Task InstallAll(IEnumerable<PluginInfo> plugins)
     {
         foreach (var plugin in plugins.Where(x => (x.IsOnline || x.CanUpdate) && x.IsEnabled)) {
-            await Download(plugin);
+            await Install(plugin);
             plugin.IsOnline = plugin.CanUpdate = false;
         }
     }
 
-    private static async Task Download(PluginInfo info)
+    private static async Task Install(PluginInfo info)
     {
         if (info.GitHubRepoId == -1) {
             return;

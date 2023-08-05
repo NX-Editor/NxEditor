@@ -72,10 +72,10 @@ public partial class ShellViewModel : ObservableObject
         IsLoading = true;
 
         if (_canUpdate) {
-            await AppUpdater.Download();
+            await AppUpdater.Install();
         }
 
-        await PluginUpdater.Download(Plugins);
+        await PluginUpdater.InstallAll(Plugins);
 
         FoundUpdates = 0;
         IsLoading = false;
@@ -86,7 +86,7 @@ public partial class ShellViewModel : ObservableObject
     {
         IsLoading = true;
         if (IsEditorInstalled) {
-            await PluginUpdater.Download(Plugins);
+            await PluginUpdater.InstallAll(Plugins);
             Process.Start(
                 Path.Combine(GlobalConfig.StaticPath, "bin", AppPlatform.GetName())
             );
@@ -96,8 +96,8 @@ public partial class ShellViewModel : ObservableObject
         }
 
 
-        await AppUpdater.Download();
-        await PluginUpdater.Download(Plugins);
+        await AppUpdater.Install();
+        await PluginUpdater.InstallAll(Plugins);
 
         IsEditorInstalled = true;
         PrimaryButtonContent = "Open NX Editor";

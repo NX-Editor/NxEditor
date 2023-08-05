@@ -1,4 +1,5 @@
 ﻿using NxEditor.PluginBase;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ public class AppUpdater
     private static readonly string _download = AppPlatform.GetDownload();
     private static readonly string _path = Path.Combine(GlobalConfig.StaticPath, "bin");
     private static readonly string _versionFile = Path.Combine(GlobalConfig.StaticPath, "version.json");
+    private static readonly string _launcher = Path.Combine(GlobalConfig.StaticPath, "NxEditor.Launcher.exe");
 
     public static bool IsInstalled => File.Exists(_versionFile);
 
@@ -21,8 +23,10 @@ public class AppUpdater
         return await GitHubRepo.HasUpdate("NX-Editor", "NxEditor", version);
     }
 
-    public static async Task Download(bool addToPath = true)
+    public static async Task Install(bool addToPath = true)
     {
+        CopyLauncher();
+        CreateShortcuts();
         Directory.CreateDirectory(_path);
 
         (Stream stream, string tag) = await GitHubRepo.GetRelease("NX-Editor", "NxEditor", _download);
@@ -42,4 +46,20 @@ public class AppUpdater
         }
     }
 
+
+    private static void CopyLauncher()
+    {
+        string? exe = Process.GetCurrentProcess().MainModule?.FileName;
+        if (exe is not null && File.Exists(exe)) {
+            File.Copy(exe, _launcher);
+        }
+    }
+
+    public static void CreateShortcuts()
+    {
+        string app = Path.Combine(_path, AppPlatform.GetName());
+        Shortcut.Create("NX Editor", Location.Application, app, "nxe");
+        Shortcut.Create("NX Editor Launcher", Location.Application, _launcher, "nxe");
+        Shortcut.Create("NX Editor", Location.Desktop, app, "nxe");
+    }
 }
