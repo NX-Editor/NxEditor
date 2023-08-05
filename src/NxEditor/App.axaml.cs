@@ -6,7 +6,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Models;
-using HarfBuzzSharp;
 using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
