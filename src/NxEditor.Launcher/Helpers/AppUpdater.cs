@@ -80,8 +80,8 @@ public class AppUpdater
     private static void CopyLauncher()
     {
         string? exe = Process.GetCurrentProcess().MainModule?.FileName;
-        if (exe is not null && File.Exists(exe)) {
-            File.Copy(exe, _launcher);
+        if (exe is not null && File.Exists(exe) && !exe.SequenceEqual(_launcher)) {
+            File.Copy(exe, _launcher, true);
         }
     }
 
