@@ -11,6 +11,7 @@ using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase;
+using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
 using System.Runtime.CompilerServices;
 
@@ -38,6 +39,7 @@ public partial class App : Application
             Config.SetTheme(Config.Shared.Theme);
 
             desktop.MainWindow = ShellViewModel.Shared.View;
+            DialogBox.SetViewRoot(ShellViewModel.Shared.View.DropClient);
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             Frontend.Register(visualRoot?.Clipboard!);

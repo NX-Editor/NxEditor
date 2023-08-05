@@ -6,8 +6,8 @@ using ConfigFactory.Core.Attributes;
 using NxEditor.Attributes;
 using NxEditor.Core.Extensions;
 using NxEditor.Generators;
+using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
-using NxEditor.ViewModels.Dialogs;
 using System.Text;
 
 namespace NxEditor.Models.Menus;
@@ -188,7 +188,7 @@ public class ShellViewMenu
     [Menu("About", "About", "F12", "fa-solid fa-circle-info")]
     public static async Task About()
     {
-        await new ContentDialog {
+        await new DialogBox {
             Title = "About",
             Content = new StackPanel {
                 Spacing = 5,
