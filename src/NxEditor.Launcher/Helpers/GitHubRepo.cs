@@ -11,12 +11,19 @@ public static class GitHubRepo
     public static async Task<(Stream stream, string tag)> GetRelease(long repoId, string assetName)
     {
         IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(repoId);
-        Release latest = releases[0];
+
+        Release? latest = null;
+        ReleaseAsset? asset = null;
+
+        int index = -1;
+        while (asset == null || latest == null) {
+            index++;
+            latest = releases[index];
+            asset = latest.Assets.Where(x => x.Name == assetName).FirstOrDefault();
+        }
 
         using HttpClient client = new();
-        return (await client.GetStreamAsync(latest.Assets
-            .Where(x => x.Name == assetName)
-            .First().BrowserDownloadUrl), latest.TagName);
+        return (await client.GetStreamAsync(asset.BrowserDownloadUrl), latest.TagName);
     }
 
     public static async Task<byte[]> GetAsset(string org, string repo, string assetPath)
