@@ -10,6 +10,7 @@ public class MenuAttribute : Attribute
     public string HotKey { get; set; }
     public string? Icon { get; set; }
     public bool IsSeparator { get; set; } = false;
+    public string? GetCollectionMethodName { get; set; }
 
     [SetsRequiredMembers]
     public MenuAttribute(string name, string path, string? hotkey = null, string? icon = null)

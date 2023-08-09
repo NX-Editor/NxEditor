@@ -8,6 +8,7 @@ using NxEditor.Core.Extensions;
 using NxEditor.Generators;
 using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace NxEditor.Models.Menus;
@@ -51,10 +52,12 @@ public class ShellViewMenu
         }
     }
 
-    [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true)]
-    public static void Recent(string path)
+    [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true, GetCollectionMethodName = "GetRecentFilesCollection")]
+    public static void Recent(MenuItem item)
     {
-        EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+        if (item.Tag is string path && File.Exists(path)) {
+            EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+        }
     }
 
     [Menu("Clear Recent", "File", icon: "fa-regular fa-circle-xmark")]
@@ -217,4 +220,7 @@ public class ShellViewMenu
             }
         }.ShowAsync();
     }
+
+    public ObservableCollection<MenuItem> GetRecentFilesCollection()
+        => RecentFiles.Shared;
 }

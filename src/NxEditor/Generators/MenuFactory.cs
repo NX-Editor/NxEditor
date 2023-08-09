@@ -2,150 +2,160 @@
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.Attributes;
-using NxEditor.Models;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace NxEditor.Generators;
 
-public class MenuFactory
+public class MenuFactory : IMenuFactory
 {
-    private static ShellView? _visualRoot;
-    public static ObservableCollection<Control>? ItemsSource { get; set; }
+    private readonly TopLevel? _topLevel;
+    private readonly Dictionary<Type, List<Control>> _groups = new();
+    private ItemsControl? _parent;
 
-    public static void Init(ShellView visualRoot)
+    public ObservableCollection<Control> Items { get; set; } = new();
+
+    public MenuFactory(TopLevel? topLevel)
     {
-        _visualRoot = visualRoot;
+        _topLevel = topLevel;
     }
 
-    public static ObservableCollection<Control> Generate<T>() => Generate<T>(default);
-    public static ObservableCollection<Control> Generate<T>(T? model)
+    /// <summary>
+    /// Removes all items added by the provided type (<typeparamref name="T"/>)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public IMenuFactory Prepend<T>() where T : class
     {
-        // Filter the ViewModel functions
-        IEnumerable<MethodInfo> functions = typeof(T).GetMethods().Where(x => x.GetCustomAttributes<MenuAttribute>().Any());
+        if (_groups.TryGetValue(typeof(T), out List<Control>? group)) {
+            foreach (var item in group) {
+                if (item.Parent is ItemsControl itemsControl) {
+                    try {
+                        itemsControl.Items.Remove(item);
+                    }
+                    catch {
+                        Items.Remove(item);
+                    }
+                }
+            }
 
-        // Define a new dynamic dictionary object to
-        // store the sorted menu functions
-        Dictionary<string, dynamic> pseudoMenu = new();
+            _groups.Remove(typeof(T));
+        }
 
-        // Iterate the sorted functions and organize
-        // functions by the Path property
-        foreach (var func in functions) {
+        return this;
+    }
 
-            // Store the menu attribute data
-            var menu = func.GetCustomAttribute<MenuAttribute>()!;
+    /// <summary>
+    /// Creates the menu stack from the provided <paramref name="source"/> model.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    public IMenuFactory Append<T>(T source) where T : class
+    {
+        List<Control> group = _groups[typeof(T)] = new();
+        foreach ((var info, var attribute) in Collect<T>()) {
+            AppendItem(source, info, attribute, group);
+            _parent = null;
+        }
 
-            // Null check the path
-            if (menu.Path == null) {
-                pseudoMenu.Add(func.Name, func);
+        return this;
+    }
+
+    private void AppendItem<T>(T source, MethodInfo info, MenuAttribute attribute, List<Control> group) where T : class
+    {
+        SetParentFromPath(attribute.Path, group);
+
+        KeyGesture? hotKey = string.IsNullOrEmpty(attribute.HotKey)
+            ? null : KeyGesture.Parse(attribute.HotKey);
+
+        if (attribute.IsSeparator) {
+            Separator separator = new();
+            _parent?.Items.Add(separator);
+            group.Add(separator);
+        }
+
+        MenuItem item = new() {
+            Header = attribute.Name,
+            Icon = new Projektanker.Icons.Avalonia.Icon {
+                Value = attribute.Icon
+            },
+            Classes = {
+                "MenuFactor-MenuItem"
+            },
+            InputGesture = hotKey
+        };
+
+        _parent?.Items.Add(item);
+        group.Add(item);
+
+        if (typeof(T).GetMethod(attribute.GetCollectionMethodName ?? "")?.Invoke(source, null) is ObservableCollection<MenuItem> collection) {
+            item.ItemsSource = collection;
+            collection.CollectionChanged += (s, e) => {
+                if (e.NewItems is IList items) {
+                    ProcessNewItems(source, items, info);
+                }
+            };
+
+            return;
+        }
+
+        item.Command = new AsyncRelayCommand(async () => {
+            if (info.Invoke(source, null) is Task task) {
+                await task;
+            }
+        });
+
+        if (hotKey != null) {
+            _topLevel?.RegisterHotKey(hotKey, attribute.Path, item.Command);
+        }
+    }
+
+    private static (MethodInfo, MenuAttribute)[] Collect<T>() where T : class
+    {
+        return typeof(T).GetMethods()
+            .Select(x => (x, attribute: x.GetCustomAttribute<MenuAttribute>()!))
+            .Where(x => x.attribute != null)
+            .ToArray();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void ProcessNewItems<T>(T source, IList items, MethodInfo info) where T : class
+    {
+        foreach (var item in items) {
+            if (item is MenuItem menuItem) {
+                menuItem.Command = new AsyncRelayCommand(async () => {
+                    if (info.Invoke(source, new object?[] { menuItem }) is Task task) {
+                        await task;
+                    }
+                });
+            }
+        }
+    }
+
+    private void SetParentFromPath(string path, List<Control> group)
+    {
+        foreach (var part in path.Replace('\\', '/').Split('/')) {
+            MenuItem item = new() {
+                Header = part,
+                Classes = {
+                    "MenuFactor-MenuItem"
+                }
+            };
+
+            if (_parent == null) {
+                item.Classes.Add("MenuFactor-TopLevel");
+            }
+
+            IEnumerable<object> source = (IEnumerable<object>?)_parent?.Items ?? Items;
+            if (source.Select(x => x as MenuItem).Where(x => x != null && (string?)x.Header == part).FirstOrDefault() is MenuItem existingItem) {
+                _parent = existingItem;
                 continue;
             }
 
-            // Store the current dictionary position
-            Dictionary<string, dynamic> dictPos = pseudoMenu;
-
-            // Split the path by '.' as a separator
-            // and create the required dicts for
-            // each "folder" in the path
-            foreach (var folder in menu.Path.Split('/')) {
-                if (!dictPos.ContainsKey(folder)) {
-                    dictPos.Add(folder, new Dictionary<string, dynamic>());
-                }
-
-                dictPos = dictPos[folder];
-            }
-
-            // Add the last item in the tree to
-            // the current dictionary
-            dictPos.Add(func.Name, func);
+            (source as IList)?.Add(_parent = item);
+            group.Add(item);
         }
-
-        return ItemsSource = SetChildItems(pseudoMenu, model);
-    }
-
-    private static ObservableCollection<Control> SetChildItems<T>(Dictionary<string, dynamic> data, T? obj)
-    {
-        // Define the root list
-        ObservableCollection<Control> itemsRoot = new();
-
-        foreach ((var name, var childData) in data) {
-            MenuItem child;
-
-            if (childData is MethodInfo func) {
-
-                var menu = func.GetCustomAttribute<MenuAttribute>()!;
-                if (menu.IsSeparator) {
-                    itemsRoot.Add(new Separator());
-                }
-
-                KeyGesture? shortcut = string.IsNullOrEmpty(menu.HotKey) ? null : KeyGesture.Parse(menu.HotKey);
-
-                var command = new RelayCommand(() => {
-                    try {
-                        if (ShellView.MainMenu?.Any(x => x.Name == $"MenuItem__{menu.PathRoot()}") == true) {
-                            func.Invoke(obj, Array.Empty<object>());
-                        }
-                    }
-                    catch (Exception ex) {
-                        App.Log(ex, func.Name);
-                    }
-                });
-
-                child = new() {
-                    Header = menu.Name ?? func.Name,
-                    Icon = new Projektanker.Icons.Avalonia.Icon() { Value = menu.Icon },
-                    InputGesture = shortcut!,
-                    Height = (menu.Name ?? func.Name).StartsWith("_") ? 30 : double.NaN,
-                    Classes = {
-                        "MenuFactor-MenuItem"
-                    },
-                    Command = command
-                };
-
-                if (shortcut != null) {
-                    _visualRoot?.RegisterHotKey(shortcut, menu.Path, command);
-                }
-
-                // TODO: What the heck is this?
-                if (func.Name == "Recent") {
-                    child.ItemsSource = RecentFiles.Shared;
-                    RecentFiles.Shared.CollectionChanged += (s, e) => {
-                        if (e.NewItems != null) {
-                            foreach (var item in e.NewItems) {
-                                if (item is MenuItem menuItem) {
-                                    menuItem.Command = new RelayCommand(() => {
-                                        if (File.Exists(menuItem.Tag as string)) {
-                                            func.Invoke(obj, new object?[] {
-                                                menuItem.Tag
-                                            });
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    };
-
-                    RecentFiles.Shared.Load();
-                }
-            }
-            else if (childData is Dictionary<string, dynamic> dict) {
-                child = new() {
-                    Name = $"MenuItem__{name}",
-                    Header = name,
-                    ItemsSource = SetChildItems(dict, obj),
-                    Classes = {
-                        "MenuFactor-TopLevel",
-                        "MenuFactor-MenuItem"
-                    }
-                };
-            }
-            else {
-                throw new ArgumentException($"The passed type '{data.GetType()}' was not in the expected format.");
-            }
-
-            itemsRoot.Add(child);
-        }
-
-        return itemsRoot;
     }
 }

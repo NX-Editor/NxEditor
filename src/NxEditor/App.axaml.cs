@@ -8,6 +8,7 @@ using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Models;
 using NxEditor.Core.Components;
 using NxEditor.Generators;
+using NxEditor.Models;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase;
 using NxEditor.PluginBase.Common;
@@ -39,13 +40,19 @@ public partial class App : Application
 
             desktop.MainWindow = ShellViewModel.Shared.View;
             DialogBox.SetViewRoot(ShellViewModel.Shared.View.DropClient);
+            RecentFiles.Shared.Load();
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
+            MenuFactory menu = new(visualRoot);
+
+            ShellViewModel.Shared.View.RootMenu.ItemsSource = menu.Items;
+            menu.Append(new ShellViewMenu());
+
+            Frontend.Register<IMenuFactory>(menu);
             Frontend.Register(visualRoot?.Clipboard!);
             Frontend.Register(
                 BrowserDialog.StorageProvider = visualRoot?.StorageProvider!
             );
-
 
             desktop.MainWindow.Loaded += (s, e) => {
                 _notificationManager = new(visualRoot) {

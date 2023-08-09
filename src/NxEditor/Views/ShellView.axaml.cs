@@ -3,23 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using NxEditor.Generators;
-using NxEditor.Models.Menus;
 using NxEditor.PluginBase.Models;
-using System.Collections.ObjectModel;
 
 namespace NxEditor.Views;
 public partial class ShellView : Window
 {
-    public static ObservableCollection<Control>? MainMenu { get; private set; }
-    public static int MenuOverflow { get; set; } = 0;
-
     public ShellView()
     {
         InitializeComponent();
-        MenuFactory.Init(this);
-        // TODO: this is kinda stupid, refactor the MenuFactor to avoid this weird dependency injection method
-        MenuFactory.ItemsSource = MainMenu = MenuFactory.Generate<ShellViewMenu>();
 
         Minimize.Click += (s, e) => WindowState = WindowState.Minimized;
         Fullscreen.Click += (s, e) => WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
@@ -58,20 +49,9 @@ public partial class ShellView : Window
             }
         };
 
-        RootMenu.ItemsSource = MainMenu;
-
         DropClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
         DropClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
-    }
-
-    public static void ClearOverflowMenu()
-    {
-        for (int i = 0; i < MenuOverflow; i++) {
-            MainMenu?.RemoveAt(MainMenu.Count - 1);
-        }
-
-        MenuOverflow = 0;
     }
 
     private bool IsInResizeBorder(PointerEventArgs e, out WindowEdge edge)
