@@ -39,13 +39,6 @@
                    Margin="4"
                    IsHitTestVisible="False"
                    Source="/Assets/icon.ico" />
-            <TextBlock Grid.ColumnSpan="4"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontFamily="{StaticResource Ubuntu}"
-                       FontSize="14"
-                       IsHitTestVisible="False"
-                       Text="{x:Static app:App.Title}" />
             <Menu Name="RootMenu"
                   Grid.Column="1"
                   Height="30"
@@ -118,7 +111,7 @@
         </Border>
 
         <Grid Grid.Row="2"
-              ColumnDefinitions="Auto,Auto,*,Auto"
+              ColumnDefinitions="Auto,Auto,*,Auto,Auto"
               IsHitTestVisible="False">
             <Border Grid.ColumnSpan="10"
                     Background="{DynamicResource SystemAccentColor}"
@@ -130,6 +123,12 @@
                        FontFamily="{StaticResource UbuntuMono}"
                        Text="{Binding Status, Source={x:Static plugin:StatusModal.Shared}}" />
             <TextBlock Grid.Column="3"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource Ubuntu}"
+                       FontSize="12"
+                       Text="{x:Static app:App.Title}" />
+            <TextBlock Grid.Column="4"
                        Margin="5,0"
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource UbuntuMono}"
