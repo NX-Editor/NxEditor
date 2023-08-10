@@ -23,13 +23,16 @@ public class MenuFactory : IMenuFactory
     }
 
     /// <summary>
-    /// Removes all items added by the provided type (<typeparamref name="T"/>)
+    /// Removes all items added by the provided type
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public IMenuFactory Prepend<T>() where T : class
+    public IMenuFactory Prepend<T>() where T : class => Prepend(typeof(T));
+
+    /// <inheritdoc cref="Prepend{T}"/>
+    public IMenuFactory Prepend(Type type)
     {
-        if (_groups.TryGetValue(typeof(T), out List<Control>? group)) {
+        if (_groups.TryGetValue(type, out List<Control>? group)) {
             foreach (var item in group) {
                 if (item.Parent is ItemsControl itemsControl) {
                     try {
@@ -41,7 +44,7 @@ public class MenuFactory : IMenuFactory
                 }
             }
 
-            _groups.Remove(typeof(T));
+            _groups.Remove(type);
         }
 
         return this;
@@ -52,18 +55,22 @@ public class MenuFactory : IMenuFactory
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
-    public IMenuFactory Append<T>(T source) where T : class
+    public IMenuFactory Append<T>(T source) where T : class => Append((object)source);
+
+    /// <inheritdoc cref="Append{T}(T)"/>
+    public IMenuFactory Append(object source)
     {
-        List<Control> group = _groups[typeof(T)] = new();
-        foreach ((var info, var attribute) in Collect<T>()) {
-            AppendItem(source, info, attribute, group);
+        Type type = source.GetType();
+        List<Control> group = _groups[type] = new();
+        foreach ((var info, var attribute) in Collect(type)) {
+            AppendItem(type, source, info, attribute, group);
             _parent = null;
         }
 
         return this;
     }
 
-    private void AppendItem<T>(T source, MethodInfo info, MenuAttribute attribute, List<Control> group) where T : class
+    private void AppendItem(Type type, object source, MethodInfo info, MenuAttribute attribute, List<Control> group)
     {
         SetParentFromPath(attribute.Path, group);
 
@@ -90,7 +97,7 @@ public class MenuFactory : IMenuFactory
         _parent?.Items.Add(item);
         group.Add(item);
 
-        if (typeof(T).GetMethod(attribute.GetCollectionMethodName ?? "")?.Invoke(source, null) is ObservableCollection<MenuItem> collection) {
+        if (type.GetMethod(attribute.GetCollectionMethodName ?? "")?.Invoke(source, null) is ObservableCollection<MenuItem> collection) {
             item.ItemsSource = collection;
             collection.CollectionChanged += (s, e) => {
                 if (e.NewItems is IList items) {
@@ -112,16 +119,16 @@ public class MenuFactory : IMenuFactory
         }
     }
 
-    private static (MethodInfo, MenuAttribute)[] Collect<T>() where T : class
+    private static (MethodInfo, MenuAttribute)[] Collect(Type type)
     {
-        return typeof(T).GetMethods()
+        return type.GetMethods()
             .Select(x => (x, attribute: x.GetCustomAttribute<MenuAttribute>()!))
             .Where(x => x.attribute != null)
             .ToArray();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void ProcessNewItems<T>(T source, IList items, MethodInfo info) where T : class
+    private static void ProcessNewItems(object source, IList items, MethodInfo info)
     {
         foreach (var item in items) {
             if (item is MenuItem menuItem) {
