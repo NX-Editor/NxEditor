@@ -61,9 +61,11 @@ public partial class App : Application
                     Margin = new(0, 0, 4, 0)
                 };
 
-#if WIN_X64 && RELEASE
-                Core.Extensions.ConsoleExtension.SetWindowMode(
-                    Core.Extensions.WindowMode.Hidden);
+#if RELEASE
+                if (OperatingSystem.IsWindows()) {
+                    Core.Extensions.ConsoleExtension.SetWindowMode(
+                        Core.Extensions.WindowMode.Hidden);
+                }
 #endif
             };
 
@@ -83,7 +85,7 @@ public partial class App : Application
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args.Where(File.Exists)) {
-                    EditorManager.Shared.TryLoadEditor(new FileHandle(arg));
+                    await EditorManager.Shared.TryLoadEditor(new FileHandle(arg));
                 }
             }
         }

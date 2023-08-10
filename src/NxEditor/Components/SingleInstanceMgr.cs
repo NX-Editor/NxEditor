@@ -6,9 +6,9 @@ namespace NxEditor.Components;
 public static class SingleInstanceMgr
 {
     private static readonly string _appId = "NX-Editor(cf981f5b-5063-46a3-9e98-219f25ec0005)";
-    private static Action<string[]>? _attach;
+    private static Func<string[], Task>? _attach;
 
-    public static bool Start(string[] args, Action<string[]> attach)
+    public static bool Start(string[] args, Func<string[], Task> attach)
     {
         _attach = attach;
 
@@ -31,7 +31,7 @@ public static class SingleInstanceMgr
         return false;
     }
 
-    public static void StartServerListener()
+    public static async Task StartServerListener()
     {
         NamedPipeServerStream server = new(_appId);
         server.WaitForConnection();
@@ -44,10 +44,12 @@ public static class SingleInstanceMgr
             }
 
             if (args.Length > 0) {
-                _attach?.Invoke(args);
+                if (_attach?.Invoke(args) is Task task) {
+                    await task;
+                }
             }
         }
 
-        StartServerListener();
+        await StartServerListener();
     }
 }

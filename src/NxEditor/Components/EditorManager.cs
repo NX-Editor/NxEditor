@@ -14,10 +14,10 @@ public class EditorManager : IEditorManager
 
     public IEditor? Current => ShellDockFactory.Current() as IEditor;
 
-    public bool TryLoadEditor(IFileHandle handle)
+    public async Task<bool> TryLoadEditor(IFileHandle handle)
     {
         try {
-            LoadEditor(handle);
+            await LoadEditor(handle);
             return true;
         }
         catch (Exception ex) {
@@ -27,7 +27,7 @@ public class EditorManager : IEditorManager
         return false;
     }
 
-    public void LoadEditor(IFileHandle handle)
+    public async Task LoadEditor(IFileHandle handle)
     {
         App.Log($"Processing {handle.Name}");
 
@@ -35,7 +35,7 @@ public class EditorManager : IEditorManager
             return;
         }
 
-        IFormatService service = ServiceLoader.Shared
+        IFormatService service = await ServiceLoader.Shared
             .RequestService(handle);
 
         if (service is IEditor editor) {

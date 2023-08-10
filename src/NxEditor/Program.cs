@@ -36,7 +36,10 @@ internal class Program
         }
 
         PluginManager.RegisterExtensions();
-        // await Console.Out.WriteLineAsync("Processing Arguments...");
+        Task.Run(async () => {
+            await Console.Out.WriteLineAsync("Processing arguments...");
+            // Run command processor
+        }).ConfigureAwait(false).GetAwaiter().GetResult();
 
         return;
 
@@ -44,11 +47,11 @@ internal class Program
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
-    public static void Attach(string[] args)
+    public static async Task Attach(string[] args)
     {
-        Dispatcher.UIThread.InvokeAsync(() => {
+        await Dispatcher.UIThread.InvokeAsync(async () => {
             ShellViewModel.Shared.View?.Activate();
-            EditorManager.Shared.TryLoadEditor(new FileHandle(args[0]));
+            await EditorManager.Shared.TryLoadEditor(new FileHandle(args[0]));
         });
     }
 

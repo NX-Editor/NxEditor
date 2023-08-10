@@ -23,7 +23,7 @@ public class ShellViewMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (!EditorManager.Shared.TryLoadEditor(new FileHandle(path))) {
+            if (!await EditorManager.Shared.TryLoadEditor(new FileHandle(path))) {
                 // TODO: throw message dialog
             }
         }
@@ -53,10 +53,10 @@ public class ShellViewMenu
     }
 
     [Menu("Recent", "File", icon: "fa-solid fa-clock-rotate-left", IsSeparator = true, GetCollectionMethodName = "GetRecentFilesCollection")]
-    public static void Recent(MenuItem item)
+    public static async Task Recent(MenuItem item)
     {
         if (item.Tag is string path && File.Exists(path)) {
-            EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+            await EditorManager.Shared.TryLoadEditor(new FileHandle(path));
         }
     }
 
@@ -221,6 +221,6 @@ public class ShellViewMenu
         }.ShowAsync();
     }
 
-    public ObservableCollection<MenuItem> GetRecentFilesCollection()
+    public static ObservableCollection<MenuItem> GetRecentFilesCollection()
         => RecentFiles.Shared;
 }
