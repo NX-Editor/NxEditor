@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
-using NxEditor.Attributes;
+using NxEditor.PluginBase.Attributes;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reflection;
