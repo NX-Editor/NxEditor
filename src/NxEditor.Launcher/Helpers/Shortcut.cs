@@ -62,7 +62,7 @@ public class Shortcut
             link.SetPath(Target);
             link.SetIconLocation(Target, 0);
             link.SetWorkingDirectory(Path.GetDirectoryName(Target) ?? location);
-        
+
             IPersistFile file = (IPersistFile)link;
             file.Save(Path.Combine(location, $"{Name}.lnk"), false);
         }
