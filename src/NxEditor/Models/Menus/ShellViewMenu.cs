@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Core.Attributes;
@@ -181,9 +182,44 @@ public class ShellViewMenu
     // About
 
     [Menu("Help", "About", "F1", "fa-solid fa-handshake-angle")]
-    public static void Help()
+    public static async Task Help()
     {
-        throw new NotImplementedException();
+        await new DialogBox {
+            Title = "Help!",
+            IsSecondaryButtonVisible = false,
+            Content = new StackPanel {
+                Spacing = 5,
+                Children = {
+                    new TextBlock {
+                        Margin = new(0, 0, 0, 15),
+                        Text = """
+                        Eventually I'll have documentation, but for now
+                        you can just message me on Discord or GitHub.
+                        """
+                    },
+                    new StackPanel {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 15,
+                        Children = {
+                            new Button {
+                                Content = "Discord Server",
+                                Classes = { "Hyperlink" },
+                                Command = new RelayCommand(async () => {
+                                    await BrowserExtension.OpenUrl("https://discord.gg/8Saj6tTkNB");
+                                })
+                            },
+                            new Button {
+                                Content = "NX-Editor GitHub",
+                                Classes = { "Hyperlink" },
+                                Command = new RelayCommand(async () => {
+                                    await BrowserExtension.OpenUrl("https://github.com/orgs/NX-Editor/discussions/new/choose");
+                                })
+                            }
+                        }
+                    }
+                }
+            }
+        }.ShowAsync();
     }
 
     [Menu("About", "About", "F12", "fa-solid fa-circle-info")]
