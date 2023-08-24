@@ -23,9 +23,7 @@ public class ShellViewMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            if (!await EditorManager.Shared.TryLoadEditor(new FileHandle(path))) {
-                // TODO: throw message dialog
-            }
+            await EditorManager.Shared.TryLoadEditor(new FileHandle(path));
         }
     }
 
