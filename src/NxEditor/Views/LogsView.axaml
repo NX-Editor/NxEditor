@@ -33,11 +33,6 @@
                                     <pi:Icon Value="fa-solid fa-copy" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Command="{Binding CopyMarkdown}" Header="Copy Markdown">
-                                <MenuItem.Icon>
-                                    <pi:Icon Value="fa-solid fa-brush" />
-                                </MenuItem.Icon>
-                            </MenuItem>
                         </ContextMenu>
                     </Border.ContextMenu>
                 </Border>
