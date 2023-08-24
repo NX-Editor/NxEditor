@@ -68,7 +68,7 @@ public class ShellViewMenu
     [Menu("Exit", "File", "Alt + F4", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
     public static void Exit()
     {
-
+        Environment.Exit(0);
     }
 
     // 
