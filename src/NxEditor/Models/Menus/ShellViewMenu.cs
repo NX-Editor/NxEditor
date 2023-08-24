@@ -65,6 +65,34 @@ public class ShellViewMenu
         RecentFiles.Shared.Clear();
     }
 
+    [Menu("Clear Editor Cache", "File", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
+    public static void ClearEditorCache()
+    {
+        if (Directory.Exists(EditorConfig.CacheFolder)) {
+            Directory.Delete(EditorConfig.CacheFolder, true);
+        }
+
+        App.Toast("Editor cache cleared successfully", "Clear Editor Cache", NotificationType.Success);
+    }
+
+    [Menu("Open Logs Folder", "File", "Ctrl + Alt + L", "fa-solid fa-arrow-up-right-from-square", IsSeparator = true)]
+    public static async Task OpenLogsFolder()
+    {
+        await BrowserExtension.OpenUrl(Logger.LogsPath);
+    }
+
+    [Menu("Clear Logs Folder", "File", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
+    public static void ClearLogsFolder()
+    {
+        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.yml")) {
+            if (file != Logger.CurrentLog) {
+                File.Delete(file);
+            }
+        }
+
+        App.Toast("Logs folder cleared successfully", "Clear Logs Folder", NotificationType.Success);
+    }
+
     [Menu("Exit", "File", "Alt + F4", "fa-solid fa-arrow-right-from-bracket", IsSeparator = true)]
     public static void Exit()
     {
@@ -122,60 +150,30 @@ public class ShellViewMenu
         await (EditorManager.Shared.Current?.FindAndReplace()).SafeInvoke();
     }
 
-    // 
-    // Tools
+    //
+    // View
 
-    [Menu("Settings", "Tools", "Ctrl + Alt + W", "fa-solid fa-cog")]
+    [Menu("Settings", "View", "Ctrl + Alt + W", "fa-solid fa-cog")]
     public static void Settings()
     {
         ShellDockFactory.AddDoc(ConfigViewModel.Shared);
     }
 
-    [Menu("Open Logs", "Tools", "Ctrl + L", "fa-solid fa-file-circle-check", IsSeparator = true)]
+    [Menu("Show/Hide Console", "View", "Ctrl + F11", "fa-solid fa-terminal", IsSeparator = true)]
+    public static void ShowHideConsole()
+    {
+        if (OperatingSystem.IsWindows()) {
+            ConsoleExtension.SwapWindowMode();
+        }
+        else {
+            App.Toast("This action is only supported on Win32 platforms", "OS Error", NotificationType.Error);
+        }
+    }
+
+    [Menu("Open Logs", "View", "Ctrl + L", "fa-solid fa-file-circle-check")]
     public static void OpenLogs()
     {
         ShellDockFactory.AddDoc(LogsViewModel.Shared);
-    }
-
-    [Menu("Open Logs Folder", "Tools", "Ctrl + Alt + L", "fa-solid fa-arrow-up-right-from-square")]
-    public static async Task OpenLogsFolder()
-    {
-        await BrowserExtension.OpenUrl(Logger.LogsPath);
-    }
-
-    [Menu("Clear Logs Folder", "Tools", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
-    public static void ClearLogsFolder()
-    {
-        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.yml")) {
-            if (file != Logger.CurrentLog) {
-                File.Delete(file);
-            }
-        }
-
-        App.Toast("Logs folder cleared successfully", "Clear Logs Folder", NotificationType.Success);
-    }
-
-    [Menu("Clear Editor Cache", "Tools", "Ctrl + F8", "fa-regular fa-circle-xmark", IsSeparator = true)]
-    public static void ClearEditorCache()
-    {
-        if (Directory.Exists(EditorConfig.CacheFolder)) {
-            Directory.Delete(EditorConfig.CacheFolder, true);
-        }
-
-        App.Toast("Editor cache cleared successfully", "Clear Editor Cache", NotificationType.Success);
-    }
-
-    //
-    // View
-
-    [Menu("Show/Hide Console", "View", "Ctrl + F12", "fa-solid fa-terminal")]
-    public static void ShowHideConsole()
-    {
-#if WIN_X64
-        ConsoleExtension.SwapWindowMode();
-#else
-        App.Toast("This action is only supported on Win32 platforms", "OS Error", NotificationType.Error);
-#endif
     }
 
     // 
@@ -222,7 +220,7 @@ public class ShellViewMenu
         }.ShowAsync();
     }
 
-    [Menu("About", "About", "F12", "fa-solid fa-circle-info")]
+    [Menu("About", "About", "Ctrl + F12", "fa-solid fa-circle-info")]
     public static async Task About()
     {
         await new DialogBox {

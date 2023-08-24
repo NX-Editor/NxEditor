@@ -11,7 +11,6 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <TargetFramework>net7.0</TargetFramework>
     <TrimeMode>link</TrimeMode>
-    <DefineConstants Condition="'$(RuntimeIdentifier)'=='win-x64'">WIN_X64</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
