@@ -40,13 +40,14 @@ public partial class App : Application
 
             desktop.MainWindow = ShellViewModel.Shared.View;
             DialogBox.SetViewRoot(ShellViewModel.Shared.View.DropClient);
-            RecentFiles.Shared.Load();
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             MenuFactory menu = new(visualRoot);
 
             ShellViewModel.Shared.View.RootMenu.ItemsSource = menu.Items;
             menu.Append(new ShellViewMenu());
+
+            RecentFiles.Shared.Load();
 
             Frontend.Register<IMenuFactory>(menu);
             Frontend.Register(visualRoot?.Clipboard!);
