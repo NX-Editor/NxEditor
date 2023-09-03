@@ -16,7 +16,12 @@ public partial class LogEntry : ObservableObject
 
     public async Task Copy()
     {
-        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync($"{Message}") is Task task) {
+        if (ShellViewModel.Shared.View?.Clipboard?.SetTextAsync(Message != Meta ? $"""
+            **{Message}**
+            ```
+            {Meta}
+            ```
+            """ : Message) is Task task) {
             await task;
         }
     }
