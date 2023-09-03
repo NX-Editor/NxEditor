@@ -231,14 +231,17 @@ public class ShellViewMenu
                 Children = {
                     new TextBlock {
                         Text = "Nintendo Extended Editor (NX-Editor)",
-                        FontWeight = Avalonia.Media.FontWeight.Bold
+                        FontWeight = Avalonia.Media.FontWeight.Bold,
+                        FontSize = 18
                     },
                     new TextBlock {
                         Text = """
-                        A general editor for editing first-party
-                        Nintendo formats. Primary aimed at support
+                        A general purpose file editor for first-party
+                        Nintendo formats. Primarily aimed at support
                         for Tears of the Kingdom files and more
                         modern Nintendo Switch files.
+
+                        © 2023 Arch Leaders, AGPL-3.0
                         """
                     },
                     new Button {
