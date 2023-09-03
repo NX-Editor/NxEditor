@@ -1,9 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
+using NxEditor.PluginBase;
 using NxEditor.PluginBase.Attributes;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -109,8 +111,14 @@ public class MenuFactory : IMenuFactory
         }
 
         item.Command = new AsyncRelayCommand(async () => {
-            if (info.Invoke(source, null) is Task task) {
-                await task;
+            try {
+                if (info.Invoke(source, null) is Task task) {
+                    await task;
+                }
+            }
+            catch (Exception ex) {
+                StatusModal.Set($"Failed to execute action: {attribute.Name}", "fa-regular fa-circle-xmark", isWorkingStatus: false, temporaryStatusTime: 3);
+                Trace.WriteLine($"{ex} - {ex.Message}");
             }
         });
 
