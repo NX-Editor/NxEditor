@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
@@ -35,6 +36,7 @@ public partial class App : Application
         Frontend.Register<IEditorManager>(EditorManager.Shared);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            BindingPlugins.DataValidators.RemoveAt(0);
             ShellViewModel.Shared.InitDock();
             Config.SetTheme(Config.Shared.Theme);
 
