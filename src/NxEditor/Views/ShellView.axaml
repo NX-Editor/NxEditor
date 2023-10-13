@@ -17,12 +17,12 @@
         d:DesignWidth="800"
         x:DataType="local:ShellViewModel"
         Background="{DynamicResource SystemChromeLowColor}"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/icon.ico"
         SystemDecorations="BorderOnly"
         mc:Ignorable="d">
-    <Grid Name="PointerClient"
-          Background="Transparent"
-          RowDefinitions="30,*,20">
+    <Grid Name="PointerClient" RowDefinitions="30,*,20">
 
         <Border Name="ChromeClient"
                 Background="{DynamicResource SystemChromeHighColor}"

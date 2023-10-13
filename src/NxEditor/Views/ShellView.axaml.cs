@@ -2,7 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Platform.Storage;
+using NxEditor.Core.Extensions;
 using NxEditor.PluginBase.Models;
 
 namespace NxEditor.Views;
@@ -19,101 +21,24 @@ public partial class ShellView : Window
         };
 
         ChromeClient.PointerPressed += (s, e) => {
-            if (!IsInResizeBorder(e, out _)) {
-                BeginMoveDrag(e);
-            }
-        };
-
-        ResizeClient.PointerPressed += (s, e) => {
-            if (IsInResizeBorder(e, out WindowEdge edge)) {
-                BeginResizeDrag(edge, e);
-            }
-        };
-
-        PointerClient.PointerMoved += (s, e) => {
-            if (IsInResizeBorder(e, out WindowEdge edge) && e.Source is Border border && border.Name is "ResizeClient" or "ChromeClient" or "ChromeStack") {
-                ChromeStack.IsHitTestVisible = false;
-                Cursor = new(edge switch {
-                    WindowEdge.NorthWest => StandardCursorType.TopLeftCorner,
-                    WindowEdge.NorthEast => StandardCursorType.TopRightCorner,
-                    WindowEdge.SouthWest => StandardCursorType.BottomLeftCorner,
-                    WindowEdge.SouthEast => StandardCursorType.BottomRightCorner,
-                    WindowEdge.North or WindowEdge.South => StandardCursorType.SizeNorthSouth,
-                    WindowEdge.West or WindowEdge.East => StandardCursorType.SizeWestEast,
-                    _ => StandardCursorType.Arrow,
-                });
-            }
-            else {
-                ChromeStack.IsHitTestVisible = true;
-                Cursor = new(StandardCursorType.Arrow);
-            }
+            BeginMoveDrag(e);
         };
 
         DropClient.AddHandler(DragDrop.DragEnterEvent, DragEnterEvent);
         DropClient.AddHandler(DragDrop.DragLeaveEvent, DragLeaveEvent);
         DropClient.AddHandler(DragDrop.DropEvent, DragDropEvent);
-    }
 
-    private bool IsInResizeBorder(PointerEventArgs e, out WindowEdge edge)
-    {
-        const int boxSize = 5;
-        const int borderSize = 3;
-
-        if (WindowState == WindowState.FullScreen || WindowState == WindowState.Maximized) {
-            edge = 0;
-            return false;
-        }
-
-        Point pos = e.GetPosition(this);
-        if (pos.X <= boxSize && pos.Y <= boxSize) {
-            edge = WindowEdge.NorthWest;
-            return true;
-        }
-        else if (pos.X >= Bounds.Width - boxSize && pos.Y <= boxSize) {
-            edge = WindowEdge.NorthEast;
-            return true;
-        }
-        if (pos.X <= boxSize && pos.Y >= Bounds.Height - boxSize) {
-            edge = WindowEdge.SouthWest;
-            return true;
-        }
-        else if (pos.X >= Bounds.Width - boxSize && pos.Y >= Bounds.Height - boxSize) {
-            edge = WindowEdge.SouthEast;
-            return true;
-        }
-        else if (pos.Y <= borderSize) {
-            edge = WindowEdge.North;
-            return true;
-        }
-        else if (pos.Y >= Bounds.Height - borderSize) {
-            edge = WindowEdge.South;
-            return true;
-        }
-        else if (pos.X <= borderSize) {
-            edge = WindowEdge.West;
-            return true;
-        }
-        else if (pos.X >= Bounds.Width - borderSize) {
-            edge = WindowEdge.East;
-            return true;
-        }
-
-        edge = 0;
-        return false;
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        if (change.Property == WindowStateProperty && change.NewValue is WindowState state) {
-            if (state == WindowState.Normal) {
-                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
+        this.GetPropertyChangedObservable(WindowStateProperty).AddClassHandler<Visual>((t, args) => {
+            if (args.GetNewValue<WindowState>() == WindowState.Maximized) {
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+                if (OperatingSystem.IsWindows()) {
+                    FixScreenSize();
+                }
             }
             else {
-                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = true);
+                ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
             }
-        }
-
-        base.OnPropertyChanged(change);
+        });
     }
 
     public void DragDropEvent(object? sender, DragEventArgs e)
@@ -145,5 +70,21 @@ public partial class ShellView : Window
     public void DragLeaveEvent(object? sender, DragEventArgs e)
     {
         DragFadeMask.IsVisible = false;
+    }
+
+    private void FixScreenSize()
+    {
+        Screen? screen = Screens.ScreenFromWindow(this);
+        if (screen != null) {
+            if (screen.WorkingArea.Height < ClientSize.Height * screen.Scaling) {
+                ClientSize = screen.WorkingArea.Size.ToSize(screen.Scaling);
+                if (Position.X < 0 || Position.Y < 0) {
+                    Position = screen.WorkingArea.Position;
+                    if (TryGetPlatformHandle() is IPlatformHandle platform) {
+                        Win32Extension.FixAfterMaximizing(platform.Handle, screen);
+                    }
+                }
+            }
+        }
     }
 }
