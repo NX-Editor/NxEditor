@@ -88,7 +88,7 @@ public partial class App : Application
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
                 foreach (var arg in desktop.Args.Where(File.Exists)) {
-                    await EditorManager.Shared.TryLoadEditor(new FileHandle(arg));
+                    await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(arg));
                 }
             }
         }

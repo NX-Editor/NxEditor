@@ -14,7 +14,7 @@ public class EditorManager : IEditorManager
 
     public IEditor? Current => ShellDockFactory.Current() as IEditor;
 
-    public async Task<bool> TryLoadEditor(IFileHandle handle)
+    public async Task<bool> TryLoadEditor(IEditorFile handle)
     {
         try {
             await LoadEditor(handle);
@@ -27,7 +27,7 @@ public class EditorManager : IEditorManager
         return false;
     }
 
-    public async Task LoadEditor(IFileHandle handle)
+    public async Task LoadEditor(IEditorFile handle)
     {
         App.Log($"Processing {handle.Name}");
 
@@ -39,10 +39,11 @@ public class EditorManager : IEditorManager
             .RequestService(handle);
 
         if (service is IEditor editor) {
-            _ = editor.Read();
+            _ = Task.Run(editor.Read);
+
             ShellDockFactory.AddDoc((Document)editor);
-            if (handle.FilePath is not null) {
-                RecentFiles.Shared.AddPath(handle.FilePath);
+            if (File.Exists(handle.Id)) {
+                RecentFiles.Shared.AddPath(handle.Id);
             }
 
             return;

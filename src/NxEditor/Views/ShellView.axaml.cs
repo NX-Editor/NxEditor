@@ -45,7 +45,7 @@ public partial class ShellView : Window
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (var path in paths.Select(x => x.Path.LocalPath)) {
-                _ = EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+                _ = EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(path));
             }
         }
 

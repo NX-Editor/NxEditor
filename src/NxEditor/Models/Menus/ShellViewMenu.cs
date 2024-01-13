@@ -24,7 +24,7 @@ public class ShellViewMenu
     {
         BrowserDialog dialog = new(BrowserMode.OpenFile, "Open File", "Any File:*.*", instanceBrowserKey: "open-file");
         if (await dialog.ShowDialog() is string path) {
-            await EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+            await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(path));
         }
     }
 
@@ -39,13 +39,13 @@ public class ShellViewMenu
     {
         string[]? supportedExtensions = EditorManager.Shared.Current?.ExportExtensions;
         StringBuilder extensionsFilterString = new();
-        if (supportedExtensions?.Any() == true) {
+        if (supportedExtensions?.Length > 0) {
             foreach (var ext in supportedExtensions) {
                 extensionsFilterString.Append(ext);
             }
         }
 
-        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorManager.Shared.Current?.Handle.FilePath), "save-file");
+        BrowserDialog dialog = new(BrowserMode.SaveFile, "Save File", $"{extensionsFilterString}Any File:*.*", Path.GetFileName(EditorManager.Shared.Current?.Handle.Name), "save-file");
         if (await dialog.ShowDialog() is string path) {
             EditorManager.Shared.Current?.Save(path);
         }
@@ -55,7 +55,7 @@ public class ShellViewMenu
     public static async Task Recent(MenuItem item)
     {
         if (item.Tag is string path && File.Exists(path)) {
-            await EditorManager.Shared.TryLoadEditor(new FileHandle(path));
+            await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(path));
         }
     }
 

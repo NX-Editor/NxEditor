@@ -1,8 +1,7 @@
 {
   "profiles": {
     "NxEditor": {
-      "commandName": "Project",
-      "commandLineArgs": "\"D:\\Bin\\RSTB\\Totk\\ResourceSizeTable.Product.111.rsizetable.zs\""
+      "commandName": "Project"
     }
   }
 }
