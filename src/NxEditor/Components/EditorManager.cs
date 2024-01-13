@@ -31,7 +31,7 @@ public class EditorManager : IEditorManager
     {
         App.Log($"Processing {handle.Name}");
 
-        if (ShellDockFactory.TryFocus(handle.FilePath ?? handle.Name, out IDockable? dock) && dock is IEditor) {
+        if (ShellDockFactory.TryFocus(handle.Id, out IDockable? dock) && dock is IEditor) {
             return;
         }
 
