@@ -22,11 +22,11 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.999-cibuild0040597-beta" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.5" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
     <PackageReference Include="Avalonia.Desktop" Version="11.1.999-cibuild0040597-beta" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.999-cibuild0040597-beta" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.999-cibuild0040597-beta" />
-    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.5" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0.5" />
     <PackageReference Include="Dock.Serializer" Version="11.0.0.5" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.0.1" />
