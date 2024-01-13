@@ -65,7 +65,6 @@
         </Style.Resources>
 
         <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded}" />
-        <Setter Property="IsSelected" Value="{ReflectionBinding IsSelected, Mode=TwoWay}" />
         <Setter Property="CornerRadius" Value="3" />
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="Template">
