@@ -9,7 +9,7 @@ public partial class LogsViewModel : StaticPage<LogsViewModel, LogsView>
     public LogsViewTraceListener TraceListener { get; }
 
     [ObservableProperty]
-    private ObservableCollection<LogEntry> _logTrace = new();
+    private ObservableCollection<LogEntry> _logTrace = [];
 
     [ObservableProperty]
     private LogEntry? _selected;

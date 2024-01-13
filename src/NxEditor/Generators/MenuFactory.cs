@@ -11,18 +11,13 @@ using System.Runtime.CompilerServices;
 
 namespace NxEditor.Generators;
 
-public class MenuFactory : IMenuFactory
+public class MenuFactory(TopLevel? topLevel) : IMenuFactory
 {
-    private readonly TopLevel? _topLevel;
-    private readonly Dictionary<Type, List<Control>> _groups = new();
+    private readonly TopLevel? _topLevel = topLevel;
+    private readonly Dictionary<Type, List<Control>> _groups = [];
     private ItemsControl? _parent;
 
-    public ObservableCollection<Control> Items { get; set; } = new();
-
-    public MenuFactory(TopLevel? topLevel)
-    {
-        _topLevel = topLevel;
-    }
+    public ObservableCollection<Control> Items { get; set; } = [];
 
     /// <summary>
     /// Removes all items added by the provided type
@@ -63,7 +58,7 @@ public class MenuFactory : IMenuFactory
     public IMenuFactory Append(object source)
     {
         Type type = source.GetType();
-        List<Control> group = _groups[type] = new();
+        List<Control> group = _groups[type] = [];
         foreach ((var info, var attribute) in Collect(type)) {
             AppendItem(type, source, info, attribute, group);
             _parent = null;
@@ -88,7 +83,7 @@ public class MenuFactory : IMenuFactory
         MenuItem item = new() {
             Header = attribute.Name,
             Icon = new Projektanker.Icons.Avalonia.Icon {
-                Value = attribute.Icon
+                Value = attribute.Icon ?? "fa-solid fa-crow"
             },
             Classes = {
                 "MenuFactor-MenuItem"
@@ -141,7 +136,7 @@ public class MenuFactory : IMenuFactory
         foreach (var item in items) {
             if (item is MenuItem menuItem) {
                 menuItem.Command = new AsyncRelayCommand(async () => {
-                    if (info.Invoke(source, new object?[] { menuItem }) is Task task) {
+                    if (info.Invoke(source, [menuItem]) is Task task) {
                         await task;
                     }
                 });

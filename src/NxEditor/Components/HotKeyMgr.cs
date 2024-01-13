@@ -5,14 +5,14 @@ namespace NxEditor.Components;
 
 public static class HotKeyMgr
 {
-    public static Dictionary<KeyGesture, bool> HotKeys { get; } = new();
-    public static Dictionary<string, List<KeyGesture>> HotKeyGroups { get; } = new();
+    public static Dictionary<KeyGesture, bool> HotKeys { get; } = [];
+    public static Dictionary<string, List<KeyGesture>> HotKeyGroups { get; } = [];
 
     public static void RegisterHotKey(this InputElement target, KeyGesture hotKey, string group, ICommand command)
     {
         if (HotKeys.TryAdd(hotKey, true)) {
             if (!HotKeyGroups.TryGetValue(group, out List<KeyGesture>? hotKeys)) {
-                hotKeys = new();
+                hotKeys = [];
             }
 
             hotKeys.Add(hotKey);

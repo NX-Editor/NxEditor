@@ -9,7 +9,7 @@ public class RecentFiles : ObservableCollection<MenuItem>
 {
     public static readonly string _path = Path.Combine(GlobalConfig.Shared.StorageFolder, "recent.json");
 
-    public static RecentFiles Shared { get; } = new();
+    public static RecentFiles Shared { get; } = [];
 
     public void AddPath(string path)
     {
@@ -36,7 +36,7 @@ public class RecentFiles : ObservableCollection<MenuItem>
         }
 
         using FileStream fs = File.OpenRead(_path);
-        List<string> paths = JsonSerializer.Deserialize<List<string>>(fs) ?? new();
+        List<string> paths = JsonSerializer.Deserialize<List<string>>(fs) ?? [];
 
         foreach (var path in paths.Where(File.Exists)) {
             Add(FromPath(path));
