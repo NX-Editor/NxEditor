@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using NxEditor.Core.Components;
 using NxEditor.PluginBase.Models;
@@ -50,7 +51,8 @@ internal class Program
     public static async Task Attach(string[] args)
     {
         await Dispatcher.UIThread.InvokeAsync(async () => {
-            ShellViewModel.Shared.View?.Activate();
+            ShellViewModel.Shared.View.WindowState = WindowState.Normal;
+            ShellViewModel.Shared.View.Activate();
             await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(args[0]));
         });
     }
