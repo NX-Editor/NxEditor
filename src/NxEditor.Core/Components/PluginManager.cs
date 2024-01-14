@@ -76,7 +76,7 @@ public static class PluginManager
     {
         return Directory.Exists(path) ? Directory
             .EnumerateFiles(path, "meta.json", SearchOption.AllDirectories)
-            .Select(PluginInfo.FromPath) : Array.Empty<PluginInfo>();
+            .Select(PluginInfo.FromPath) : [];
     }
 
     private static void LoadDirectory(string path)
