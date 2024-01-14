@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿#pragma warning disable SYSLIB1096 // TODO: Convert to 'GeneratedComInterface'
+
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace NxEditor.Launcher.Helpers.Win32;

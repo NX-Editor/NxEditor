@@ -7,6 +7,6 @@ public partial class ShellView : Window
     public ShellView()
     {
         InitializeComponent();
-        WindowChromeClient.PointerPressed += (s, e) => BeginMoveDrag(e);
+        Client.PointerPressed += (s, e) => BeginMoveDrag(e);
     }
 }

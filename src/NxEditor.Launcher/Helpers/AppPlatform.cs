@@ -2,7 +2,7 @@
 
 public class AppPlatform
 {
-    public static string GetName()
+    public static string GetExecutableName()
     {
         if (OperatingSystem.IsWindows()) {
             return "nxe.exe";
@@ -12,7 +12,7 @@ public class AppPlatform
         }
     }
 
-    public static string GetDownload()
+    public static string GetOsFileName()
     {
         if (OperatingSystem.IsWindows()) {
             return "win-x64.zip";

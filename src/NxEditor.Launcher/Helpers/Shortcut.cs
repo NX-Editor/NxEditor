@@ -8,20 +8,12 @@ public enum Location
     Application
 }
 
-public class Shortcut
+public class Shortcut(string name, Location location, string target, params string[] keywords)
 {
-    public string Name { get; set; }
-    public Location Location { get; set; }
-    public string Target { get; set; }
-    public string[] Keywords { get; set; }
-
-    public Shortcut(string name, Location location, string target, params string[] keywords)
-    {
-        Name = name;
-        Location = location;
-        Target = target;
-        Keywords = keywords;
-    }
+    public string Name { get; set; } = name;
+    public Location Location { get; set; } = location;
+    public string Target { get; set; } = target;
+    public string[] Keywords { get; set; } = keywords;
 
     public static void Create(string name, Location location, string target, params string[] keywords)
     {

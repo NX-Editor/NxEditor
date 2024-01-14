@@ -19,7 +19,7 @@ public class PluginUpdater
             return;
         }
 
-        (Stream stream, string tag) = await GitHubRepo.GetRelease(info.GitHubRepoId, AppPlatform.GetDownload());
+        (Stream stream, string tag) = await GitHubRepo.GetRelease(info.GitHubRepoId, AppPlatform.GetOsFileName());
         ZipArchive archive = new(stream);
         Directory.CreateDirectory(info.Folder);
         archive.ExtractToDirectory(info.Folder, true);

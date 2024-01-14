@@ -7,11 +7,16 @@ namespace NxEditor.Launcher.Helpers;
 
 public class AppUpdater
 {
-    private static readonly char pathEnvChar = Environment.OSVersion.Platform == PlatformID.Win32NT ? ';' : ':';
-    private static readonly string _download = AppPlatform.GetDownload();
-    private static readonly string _path = Path.Combine(GlobalConfig.StaticPath, "bin");
+    private const string APP_NAME = "NX Editor";
+    private const string LAUNCHER_NAME = "NX Editor Launcher";
+    private const string GITHUB_ORG = "NX-Editor";
+    private const string GITHUB_REPO = "NxEditor";
+
+    private static readonly char _pathEnvChar = OperatingSystem.IsWindows() ? ';' : ':';
+    private static readonly string _zipFileName = AppPlatform.GetOsFileName();
+    private static readonly string _outputPath = Path.Combine(GlobalConfig.StaticPath, "bin");
     private static readonly string _versionFile = Path.Combine(GlobalConfig.StaticPath, "version.json");
-    private static readonly string _launcher = Path.Combine(GlobalConfig.StaticPath, "NxEditor.Launcher.exe");
+    private static readonly string _launcherOutputPath = Path.Combine(GlobalConfig.StaticPath, "NxEditor.Launcher.exe");
 
     public static bool IsInstalled => File.Exists(_versionFile);
 
@@ -20,29 +25,29 @@ public class AppUpdater
         using FileStream fs = File.OpenRead(_versionFile);
         string version = JsonSerializer.Deserialize<string>(fs)!;
 
-        return await GitHubRepo.HasUpdate("NX-Editor", "NxEditor", version);
+        return await GitHubRepo.HasUpdate(GITHUB_ORG, GITHUB_REPO, version);
     }
 
     public static async Task Install(bool addToPath = true)
     {
-        CopyLauncher();
-        CreateShortcuts();
-        Directory.CreateDirectory(_path);
+        CopyRunningLauncherToOutput();
+        CreateDesktopShortcuts();
+        Directory.CreateDirectory(_outputPath);
 
-        (Stream stream, string tag) = await GitHubRepo.GetRelease("NX-Editor", "NxEditor", _download);
+        (Stream stream, string tag) = await GitHubRepo.GetRelease(GITHUB_ORG, GITHUB_REPO, _zipFileName);
         ZipArchive archive = new(stream);
-        archive.ExtractToDirectory(_path, true);
+        archive.ExtractToDirectory(_outputPath, true);
 
         using (FileStream fs = File.Create(_versionFile)) {
             await JsonSerializer.SerializeAsync(fs, tag);
         }
 
-        if (addToPath && Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) is string pathEnv && !pathEnv.Contains(_path)) {
-            if (!pathEnv.EndsWith(pathEnvChar)) {
-                pathEnv += pathEnvChar;
+        if (addToPath && Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) is string pathEnv && !pathEnv.Contains(_outputPath)) {
+            if (!pathEnv.EndsWith(_pathEnvChar)) {
+                pathEnv += _pathEnvChar;
             }
 
-            Environment.SetEnvironmentVariable("PATH", pathEnv + _path, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable("PATH", pathEnv + _outputPath, EnvironmentVariableTarget.User);
         }
     }
 
@@ -53,8 +58,8 @@ public class AppUpdater
                 File.Delete(_versionFile);
             }
 
-            if (Directory.Exists(_path)) {
-                Directory.Delete(_path, true);
+            if (Directory.Exists(_outputPath)) {
+                Directory.Delete(_outputPath, true);
             }
 
             string pluginsDirectory = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins");
@@ -67,7 +72,7 @@ public class AppUpdater
                 Directory.Delete(logsDirectory, true);
             }
 
-            DeleteShortcuts();
+            DeleteDesktopShortcuts();
         }
         catch (Exception ex) {
             Console.WriteLine(ex);
@@ -77,26 +82,26 @@ public class AppUpdater
         return Task.FromResult(true);
     }
 
-    private static void CopyLauncher()
+    private static void CopyRunningLauncherToOutput()
     {
         string? exe = Process.GetCurrentProcess().MainModule?.FileName;
-        if (exe is not null && File.Exists(exe) && !exe.SequenceEqual(_launcher)) {
-            File.Copy(exe, _launcher, true);
+        if (exe is not null && File.Exists(exe) && !exe.SequenceEqual(_launcherOutputPath)) {
+            File.Copy(exe, _launcherOutputPath, true);
         }
     }
 
-    public static void CreateShortcuts()
+    private static void CreateDesktopShortcuts()
     {
-        string app = Path.Combine(_path, AppPlatform.GetName());
-        Shortcut.Create("NX Editor", Location.Application, app, "nxe");
-        Shortcut.Create("NX Editor Launcher", Location.Application, _launcher, "nxe");
-        Shortcut.Create("NX Editor", Location.Desktop, app, "nxe");
+        string app = Path.Combine(_outputPath, AppPlatform.GetExecutableName());
+        Shortcut.Create(APP_NAME, Location.Application, app, "nxe");
+        Shortcut.Create(LAUNCHER_NAME, Location.Application, _launcherOutputPath, "nxe");
+        Shortcut.Create(APP_NAME, Location.Desktop, app, "nxe");
     }
 
-    public static void DeleteShortcuts()
+    private static void DeleteDesktopShortcuts()
     {
-        Shortcut.Remove("NX Editor", Location.Application);
-        Shortcut.Remove("NX Editor Launcher", Location.Application);
-        Shortcut.Remove("NX Editor", Location.Desktop);
+        Shortcut.Remove(APP_NAME, Location.Application);
+        Shortcut.Remove(LAUNCHER_NAME, Location.Application);
+        Shortcut.Remove(APP_NAME, Location.Desktop);
     }
 }

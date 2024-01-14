@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace NxEditor.Launcher;
 internal class Program
@@ -12,7 +14,14 @@ internal class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        IconProvider.Current.Register(
+            new FontAwesomeIconProvider()
+        );
+
+        return AppBuilder
+            .Configure<App>()
             .UsePlatformDetect()
             .LogToTrace();
+    }
 }

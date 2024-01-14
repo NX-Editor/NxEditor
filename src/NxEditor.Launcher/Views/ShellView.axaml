@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:NxEditor.Launcher.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         Title="NX Editor Launcher"
         Width="650"
         Height="400"
@@ -11,12 +12,14 @@
         d:DesignWidth="650"
         x:CompileBindings="True"
         x:DataType="local:ShellViewModel"
-        Background="{DynamicResource SystemChromeLowColor}"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/icon.ico"
         SystemDecorations="BorderOnly"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
-    <Grid Name="WindowChromeClient" Background="Transparent">
+    <Grid Name="Client" Background="Transparent">
         <Image VerticalAlignment="Top"
                Source="/Assets/background.jpg"
                Stretch="Fill" />
@@ -50,7 +53,7 @@
                                                  Margin="5,0,0,0"
                                                  VerticalAlignment="Center"
                                                  IsVisible="{Binding IsOnline}"
-                                                 Stroke="{DynamicResource SystemAccentColor}"
+                                                 Stroke="#00a4ef"
                                                  StrokeThickness="2" />
                                         <Ellipse Width="10"
                                                  Height="10"
@@ -86,6 +89,9 @@
                         HorizontalAlignment="Left"
                         Orientation="Horizontal"
                         Spacing="10">
+                <Button VerticalAlignment="Stretch" Command="{Binding ShowHelpCommand}">
+                    <pi:Icon Value="fa-solid fa-info" />
+                </Button>
                 <Button Command="{Binding ExitCommand}" Content="Exit" />
                 <Button Command="{Binding UninstallCommand}"
                         Content="Uninstall"

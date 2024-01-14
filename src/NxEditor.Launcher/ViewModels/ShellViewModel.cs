@@ -1,11 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Markdown.Avalonia;
 using NxEditor.Core.Components;
 using NxEditor.Core.Models;
 using NxEditor.Launcher.Helpers;
 using NxEditor.PluginBase;
+using NxEditor.PluginBase.Common;
+using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 
 namespace NxEditor.Launcher.ViewModels;
@@ -49,15 +54,18 @@ public partial class ShellViewModel : ObservableObject
         byte[] pluginsData = await GitHubRepo.GetAsset("NX-Editor", "Plugins", "public.json");
         Dictionary<string, PluginInfoView> plugins = JsonSerializer.Deserialize<Dictionary<string, PluginInfoView>>(pluginsData)!;
 
-        IEnumerable<string> loaded = Plugins.Select(x => x.Name);
+        foreach ((var id, var plugin) in plugins) {
+            if (Plugins.FirstOrDefault(x => x.Name == plugin.Name) is PluginInfo existing) {
+                existing.GitHubRepoId = plugin.Id;
+                continue;
+            }
 
-        foreach (var plugin in plugins.Where(x => !loaded.Contains(x.Value.Name))) {
             Plugins.Add(new() {
-                Description = plugin.Value.Description,
-                Folder = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins", plugin.Key),
-                GitHubRepoId = plugin.Value.Id,
+                Description = plugin.Description,
+                Folder = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins", id),
+                GitHubRepoId = plugin.Id,
                 IsOnline = true,
-                Name = plugin.Value.Name
+                Name = plugin.Name
             });
         }
     }
@@ -88,7 +96,7 @@ public partial class ShellViewModel : ObservableObject
         if (IsEditorInstalled) {
             await PluginUpdater.InstallAll(Plugins);
             Process.Start(
-                Path.Combine(GlobalConfig.StaticPath, "bin", AppPlatform.GetName())
+                Path.Combine(GlobalConfig.StaticPath, "bin", AppPlatform.GetExecutableName())
             );
 
             IsLoading = false;
@@ -125,6 +133,29 @@ public partial class ShellViewModel : ObservableObject
     {
         Environment.Exit(0);
         return Task.CompletedTask;
+    }
+
+    [RelayCommand]
+    private async Task ShowHelp()
+    {
+        using Stream stream = AssetLoader.Open(new("avares://NxEditor.Launcher/Assets/Readme.md"));
+        int strlen = (int)stream.Length;
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(strlen);
+        stream.Read(buffer, 0, buffer.Length);
+        string markdown = Encoding.UTF8.GetString(buffer[..strlen]);
+        ArrayPool<byte>.Shared.Return(buffer);
+
+        DialogBox dialog = new() {
+            Title = $"NX Editor, version {App.Version}",
+            IsSecondaryButtonVisible = false,
+            Content = new MarkdownScrollViewer {
+                Markdown = markdown,
+                MaxHeight = 200,
+                MaxWidth = 500
+            },
+        };
+
+        await dialog.ShowAsync();
     }
 
     private async Task CheckForUpdates()

@@ -27,9 +27,11 @@
     <PackageReference Include="Avalonia" Version="11.0.6" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
-    <PackageReference Include="Octokit" Version="9.0.0" />
-
+    <PackageReference Include="Markdown.Avalonia" Version="11.0.2" />
+    <PackageReference Include="Octokit" Version="9.1.0" />
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
+    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.0.1" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.0.1" />
   </ItemGroup>
   
   <ItemGroup>
