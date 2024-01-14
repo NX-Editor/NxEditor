@@ -39,7 +39,7 @@ public class EditorManager : IEditorManager
             .RequestService(handle);
 
         if (service is IEditor editor) {
-            _ = Task.Run(editor.Read);
+            editor.Read();
 
             ShellDockFactory.AddDoc((Document)editor);
             if (File.Exists(handle.Id)) {
