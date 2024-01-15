@@ -3,14 +3,9 @@ using System.Runtime.Loader;
 
 namespace NxEditor.Core.Components;
 
-public class PluginLoadContext : AssemblyLoadContext
+public class PluginLoadContext(string pluginPath) : AssemblyLoadContext
 {
-    private readonly AssemblyDependencyResolver _resolver;
-
-    public PluginLoadContext(string pluginPath)
-    {
-        _resolver = new AssemblyDependencyResolver(pluginPath);
-    }
+    private readonly AssemblyDependencyResolver _resolver = new(pluginPath);
 
     protected override Assembly? Load(AssemblyName assemblyName)
     {
