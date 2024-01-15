@@ -37,9 +37,8 @@ internal class Program
         }
 
         PluginManager.RegisterExtensions();
-        Task.Run(async () => {
-            await Console.Out.WriteLineAsync("Processing arguments...");
-            // Run command processor
+        Task.Run(() => {
+            throw new NotImplementedException();
         }).ConfigureAwait(false).GetAwaiter().GetResult();
 
         return;
