@@ -1,19 +1,21 @@
 ﻿using Octokit;
 
-namespace NxEditor.Launcher.Helpers;
+namespace NxEditor.Core.Helpers;
 
-public static class GitHubRepo
+public static class GithubHelper
 {
-    private static readonly GitHubClient _githubClient = new(
-        new ProductHeaderValue($"NxEditor.Launcher.Helpers.{Guid.NewGuid()}")
+    private static readonly GitHubClient _client = new(
+        new ProductHeaderValue($"NxEditor.Core.Helpers.GithubHelper.{Guid.NewGuid()}")
     );
 
     public static async Task<(Stream stream, string tag)> GetRelease(string org, string repo, string assetName)
-        => await GetRelease((await _githubClient.Repository.Get(org, repo)).Id, assetName);
+    {
+        return await GetRelease((await _client.Repository.Get(org, repo)).Id, assetName);
+    }
 
     public static async Task<(Stream stream, string tag)> GetRelease(long repoId, string assetName)
     {
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(repoId);
+        IReadOnlyList<Release> releases = await _client.Repository.Release.GetAll(repoId);
 
         Release? latest = null;
         ReleaseAsset? asset = null;
@@ -31,15 +33,17 @@ public static class GitHubRepo
 
     public static async Task<byte[]> GetAsset(string org, string repo, string assetPath)
     {
-        return await _githubClient.Repository.Content.GetRawContent(org, repo, assetPath);
+        return await _client.Repository.Content.GetRawContent(org, repo, assetPath);
     }
 
     public static async Task<bool> HasUpdate(string org, string repo, string currentTag)
-        => await HasUpdate((await _githubClient.Repository.Get(org, repo)).Id, currentTag);
+    {
+        return await HasUpdate((await _client.Repository.Get(org, repo)).Id, currentTag);
+    }
 
     public static async Task<bool> HasUpdate(long repoId, string currentTag)
     {
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(repoId);
+        IReadOnlyList<Release> releases = await _client.Repository.Release.GetAll(repoId);
         return releases.Count > 0 && releases[0].TagName != currentTag;
     }
 }

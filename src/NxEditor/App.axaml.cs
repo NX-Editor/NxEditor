@@ -4,16 +4,19 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Models;
 using NxEditor.Core.Components;
+using NxEditor.Core.Helpers;
 using NxEditor.Generators;
 using NxEditor.Models;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase;
 using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor;
@@ -91,21 +94,31 @@ public partial class App : Application
                     await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(arg));
                 }
             }
+
+            _ = Task.Run(async () => {
+                if (await UpdateHelper.HasUpdate() || await UpdateHelper.GetPluginUpdates() > 0) {
+                    Toast("Updates available!", action: OpenLauncherAndExit);
+                }
+            });
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    public static void Toast(string message, string title = "Notice", NotificationType type = NotificationType.Information, TimeSpan? expiration = null)
+    public static void Toast(string message, string title = "Notice", NotificationType type = NotificationType.Information, TimeSpan? expiration = null, Action? action = null)
     {
-        _notificationManager?.Show(
-            new Notification(title, message, type, expiration));
+        Dispatcher.UIThread.Invoke(() => {
+            _notificationManager?.Show(
+                new Notification(title, message, type, expiration, action));
+        });
     }
 
     public static void ToastError(Exception ex)
     {
-        _notificationManager?.Show(new Notification(
-            ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
+        Dispatcher.UIThread.Invoke(() => {
+            _notificationManager?.Show(new Notification(
+                ex.GetType().Name, ex.Message, NotificationType.Error, onClick: ShellViewMenu.OpenLogs));
+        });
     }
 
     public static void Log(object obj, [CallerMemberName] string method = "")
@@ -115,5 +128,23 @@ public partial class App : Application
         }
 
         Logger.Write(obj, method);
+    }
+
+    private static async void OpenLauncherAndExit()
+    {
+        DialogResult result = await DialogBox.ShowAsync("Install Updates", """
+                            Your current session will be lost.
+
+                            Are you sure you would you like to open
+                            the launcher and close NX-Editor?
+                            """, primaryButtonContent: "Yes");
+
+        if (result == DialogResult.Primary) {
+            ShellViewModel.Shared.View.IsEnabled = false;
+            StatusModal.Set("Downloading launcher", "fa-solid fa-download", isWorkingStatus: true);
+            await UpdateHelper.DownloadLauncher();
+            Process.Start(UpdateHelper.LauncherPath);
+            Environment.Exit(0);
+        }
     }
 }

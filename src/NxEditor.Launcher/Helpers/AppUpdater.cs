@@ -1,4 +1,5 @@
-﻿using NxEditor.PluginBase;
+﻿using NxEditor.Core.Helpers;
+using NxEditor.PluginBase;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Text.Json;
@@ -13,20 +14,11 @@ public class AppUpdater
     private const string GITHUB_REPO = "NxEditor";
 
     private static readonly char _pathEnvChar = OperatingSystem.IsWindows() ? ';' : ':';
-    private static readonly string _zipFileName = AppPlatform.GetOsFileName();
+    private static readonly string _zipFileName = PlatformHelper.GetOsFileName();
     private static readonly string _outputPath = Path.Combine(GlobalConfig.StaticPath, "bin");
     private static readonly string _versionFile = Path.Combine(GlobalConfig.StaticPath, "version.json");
-    private static readonly string _launcherOutputPath = Path.Combine(GlobalConfig.StaticPath, "NxEditor.Launcher.exe");
 
     public static bool IsInstalled => File.Exists(_versionFile);
-
-    public static async Task<bool> HasUpdate()
-    {
-        using FileStream fs = File.OpenRead(_versionFile);
-        string version = JsonSerializer.Deserialize<string>(fs)!;
-
-        return await GitHubRepo.HasUpdate(GITHUB_ORG, GITHUB_REPO, version);
-    }
 
     public static async Task Install(bool addToPath = true)
     {
@@ -34,7 +26,7 @@ public class AppUpdater
         CreateDesktopShortcuts();
         Directory.CreateDirectory(_outputPath);
 
-        (Stream stream, string tag) = await GitHubRepo.GetRelease(GITHUB_ORG, GITHUB_REPO, _zipFileName);
+        (Stream stream, string tag) = await GithubHelper.GetRelease(GITHUB_ORG, GITHUB_REPO, _zipFileName);
         ZipArchive archive = new(stream);
         archive.ExtractToDirectory(_outputPath, true);
 
@@ -85,16 +77,16 @@ public class AppUpdater
     private static void CopyRunningLauncherToOutput()
     {
         string? exe = Process.GetCurrentProcess().MainModule?.FileName;
-        if (exe is not null && File.Exists(exe) && !exe.SequenceEqual(_launcherOutputPath)) {
-            File.Copy(exe, _launcherOutputPath, true);
+        if (exe is not null && File.Exists(exe) && exe != UpdateHelper.LauncherPath) {
+            File.Copy(exe, UpdateHelper.LauncherPath, true);
         }
     }
 
     private static void CreateDesktopShortcuts()
     {
-        string app = Path.Combine(_outputPath, AppPlatform.GetExecutableName());
+        string app = Path.Combine(_outputPath, PlatformHelper.GetExecutableName());
         Shortcut.Create(APP_NAME, Location.Application, app, "nxe");
-        Shortcut.Create(LAUNCHER_NAME, Location.Application, _launcherOutputPath, "nxe");
+        Shortcut.Create(LAUNCHER_NAME, Location.Application, UpdateHelper.LauncherPath, "nxe");
         Shortcut.Create(APP_NAME, Location.Desktop, app, "nxe");
     }
 

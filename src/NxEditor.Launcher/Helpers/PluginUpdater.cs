@@ -1,4 +1,5 @@
-﻿using NxEditor.Core.Models;
+﻿using NxEditor.Core.Helpers;
+using NxEditor.Core.Models;
 using System.IO.Compression;
 
 namespace NxEditor.Launcher.Helpers;
@@ -19,7 +20,7 @@ public class PluginUpdater
             return;
         }
 
-        (Stream stream, string tag) = await GitHubRepo.GetRelease(info.GitHubRepoId, AppPlatform.GetOsFileName());
+        (Stream stream, string tag) = await GithubHelper.GetRelease(info.GitHubRepoId, PlatformHelper.GetOsFileName());
         ZipArchive archive = new(stream);
         Directory.CreateDirectory(info.Folder);
         archive.ExtractToDirectory(info.Folder, true);

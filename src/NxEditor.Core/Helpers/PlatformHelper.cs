@@ -1,6 +1,6 @@
-﻿namespace NxEditor.Launcher.Helpers;
+﻿namespace NxEditor.Core.Helpers;
 
-public class AppPlatform
+public class PlatformHelper
 {
     public static string GetExecutableName()
     {
@@ -22,6 +22,22 @@ public class AppPlatform
         }
         else if (OperatingSystem.IsLinux()) {
             return "linux-x64.zip";
+        }
+        else {
+            throw new NotSupportedException("The running operating system is not supported");
+        }
+    }
+
+    public static string GetLauncherFileName()
+    {
+        if (OperatingSystem.IsWindows()) {
+            return "Windows-Launcher.zip";
+        }
+        else if (OperatingSystem.IsMacOS()) {
+            return "MacOS-Launcher.zip";
+        }
+        else if (OperatingSystem.IsLinux()) {
+            return "Linux-Launcher.zip";
         }
         else {
             throw new NotSupportedException("The running operating system is not supported");

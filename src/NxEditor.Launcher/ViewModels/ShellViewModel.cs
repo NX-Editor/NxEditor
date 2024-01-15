@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Markdown.Avalonia;
 using NxEditor.Core.Components;
+using NxEditor.Core.Helpers;
 using NxEditor.Core.Models;
 using NxEditor.Launcher.Helpers;
 using NxEditor.PluginBase;
@@ -51,7 +52,7 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     public async Task ShowOnlinePlugins()
     {
-        byte[] pluginsData = await GitHubRepo.GetAsset("NX-Editor", "Plugins", "public.json");
+        byte[] pluginsData = await GithubHelper.GetAsset("NX-Editor", "Plugins", "public.json");
         Dictionary<string, PluginInfoView> plugins = JsonSerializer.Deserialize<Dictionary<string, PluginInfoView>>(pluginsData)!;
 
         foreach ((var id, var plugin) in plugins) {
@@ -96,7 +97,7 @@ public partial class ShellViewModel : ObservableObject
         if (IsEditorInstalled) {
             await PluginUpdater.InstallAll(Plugins);
             Process.Start(
-                Path.Combine(GlobalConfig.StaticPath, "bin", AppPlatform.GetExecutableName())
+                Path.Combine(GlobalConfig.StaticPath, "bin", PlatformHelper.GetExecutableName())
             );
 
             IsLoading = false;
@@ -136,7 +137,7 @@ public partial class ShellViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ShowHelp()
+    private static async Task ShowHelp()
     {
         using Stream stream = AssetLoader.Open(new("avares://NxEditor.Launcher/Assets/Readme.md"));
         int strlen = (int)stream.Length;
@@ -160,17 +161,12 @@ public partial class ShellViewModel : ObservableObject
 
     private async Task CheckForUpdates()
     {
-        if (IsEditorInstalled && await AppUpdater.HasUpdate()) {
+        if (IsEditorInstalled && await UpdateHelper.HasUpdate()) {
             _canUpdate = true;
             FoundUpdates++;
         }
 
-        foreach (var plugin in Plugins.Where(x => !x.IsOnline && x.GitHubRepoId != -1)) {
-            if (plugin.CanUpdate = await GitHubRepo.HasUpdate(plugin.GitHubRepoId, plugin.Version)) {
-                FoundUpdates++;
-            }
-        }
-
+        FoundUpdates += await UpdateHelper.GetPluginUpdates(Plugins);
         IsLoading = false;
     }
 }
