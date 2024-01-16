@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor.Core", "NxEditor.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor", "NxEditor\NxEditor.csproj", "{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor.PluginBase", "NxEditor.PluginBase\src\NxEditor.PluginBase.csproj", "{C44EBFA0-67BD-446A-88C2-0EDA5655249E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor.Launcher", "NxEditor.Launcher\NxEditor.Launcher.csproj", "{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2A537EC-1C86-43BE-94BC-D5F325B5D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C44EBFA0-67BD-446A-88C2-0EDA5655249E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDFE26F2-9B63-4C11-B0DA-4A10186A687E}.Release|Any CPU.ActiveCfg = Release|Any CPU
