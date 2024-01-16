@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NxEditor.PluginBase" Version="1.1.0" />
+    <PackageReference Include="NxEditor.PluginBase" Version="1.1.1" />
     <PackageReference Include="Octokit" Version="9.1.0" />
   </ItemGroup>
 
