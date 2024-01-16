@@ -9,14 +9,12 @@ using Avalonia.VisualTree;
 using ConfigFactory.Avalonia.Helpers;
 using ConfigFactory.Models;
 using NxEditor.Core.Components;
-using NxEditor.Core.Helpers;
 using NxEditor.Generators;
 using NxEditor.Models;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase;
 using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace NxEditor;
@@ -95,11 +93,13 @@ public partial class App : Application
                 }
             }
 
+#if RELEASE
             _ = Task.Run(async () => {
-                if (await UpdateHelper.HasUpdate() || await UpdateHelper.GetPluginUpdates() > 0) {
+                if (await Core.Helpers.UpdateHelper.HasUpdate() || await Core.Helpers.UpdateHelper.GetPluginUpdates() > 0) {
                     Toast("Updates available!", action: OpenLauncherAndExit);
                 }
             });
+#endif
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -130,6 +130,7 @@ public partial class App : Application
         Logger.Write(obj, method);
     }
 
+#if RELEASE
     private static async void OpenLauncherAndExit()
     {
         DialogResult result = await DialogBox.ShowAsync("Install Updates", """
@@ -142,9 +143,10 @@ public partial class App : Application
         if (result == DialogResult.Primary) {
             ShellViewModel.Shared.View.IsEnabled = false;
             StatusModal.Set("Downloading launcher", "fa-solid fa-download", isWorkingStatus: true);
-            await UpdateHelper.DownloadLauncher();
-            Process.Start(UpdateHelper.LauncherPath);
+            await Core.Helpers.UpdateHelper.DownloadLauncher();
+            System.Diagnostics.Process.Start(Core.Helpers.UpdateHelper.LauncherPath);
             Environment.Exit(0);
         }
     }
+#endif
 }
