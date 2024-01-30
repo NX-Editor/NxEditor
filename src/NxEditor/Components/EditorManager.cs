@@ -49,6 +49,6 @@ public class EditorManager : IEditorManager
             return;
         }
 
-        throw new InvalidCastException($"Could not cast the found type of {service} to {typeof(Editor<>).Name}");
+        throw new InvalidCastException($"Could not cast the found type of {service} to {typeof(IEditor).Name}");
     }
 }
