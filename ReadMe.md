@@ -2,14 +2,14 @@
 
 [![License](https://img.shields.io/badge/License-AGPL%20v3.0-blue.svg)](License.txt) [![Downloads](https://img.shields.io/github/downloads/NX-Editor/NxEditor/total)](https://github.com/NX-Editor/NxEditor/releases)
 
-A general editor for editing first-party Nintendo formats. Primary aimed at support for Tears of the Kingdom files and more modern Nintendo Switch files.
+A general editor for editing first-party Nintendo formats. Primarily aimed at support for Tears of the Kingdom files and more modern Nintendo Switch files.
 
 ## Setup
 
-1. Install the [.NET 7 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0) ([Windows x64 direct download](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-7.0.5-windows-x64-installer))
+1. Install the [.NET 8 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) ([Windows x64 direct download]([https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)))
 2. Download the [latest release](https://github.com/NX-Editor/NxEditor/releases/latest) (Launcher), extract the zip, and run the exe
 3. Toggle the plugins you would like to install
-4. Click **Install NX Editor** and wait for the install to complete
+4. Click **Install NX Editor** and wait for the installation to complete
 
 ## Building from Source (Windows)
 
