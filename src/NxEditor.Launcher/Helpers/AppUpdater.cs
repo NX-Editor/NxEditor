@@ -20,10 +20,13 @@ public class AppUpdater
 
     public static bool IsInstalled => File.Exists(_versionFile);
 
-    public static async Task Install(bool addToPath = true)
+    public static async Task Install(bool addToPath = true, bool createShortcuts = true)
     {
         CopyRunningLauncherToOutput();
-        CreateDesktopShortcuts();
+        if (createShortcuts) {
+            CreateDesktopShortcuts();
+        }
+
         Directory.CreateDirectory(_outputPath);
 
         (Stream stream, string tag) = await GithubHelper.GetRelease(GITHUB_ORG, GITHUB_REPO, _zipFileName);

@@ -35,6 +35,9 @@ public partial class ShellViewModel : ObservableObject
     private bool _isLoading = false;
 
     [ObservableProperty]
+    private bool _createShortcuts = true;
+
+    [ObservableProperty]
     private ObservableCollection<PluginInfo> _plugins = new(PluginManager.GetPluginInfo());
 
     public ShellViewModel()
@@ -81,7 +84,7 @@ public partial class ShellViewModel : ObservableObject
         IsLoading = true;
 
         if (_canUpdate) {
-            await AppUpdater.Install();
+            await AppUpdater.Install(createShortcuts: CreateShortcuts);
         }
 
         await PluginUpdater.InstallAll(Plugins);
@@ -95,7 +98,10 @@ public partial class ShellViewModel : ObservableObject
     {
         IsLoading = true;
         if (IsEditorInstalled) {
-            await PluginUpdater.InstallAll(Plugins);
+            await Task.Run(async () => {
+                await PluginUpdater.InstallAll(Plugins);
+            });
+
             Process.Start(
                 Path.Combine(GlobalConfig.StaticPath, "bin", PlatformHelper.GetExecutableName())
             );
@@ -105,8 +111,10 @@ public partial class ShellViewModel : ObservableObject
         }
 
 
-        await AppUpdater.Install();
-        await PluginUpdater.InstallAll(Plugins);
+        await Task.Run(async () => {
+            await AppUpdater.Install(createShortcuts: CreateShortcuts);
+            await PluginUpdater.InstallAll(Plugins);
+        });
 
         IsEditorInstalled = true;
         PrimaryButtonContent = "Open NX Editor";

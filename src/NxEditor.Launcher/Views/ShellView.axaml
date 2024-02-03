@@ -1,40 +1,44 @@
-<Window x:Class="NxEditor.Launcher.Views.ShellView"
-        xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="using:NxEditor.Launcher.ViewModels"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-        Title="NX Editor Launcher"
-        Width="650"
-        Height="400"
-        d:DesignHeight="400"
-        d:DesignWidth="650"
-        x:CompileBindings="True"
-        x:DataType="local:ShellViewModel"
-        CanResize="False"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaToDecorationsHint="True"
-        Icon="/Assets/icon.ico"
-        SystemDecorations="BorderOnly"
-        WindowStartupLocation="CenterScreen"
-        mc:Ignorable="d">
+<Window
+    x:Class="NxEditor.Launcher.Views.ShellView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:NxEditor.Launcher.ViewModels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+    Title="NX Editor Launcher"
+    Width="650"
+    Height="400"
+    d:DesignHeight="400"
+    d:DesignWidth="650"
+    x:CompileBindings="True"
+    x:DataType="local:ShellViewModel"
+    CanResize="False"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaToDecorationsHint="True"
+    Icon="/Assets/icon.ico"
+    SystemDecorations="BorderOnly"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Grid Name="Client" Background="Transparent">
-        <Image VerticalAlignment="Top"
-               Source="/Assets/background.jpg"
-               Stretch="Fill" />
+        <Image
+            VerticalAlignment="Top"
+            Source="/Assets/background.jpg"
+            Stretch="Fill" />
 
         <Border Background="{DynamicResource SystemChromeLowColor}" Opacity="0.8" />
 
         <Grid Margin="25" RowDefinitions="Auto,*,Auto,Auto">
-            <Grid Margin="0,0,0,25"
-                  Background="Transparent"
-                  ColumnDefinitions="Auto,*">
+            <Grid
+                Margin="0,0,0,25"
+                Background="Transparent"
+                ColumnDefinitions="Auto,*">
                 <Image Margin="0,5,15,0" Source="/Assets/icon.ico" />
-                <TextBlock Grid.Column="1"
-                           FontSize="30"
-                           FontWeight="Bold"
-                           Text="Nintendo Extended Editor" />
+                <TextBlock
+                    Grid.Column="1"
+                    FontSize="30"
+                    FontWeight="Bold"
+                    Text="Nintendo Extended Editor" />
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <ScrollViewer>
@@ -42,60 +46,73 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Background="Transparent" ToolTip.Tip="{Binding Description}">
-                                    <StackPanel Margin="0,0,200,0"
-                                                HorizontalAlignment="Left"
-                                                Orientation="Horizontal">
-                                        <TextBlock Margin="0,0,0,5"
-                                                   VerticalAlignment="Center"
-                                                   Text="{Binding Name}" />
-                                        <Ellipse Width="10"
-                                                 Height="10"
-                                                 Margin="5,0,0,0"
-                                                 VerticalAlignment="Center"
-                                                 IsVisible="{Binding IsOnline}"
-                                                 Stroke="#00a4ef"
-                                                 StrokeThickness="2" />
-                                        <Ellipse Width="10"
-                                                 Height="10"
-                                                 Margin="5,0,0,0"
-                                                 VerticalAlignment="Center"
-                                                 IsVisible="{Binding CanUpdate}"
-                                                 Stroke="#ffa15a"
-                                                 StrokeThickness="2" />
+                                    <StackPanel
+                                        Margin="0,0,200,0"
+                                        HorizontalAlignment="Left"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,0,5"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Name}" />
+                                        <Ellipse
+                                            Width="10"
+                                            Height="10"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            IsVisible="{Binding IsOnline}"
+                                            Stroke="#00a4ef"
+                                            StrokeThickness="2" />
+                                        <Ellipse
+                                            Width="10"
+                                            Height="10"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            IsVisible="{Binding CanUpdate}"
+                                            Stroke="#ffa15a"
+                                            StrokeThickness="2" />
                                     </StackPanel>
-                                    <ToggleSwitch Grid.Column="1"
-                                                  HorizontalAlignment="Right"
-                                                  IsChecked="{Binding IsEnabled}"
-                                                  OffContent=""
-                                                  OnContent="" />
+                                    <ToggleSwitch
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        IsChecked="{Binding IsEnabled}"
+                                        OffContent=""
+                                        OnContent="" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
             </StackPanel>
-            <ProgressBar Grid.Row="2"
-                         Margin="0,15"
-                         IsIndeterminate="True"
-                         IsVisible="{Binding IsLoading}" />
-            <StackPanel Grid.Row="3"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Spacing="10">
+            <ProgressBar
+                Grid.Row="2"
+                Margin="0,15"
+                IsIndeterminate="True"
+                IsVisible="{Binding IsLoading}" />
+            <StackPanel
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <CheckBox
+                    Content="Create Shortcuts"
+                    IsChecked="{Binding CreateShortcuts}"
+                    IsVisible="{Binding !IsEditorInstalled}" />
                 <Button Command="{Binding InstallUpdatesCommand}" Content="{Binding FoundUpdates, StringFormat='Install Updates ({0})'}" />
                 <Button Command="{Binding PrimaryButtonCommand}" Content="{Binding PrimaryButtonContent}" />
             </StackPanel>
-            <StackPanel Grid.Row="3"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal"
-                        Spacing="10">
+            <StackPanel
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal"
+                Spacing="10">
                 <Button VerticalAlignment="Stretch" Command="{Binding ShowHelpCommand}">
                     <pi:Icon Value="fa-solid fa-info" />
                 </Button>
                 <Button Command="{Binding ExitCommand}" Content="Exit" />
-                <Button Command="{Binding UninstallCommand}"
-                        Content="Uninstall"
-                        IsVisible="{Binding IsEditorInstalled}" />
+                <Button
+                    Command="{Binding UninstallCommand}"
+                    Content="Uninstall"
+                    IsVisible="{Binding IsEditorInstalled}" />
             </StackPanel>
         </Grid>
     </Grid>

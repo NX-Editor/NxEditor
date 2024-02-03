@@ -9,4 +9,8 @@ public partial class ShellView : Window
         InitializeComponent();
         Client.PointerPressed += (s, e) => BeginMoveDrag(e);
     }
+
+    private void Binding(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+    }
 }
