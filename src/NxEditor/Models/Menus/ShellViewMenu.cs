@@ -9,6 +9,7 @@ using NxEditor.Generators;
 using NxEditor.PluginBase.Attributes;
 using NxEditor.PluginBase.Common;
 using NxEditor.PluginBase.Models;
+using NxEditor.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Text;
 
@@ -217,6 +218,16 @@ public class ShellViewMenu
                     }
                 }
             }
+        }.ShowAsync();
+    }
+
+    [Menu("Plugins", "About", "Alt + F1", "fa-solid fa-list-ul")]
+    public static async Task Plugins()
+    {
+        await new DialogBox {
+            Title = "Plugins",
+            IsSecondaryButtonVisible = false,
+            Content = new AboutDialogView()
         }.ShowAsync();
     }
 

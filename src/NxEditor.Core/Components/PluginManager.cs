@@ -10,8 +10,9 @@ namespace NxEditor.Core.Components;
 public static class PluginManager
 {
     private static readonly string _path = Path.Combine(GlobalConfig.Shared.StorageFolder, "plugins");
-    private static readonly List<IServiceExtension> _extensions = [];
-    private static readonly Dictionary<Type, IConfigModule> _modules = [];
+
+    public static List<IServiceExtension> Extensions { get; } = [];
+    public static Dictionary<Type, IConfigModule> Modules { get; } = [];
 
     public static void Load()
     {
@@ -25,7 +26,7 @@ public static class PluginManager
     public static bool ValidateModules()
     {
         bool result = true;
-        foreach ((_, var module) in _modules) {
+        foreach ((_, var module) in Modules) {
             result = result && module.Shared.Validate(out _);
         }
 
@@ -35,7 +36,7 @@ public static class PluginManager
     public static bool RegisterModules(ConfigPageModel configPage)
     {
         bool result = true;
-        foreach ((var type, var module) in _modules) {
+        foreach ((var type, var module) in Modules) {
             try {
                 configPage.Append(module.Shared);
                 configPage.ConfigModules.Add(type.Name, module.Shared);
@@ -51,7 +52,7 @@ public static class PluginManager
 
     public static void RegisterExtensions()
     {
-        foreach (var extension in _extensions) {
+        foreach (var extension in Extensions) {
             try {
                 extension.RegisterExtension(ServiceLoader.Shared);
             }
@@ -96,7 +97,7 @@ public static class PluginManager
 
         foreach (var type in types.Where(x => x.GetInterface("IConfigModule") == typeof(IConfigModule))) {
             try {
-                _modules.Add(type, (IConfigModule)Activator.CreateInstance(type)!);
+                Modules.Add(type, (IConfigModule)Activator.CreateInstance(type)!);
             }
             catch (Exception ex) {
                 Logger.Write(new Exception($"Failed to load ConfigModule: {info.Name}", ex));
@@ -105,7 +106,7 @@ public static class PluginManager
 
         foreach (var type in types.Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
             try {
-                _extensions.Add((IServiceExtension)Activator.CreateInstance(type)!);
+                Extensions.Add((IServiceExtension)Activator.CreateInstance(type)!);
             }
             catch (Exception ex) {
                 Logger.Write(new Exception($"Failed to load ServiceExtension: {info.Name}", ex));
