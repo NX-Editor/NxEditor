@@ -10,6 +10,8 @@ using NxEditor.PluginBase.Models;
 namespace NxEditor.Views;
 public partial class ShellView : Window
 {
+    private WindowState _state;
+
     public ShellView()
     {
         InitializeComponent();
@@ -39,6 +41,21 @@ public partial class ShellView : Window
                 ICON_Fullscreen.IsVisible = !(ICON_Restore.IsVisible = false);
             }
         });
+    }
+
+    public void ActivateWindow()
+    {
+        WindowState = _state;
+        Activate();
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        if (change.Property == WindowStateProperty && WindowState == WindowState.Minimized) {
+            _state = (WindowState)(change.OldValue ?? WindowState.Normal);
+        }
+
+        base.OnPropertyChanged(change);
     }
 
     public void DragDropEvent(object? sender, DragEventArgs e)

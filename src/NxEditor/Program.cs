@@ -50,8 +50,7 @@ internal class Program
     public static async Task Attach(string[] args)
     {
         await Dispatcher.UIThread.InvokeAsync(async () => {
-            ShellViewModel.Shared.View.WindowState = WindowState.Normal;
-            ShellViewModel.Shared.View.Activate();
+            ShellViewModel.Shared.View.ActivateWindow();
             await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(args[0]));
         });
     }
