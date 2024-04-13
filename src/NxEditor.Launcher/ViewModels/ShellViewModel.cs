@@ -58,7 +58,7 @@ public partial class ShellViewModel : ObservableObject
         byte[] pluginsData = await GithubHelper.GetAsset("NX-Editor", "Plugins", "public.json");
         Dictionary<string, PluginInfoView> plugins = JsonSerializer.Deserialize<Dictionary<string, PluginInfoView>>(pluginsData)!;
 
-        foreach ((var id, var plugin) in plugins) {
+        foreach ((string? id, PluginInfoView? plugin) in plugins) {
             if (Plugins.FirstOrDefault(x => x.Name == plugin.Name) is PluginInfo existing) {
                 existing.GitHubRepoId = plugin.Id;
                 continue;

@@ -14,7 +14,7 @@ public class ShellDockFactory : Factory
 
     public static T AddDoc<T>(T doc) where T : Document
     {
-        (var dock, var index) = CheckDockable(Root, doc.Id);
+        (DocumentDock? dock, int index) = CheckDockable(Root, doc.Id);
         if (index >= 0) {
             doc = (dock.VisibleDockables![index] as T)!;
         }
@@ -28,7 +28,7 @@ public class ShellDockFactory : Factory
 
     public static bool TryFocus(string id, out IDockable? target)
     {
-        (var dock, var index) = CheckDockable(Root, id);
+        (DocumentDock? dock, int index) = CheckDockable(Root, id);
         if (index >= 0) {
             target = dock.VisibleDockables![index];
             dock.ActiveDockable = target;
@@ -48,8 +48,8 @@ public class ShellDockFactory : Factory
             return (documentDock, documentDock.VisibleDockables?.Select(x => x.Id).ToList().IndexOf(id) ?? -1);
         }
         else if (root is ProportionalDock proportionalDock && proportionalDock.VisibleDockables != null) {
-            foreach (var dockable in proportionalDock.VisibleDockables) {
-                (_default, var index) = CheckDockable(dockable, id);
+            foreach (IDockable dockable in proportionalDock.VisibleDockables) {
+                (_default, int index) = CheckDockable(dockable, id);
                 if (index >= 0) {
                     return (_default, index);
                 }
@@ -59,7 +59,11 @@ public class ShellDockFactory : Factory
         return (_default, -1);
     }
 
-    public static Document? Current() => Current(Root);
+    public static Document? Current()
+    {
+        return Current(Root);
+    }
+
     private static Document? Current(IDockable? root)
     {
         if (root is DocumentDock documentDock) {

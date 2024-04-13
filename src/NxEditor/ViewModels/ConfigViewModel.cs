@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls.Notifications;
 using ConfigFactory;
 using ConfigFactory.Avalonia;
+using ConfigFactory.Core;
 using ConfigFactory.Core.Attributes;
 using ConfigFactory.Core.Models;
 using ConfigFactory.Models;
@@ -43,7 +44,7 @@ public class ConfigViewModel : ConfigPageModel, IStaticPage<ConfigViewModel, Con
 
     public override bool OnClose()
     {
-        foreach ((_, var module) in ConfigModules) {
+        foreach ((_, IConfigModule? module) in ConfigModules) {
             module.Shared.Reset();
         }
 
@@ -52,8 +53,8 @@ public class ConfigViewModel : ConfigPageModel, IStaticPage<ConfigViewModel, Con
 
     public bool ValidateModules()
     {
-        foreach ((_, var module) in ConfigModules) {
-            if (!module.Validate(out string? msg, out ConfigProperty target)) {
+        foreach ((_, IConfigModule? module) in ConfigModules) {
+            if (!module.Validate(out string? msg, out ConfigProperty? target)) {
                 App.Toast($"""
                     {msg ?? "Please review your settings"}
                     Error at '{target.Attribute.Category}/{target.Attribute.Group}/{target.Attribute.Header}'

@@ -61,7 +61,7 @@ public partial class ShellView : Window
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
-            foreach (var path in paths.Select(x => x.Path.LocalPath)) {
+            foreach (string? path in paths.Select(x => x.Path.LocalPath)) {
                 _ = EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(path));
             }
         }
@@ -75,7 +75,7 @@ public partial class ShellView : Window
         DragFadeMask.IsVisible = true;
 
         if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
-            foreach (var path in paths.Select(x => x.Path.LocalPath)) {
+            foreach (string? path in paths.Select(x => x.Path.LocalPath)) {
                 DragFadeMaskInfo.Children.Add(new TextBlock {
                     Text = Path.GetFileName(path),
                     Foreground = Brushes.Orange,

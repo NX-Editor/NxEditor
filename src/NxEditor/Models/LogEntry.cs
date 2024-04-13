@@ -1,18 +1,12 @@
 ﻿namespace NxEditor.Models;
 
-public partial class LogEntry : ObservableObject
+public partial class LogEntry(string meta, string message) : ObservableObject
 {
     [ObservableProperty]
-    private string _meta;
+    private string _meta = meta;
 
     [ObservableProperty]
-    private string _message;
-
-    public LogEntry(string meta, string message)
-    {
-        _meta = meta;
-        _message = message;
-    }
+    private string _message = message;
 
     public async Task Copy()
     {

@@ -88,7 +88,7 @@ public partial class App : Application
             PluginManager.RegisterExtensions();
 
             if (desktop.Args != null && desktop.Args.Length > 0) {
-                foreach (var arg in desktop.Args.Where(File.Exists)) {
+                foreach (string? arg in desktop.Args.Where(File.Exists)) {
                     await EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(arg));
                 }
             }

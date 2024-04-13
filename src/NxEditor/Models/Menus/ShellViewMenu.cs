@@ -41,7 +41,7 @@ public class ShellViewMenu
         string[]? supportedExtensions = EditorManager.Shared.Current?.ExportExtensions;
         StringBuilder extensionsFilterString = new();
         if (supportedExtensions?.Length > 0) {
-            foreach (var ext in supportedExtensions) {
+            foreach (string ext in supportedExtensions) {
                 extensionsFilterString.Append(ext);
             }
         }
@@ -85,7 +85,7 @@ public class ShellViewMenu
     [Menu("Clear Logs Folder", "File", "Ctrl + F7", "fa-solid fa-file-circle-xmark")]
     public static void ClearLogsFolder()
     {
-        foreach (var file in Directory.EnumerateFiles(Logger.LogsPath, "*.yml")) {
+        foreach (string file in Directory.EnumerateFiles(Logger.LogsPath, "*.yml")) {
             if (file != Logger.CurrentLog) {
                 File.Delete(file);
             }
@@ -268,5 +268,7 @@ public class ShellViewMenu
     }
 
     public static ObservableCollection<MenuItem> GetRecentFilesCollection()
-        => RecentFiles.Shared;
+    {
+        return RecentFiles.Shared;
+    }
 }

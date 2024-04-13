@@ -12,13 +12,21 @@ public static class ResourceExtension
         Directory.CreateDirectory(_path);
     }
 
-    public static Stream? Fetch<T>(string name) => FetchEmbed(typeof(T).Assembly, name);
+    public static Stream? Fetch<T>(string name)
+    {
+        return FetchEmbed(typeof(T).Assembly, name);
+    }
+
     public static Stream? FetchEmbed(this Assembly assembly, string name)
     {
         return assembly.GetManifestResourceStream($"{assembly.GetName().Name}.Resources.{name}");
     }
 
-    public static TValue? Parse<T, TValue>(string name) => ParseEmbed<TValue>(typeof(T).Assembly, name);
+    public static TValue? Parse<T, TValue>(string name)
+    {
+        return ParseEmbed<TValue>(typeof(T).Assembly, name);
+    }
+
     public static TValue? ParseEmbed<TValue>(this Assembly assembly, string name)
     {
         using Stream? stream = FetchEmbed(assembly, name);

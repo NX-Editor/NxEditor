@@ -38,7 +38,7 @@ public class UpdateHelper
     {
         int updates = 0;
 
-        foreach (var plugin in plugins.Where(x => !x.IsOnline && x.GitHubRepoId != -1)) {
+        foreach (PluginInfo? plugin in plugins.Where(x => !x.IsOnline && x.GitHubRepoId != -1)) {
             if (plugin.CanUpdate = await GithubHelper.HasUpdate(plugin.GitHubRepoId, plugin.Version)) {
                 updates++;
             }
@@ -49,7 +49,7 @@ public class UpdateHelper
 
     public static async Task DownloadLauncher()
     {
-        (var stream, _) = await GithubHelper.GetRelease(GITHUB_ORG, GITHUB_REPO, PlatformHelper.GetLauncherFileName());
+        (Stream? stream, _) = await GithubHelper.GetRelease(GITHUB_ORG, GITHUB_REPO, PlatformHelper.GetLauncherFileName());
         ZipArchive zip = new(stream);
         if (zip.Entries.FirstOrDefault(x => x.Name == LAUNCHER_NAME)?.Open() is Stream exe) {
             using FileStream fs = File.Create(LauncherPath);

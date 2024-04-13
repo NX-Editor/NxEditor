@@ -26,7 +26,7 @@ public static class PluginManager
     public static bool ValidateModules()
     {
         bool result = true;
-        foreach ((_, var module) in Modules) {
+        foreach ((_, IConfigModule? module) in Modules) {
             result = result && module.Shared.Validate(out _);
         }
 
@@ -36,7 +36,7 @@ public static class PluginManager
     public static bool RegisterModules(ConfigPageModel configPage)
     {
         bool result = true;
-        foreach ((var type, var module) in Modules) {
+        foreach ((Type? type, IConfigModule? module) in Modules) {
             try {
                 configPage.Append(module.Shared);
                 configPage.ConfigModules.Add(type.Name, module.Shared);
@@ -52,7 +52,7 @@ public static class PluginManager
 
     public static void RegisterExtensions()
     {
-        foreach (var extension in Extensions) {
+        foreach (IServiceExtension extension in Extensions) {
             try {
                 extension.RegisterExtension(ServiceLoader.Shared);
             }
@@ -72,7 +72,11 @@ public static class PluginManager
         LoadDirectory(pluginPath);
     }
 
-    public static IEnumerable<PluginInfo> GetPluginInfo() => GetPluginInfo(_path);
+    public static IEnumerable<PluginInfo> GetPluginInfo()
+    {
+        return GetPluginInfo(_path);
+    }
+
     public static IEnumerable<PluginInfo> GetPluginInfo(string path)
     {
         return Directory.Exists(path) ? Directory
@@ -82,7 +86,7 @@ public static class PluginManager
 
     private static void LoadDirectory(string path)
     {
-        foreach (var info in GetPluginInfo(path).Where(x => x.IsEnabled)) {
+        foreach (PluginInfo? info in GetPluginInfo(path).Where(x => x.IsEnabled)) {
             LoadPlugin(info);
         }
     }
@@ -95,7 +99,7 @@ public static class PluginManager
         using FileStream fs = File.OpenRead(assemblyPath);
         Type[] types = loader.LoadFromStream(fs).GetExportedTypes();
 
-        foreach (var type in types.Where(x => x.GetInterface("IConfigModule") == typeof(IConfigModule))) {
+        foreach (Type? type in types.Where(x => x.GetInterface("IConfigModule") == typeof(IConfigModule))) {
             try {
                 Modules.Add(type, (IConfigModule)Activator.CreateInstance(type)!);
             }
@@ -104,7 +108,7 @@ public static class PluginManager
             }
         }
 
-        foreach (var type in types.Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
+        foreach (Type? type in types.Where(x => x.GetInterface("IServiceExtension") == typeof(IServiceExtension))) {
             try {
                 Extensions.Add((IServiceExtension)Activator.CreateInstance(type)!);
             }

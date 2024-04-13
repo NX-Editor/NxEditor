@@ -15,8 +15,8 @@ public class ViewLocator : IDataTemplate
             return page.View;
         }
 
-        var name = param!.GetType().FullName!.Replace("ViewModel", "View");
-        var type = Type.GetType(name);
+        string name = param!.GetType().FullName!.Replace("ViewModel", "View");
+        Type? type = Type.GetType(name);
 
         if (type != null) {
             return (Control)Activator.CreateInstance(type)!;

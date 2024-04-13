@@ -8,7 +8,7 @@ public class PluginUpdater
 {
     public static async Task InstallAll(IEnumerable<PluginInfo> plugins)
     {
-        foreach (var plugin in plugins.Where(x => (x.IsOnline || x.CanUpdate) && x.IsEnabled)) {
+        foreach (PluginInfo? plugin in plugins.Where(x => (x.IsOnline || x.CanUpdate) && x.IsEnabled)) {
             await Install(plugin);
             plugin.IsOnline = plugin.CanUpdate = false;
         }

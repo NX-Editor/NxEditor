@@ -36,7 +36,7 @@ public static class SingleInstanceMgr
         NamedPipeServerStream server = new(_appId);
         server.WaitForConnection();
 
-        using (var reader = new BinaryReader(server, Encoding.UTF8)) {
+        using (BinaryReader reader = new(server, Encoding.UTF8)) {
             int argc = reader.ReadInt32();
             string[] args = new string[argc];
             for (int i = 0; i < argc; i++) {
