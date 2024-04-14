@@ -64,6 +64,7 @@
             </ControlTheme>
         </Style.Resources>
 
+        <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
         <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded}" />
         <Setter Property="CornerRadius" Value="3" />
         <Setter Property="MinHeight" Value="24" />
