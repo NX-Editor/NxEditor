@@ -16,7 +16,7 @@ public partial class StaticPage<T, TView> : Document, IStaticPage<T, TView> wher
     {
         if (EditorExtension.LastEditorMenu is not null) {
             Frontend.Locate<IMenuFactory>()
-                .Prepend(EditorExtension.LastEditorMenu);
+                .Remove(EditorExtension.LastEditorMenu);
         }
     }
 

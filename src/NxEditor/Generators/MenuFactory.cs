@@ -24,13 +24,13 @@ public class MenuFactory(TopLevel? topLevel) : IMenuFactory
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public IMenuFactory Prepend<T>() where T : class
+    public IMenuFactory Remove<T>() where T : class
     {
-        return Prepend(typeof(T));
+        return Remove(typeof(T));
     }
 
-    /// <inheritdoc cref="Prepend{T}"/>
-    public IMenuFactory Prepend(Type type)
+    /// <inheritdoc cref="Remove{T}"/>
+    public IMenuFactory Remove(Type type)
     {
         if (_groups.TryGetValue(type, out List<Control>? group)) {
             foreach (Control item in group) {
