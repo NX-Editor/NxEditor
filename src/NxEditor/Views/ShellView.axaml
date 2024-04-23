@@ -112,7 +112,7 @@
 
         <Grid Grid.Row="2"
               ColumnDefinitions="Auto,Auto,*,Auto,Auto"
-              IsHitTestVisible="False">
+              IsHitTestVisible="True">
             <Border Grid.ColumnSpan="10"
                     Background="{DynamicResource SystemAccentColor}"
                     Opacity="0.7" />
@@ -122,6 +122,15 @@
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource UbuntuMono}"
                        Text="{Binding Status, Source={x:Static plugin:StatusModal.Shared}}" />
+            <ItemsControl Grid.Column="2"
+                          HorizontalAlignment="Right"
+                          ItemsSource="{Binding FooterItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
             <TextBlock Grid.Column="3"
                        Margin="5,0"
                        VerticalAlignment="Center"

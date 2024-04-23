@@ -1,5 +1,7 @@
-﻿using Dock.Model.Controls;
+﻿using Avalonia.Controls;
+using Dock.Model.Controls;
 using NxEditor.Generators;
+using System.Collections.ObjectModel;
 
 namespace NxEditor.ViewModels;
 
@@ -12,6 +14,9 @@ public partial class ShellViewModel : StaticPage<ShellViewModel, ShellView>
 
     [ObservableProperty]
     private IRootDock? _layout;
+
+    [ObservableProperty]
+    private ObservableCollection<Control> _footerItems = [];
 
     public void InitDock()
     {

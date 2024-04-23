@@ -11,6 +11,7 @@ using ConfigFactory.Models;
 using NxEditor.Core.Components;
 using NxEditor.Generators;
 using NxEditor.Models;
+using NxEditor.Models.Footers;
 using NxEditor.Models.Menus;
 using NxEditor.PluginBase;
 using NxEditor.PluginBase.Common;
@@ -46,13 +47,18 @@ public partial class App : Application
 
             TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
             MenuFactory menu = new(visualRoot);
+            FooterFactory footer = new();
 
             ShellViewModel.Shared.View.RootMenu.ItemsSource = menu.Items;
             menu.Append(new ShellViewMenu());
 
+            ShellViewModel.Shared.FooterItems = footer.Items;
+            footer.Append(new ShellViewFooter());
+
             RecentFiles.Shared.Load();
 
             Frontend.Register<IMenuFactory>(menu);
+            Frontend.Register<IFooterFactory>(footer);
             Frontend.Register(visualRoot?.Clipboard!);
             Frontend.Register(
                 BrowserDialog.StorageProvider = visualRoot?.StorageProvider!

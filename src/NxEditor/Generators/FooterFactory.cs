@@ -76,11 +76,11 @@ public class FooterFactory : IFooterFactory
 
     public IFooterFactory Remove(Type type)
     {
-        if (_groups.TryGetValue(type, out List<Control>? group)) {
+        if (!_groups.TryGetValue(type, out List<Control>? group)) {
             return this;
         }
 
-        foreach (Control item in _groups[type]) {
+        foreach (Control item in group) {
             Items.Remove(item);
         }
 
