@@ -22,7 +22,7 @@
         Icon="/Assets/icon.ico"
         SystemDecorations="BorderOnly"
         mc:Ignorable="d">
-    <Grid Name="PointerClient" RowDefinitions="30,*,20">
+    <Grid Name="PointerClient" RowDefinitions="30,*,25">
 
         <Border Name="ChromeClient"
                 Background="{DynamicResource SystemChromeHighColor}"
@@ -116,7 +116,7 @@
             <Border Grid.ColumnSpan="10"
                     Background="{DynamicResource SystemAccentColor}"
                     Opacity="0.7" />
-            <pi:Icon Margin="5,0" Value="{Binding Icon, Source={x:Static plugin:StatusModal.Shared}}" />
+            <pi:Icon Margin="7,0,3,0" Value="{Binding Icon, Source={x:Static plugin:StatusModal.Shared}}" />
             <TextBlock Grid.Column="1"
                        Margin="5,0"
                        VerticalAlignment="Center"
@@ -129,11 +129,11 @@
                        FontSize="12"
                        Text="{x:Static app:App.Title}" />
             <TextBlock Grid.Column="4"
-                       Margin="5,0"
+                       Margin="3,0,10,0"
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource UbuntuMono}"
                        FontSize="11"
-                       FontWeight="Bold"
+                       FontWeight="Light"
                        Text="{x:Static app:App.Version}" />
         </Grid>
     </Grid>
