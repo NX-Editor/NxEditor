@@ -66,6 +66,7 @@
 
         <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
         <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded}" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="CornerRadius" Value="3" />
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="Template">
@@ -97,6 +98,7 @@
                                               Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                              VerticalContentAlignment="Center"
                                               Background="Transparent"
                                               Content="{TemplateBinding Header}"
                                               ContentTemplate="{TemplateBinding HeaderTemplate}"
