@@ -28,8 +28,8 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.0.7" />
-    <PackageReference Include="Dock.Serializer" Version="11.0.0.7" />
+    <PackageReference Include="Dock.Avalonia" Version="11.0.10" />
+    <PackageReference Include="Dock.Serializer" Version="11.0.10" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.3.0" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.3.0" />
 
