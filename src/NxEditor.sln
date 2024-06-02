@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor.Core", "NxEditor.Core\NxEditor.Core.csproj", "{10B7D6E9-1A97-4DCC-B482-11698D8E4235}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NxEditor", "NxEditor\NxEditor.csproj", "{8D75BBD0-48FE-4CB9-874C-6AEB7A443D02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10B7D6E9-1A97-4DCC-B482-11698D8E4235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B7D6E9-1A97-4DCC-B482-11698D8E4235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B7D6E9-1A97-4DCC-B482-11698D8E4235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B7D6E9-1A97-4DCC-B482-11698D8E4235}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D75BBD0-48FE-4CB9-874C-6AEB7A443D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D75BBD0-48FE-4CB9-874C-6AEB7A443D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D75BBD0-48FE-4CB9-874C-6AEB7A443D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D75BBD0-48FE-4CB9-874C-6AEB7A443D02}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
