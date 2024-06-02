@@ -4,6 +4,6 @@
              xmlns:local="using:NxEditor"
              xmlns:sty="using:FluentAvalonia.Styling">
     <Application.Styles>
-        <sty:FluentAvaloniaTheme />
+        <sty:FluentAvaloniaTheme PreferUserAccentColor="True" />
     </Application.Styles>
 </Application>
