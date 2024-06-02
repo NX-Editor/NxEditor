@@ -1,0 +1,5 @@
+{
+    "Exceptions": {
+        "TargetPlatformNotSupported": "The target platform is not supported."
+    }
+}
