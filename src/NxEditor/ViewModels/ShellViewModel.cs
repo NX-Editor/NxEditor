@@ -2,6 +2,6 @@
 
 namespace NxEditor.ViewModels;
 
-public class ViewModelBase : ObservableObject
+public partial class ShellViewModel : ObservableObject
 {
 }

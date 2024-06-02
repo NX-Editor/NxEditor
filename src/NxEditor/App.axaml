@@ -1,10 +1,9 @@
-<Application xmlns="https://github.com/avaloniaui"
+<Application x:Class="NxEditor.App"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="NxEditor.App"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
+             xmlns:local="using:NxEditor"
+             xmlns:sty="using:FluentAvalonia.Styling">
     <Application.Styles>
-        <FluentTheme />
+        <sty:FluentAvaloniaTheme />
     </Application.Styles>
 </Application>
