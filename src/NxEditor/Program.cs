@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿global using static NxEditor.Core.Localization.StringResources;
+
+using Avalonia;
 
 namespace NxEditor.Desktop;
 

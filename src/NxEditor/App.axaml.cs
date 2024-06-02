@@ -18,11 +18,13 @@ public partial class App : Application
     {
         BindingPlugins.DataValidators.RemoveAt(0);
 
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            desktop.MainWindow = new ShellView {
-                DataContext = new ShellViewModel()
-            };
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) {
+            throw Exceptions.TargetPlatformNotSupported;
         }
+
+        desktop.MainWindow = new ShellView {
+            DataContext = new ShellViewModel()
+        };
 
         base.OnFrameworkInitializationCompleted();
     }
