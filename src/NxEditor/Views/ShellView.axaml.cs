@@ -12,7 +12,8 @@ public partial class ShellView : AppWindow
 
         TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
 
-        Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://NxEditor/Assets/Icon.ico")));
+        const string AVARES_ICON_PATH = "avares://NxEditor/Assets/Icon.ico";
+        Bitmap bitmap = new(AssetLoader.Open(new Uri(AVARES_ICON_PATH)));
         Icon = bitmap.CreateScaledBitmap(new(48, 48), BitmapInterpolationMode.HighQuality);
     }
 }
