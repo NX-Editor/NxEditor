@@ -7,4 +7,8 @@ public class StringResources_Exceptions
     public readonly PlatformNotSupportedException TargetPlatformNotSupported = new(
         GetStringResource(GROUP, nameof(TargetPlatformNotSupported))
     );
+
+    public readonly NotSupportedException AppThemeNotSupported = new(
+        GetStringResource(GROUP, nameof(AppThemeNotSupported))
+    );
 }
