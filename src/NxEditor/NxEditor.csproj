@@ -9,6 +9,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+    <Version Condition="'$(Configuration)' == 'Debug'">0.0.999-dev</Version>
   </PropertyGroup>
   
   <ItemGroup>

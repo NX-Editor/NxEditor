@@ -6,11 +6,17 @@ using Avalonia.Styling;
 using NxEditor.Core;
 using NxEditor.ViewModels;
 using NxEditor.Views;
+using System.Reflection;
 
 namespace NxEditor;
 
 public partial class App : Application
 {
+    public static readonly string Title = "NX Editor";
+    public static readonly string Version = typeof(App).Assembly
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+        .InformationalVersion.Split('+')[0] ?? SystemMsg.VersionNotFound;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
