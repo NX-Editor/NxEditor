@@ -1,6 +1,8 @@
 ﻿global using static NxEditor.Core.Localization.StringResources;
 
 using Avalonia;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace NxEditor.Desktop;
 
@@ -14,9 +16,13 @@ class Program
     }
 
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        IconProvider.Current
+            .Register(new FontAwesomeIconProvider());
+
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
-
+    }
 }
