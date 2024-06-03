@@ -3,10 +3,33 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:app="using:NxEditor"
+                     xmlns:fa="using:Projektanker.Icons.Avalonia"
                      xmlns:windowing="using:FluentAvalonia.UI.Windowing"
-                     Title="ShellView"
+                     Title="{x:Static app:App.Title}"
+                     Width="1000"
+                     Height="600"
+                     MinWidth="650"
+                     MinHeight="450"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
                      mc:Ignorable="d">
-    Welcome to Avalonia!
+    <Grid RowDefinitions="35,*,25">
+        <Grid ColumnDefinitions="35,*">
+            <Image Name="IconHost"
+                   Width="24"
+                   Height="24"
+                   Margin="3" />
+            <Menu Name="Menu"
+                  Grid.Column="1"
+                  Height="35"
+                  VerticalAlignment="Center" />
+        </Grid>
+
+        <Border Grid.Row="2" Background="{DynamicResource PrimaryAcentColor}">
+            <Grid ColumnDefinitions="25,Auto,*,Auto">
+                <fa:Icon Value="fa-house" />
+            </Grid>
+        </Border>
+    </Grid>
 </windowing:AppWindow>

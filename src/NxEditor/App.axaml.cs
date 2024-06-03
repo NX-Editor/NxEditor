@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using NxEditor.Components;
 using NxEditor.Core;
 using NxEditor.ViewModels;
 using NxEditor.Views;
@@ -32,7 +33,7 @@ public partial class App : Application
         NXE.Config.AppThemeChanged += SetRequestedThemeVariant;
 
         desktop.MainWindow = new ShellView {
-            DataContext = new ShellViewModel()
+            DataContext = new ShellViewModel(ApplicationDockFactory.Instance)
         };
     }
 

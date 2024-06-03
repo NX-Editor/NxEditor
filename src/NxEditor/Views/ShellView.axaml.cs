@@ -11,9 +11,11 @@ public partial class ShellView : AppWindow
         InitializeComponent();
 
         TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
+        TitleBar.ExtendsContentIntoTitleBar = true;
 
         const string AVARES_ICON_PATH = "avares://NxEditor/Assets/Icon.ico";
         Bitmap bitmap = new(AssetLoader.Open(new Uri(AVARES_ICON_PATH)));
         Icon = bitmap.CreateScaledBitmap(new(48, 48), BitmapInterpolationMode.HighQuality);
+        IconHost.Source = Icon;
     }
 }
