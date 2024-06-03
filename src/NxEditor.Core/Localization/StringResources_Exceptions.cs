@@ -2,7 +2,7 @@
 
 public class StringResources_Exceptions
 {
-    private const string GROUP = "Exceptions";
+    private const string GROUP = "Exception";
 
     public readonly PlatformNotSupportedException TargetPlatformNotSupported = new(
         GetStringResource(GROUP, nameof(TargetPlatformNotSupported))

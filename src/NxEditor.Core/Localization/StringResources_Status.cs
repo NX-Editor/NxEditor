@@ -1,6 +1,6 @@
 ﻿namespace NxEditor.Core.Localization;
 
-public class StringResources_Statuses
+public class StringResources_Status
 {
     private const string GROUP = "Status";
 

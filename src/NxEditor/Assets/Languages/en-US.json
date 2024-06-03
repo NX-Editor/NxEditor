@@ -5,7 +5,7 @@
     "Status": {
         "Ready": "Ready"
     },
-    "Exceptions": {
+    "Exception": {
         "AppThemeNotSupported": "The target app theme is not supported.",
         "TargetPlatformNotSupported": "The target platform is not supported."
     }
