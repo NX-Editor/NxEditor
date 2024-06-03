@@ -35,6 +35,7 @@ public partial class App : Application
 
         BindingPlugins.DataValidators.RemoveAt(0);
         NXE.Config.AppThemeChanged += SetRequestedThemeVariant;
+        NXE.Logger.LogToConsole();
 
         desktop.MainWindow = new ShellView();
         ApplicationDockFactory factory = new(desktop.MainWindow);
