@@ -20,15 +20,39 @@ public class AppLogger
 
     public IList<LogEvent> LogEvents { get; } = [];
 
+    /// <summary>
+    /// Enabled logging to the system console.
+    /// </summary>
     public void LogToConsole()
     {
         LogWritten += static (LogEvent e)
             => Console.WriteLine(e);
 
-        ExceptionOccured += static (LogEvent e)
-            => Console.WriteLine(e.Exception);
+        EventOccured += static (LogEvent e) => {
+            Console.ForegroundColor = e.Severity switch {
+                Severity.Info => ConsoleColor.Blue,
+                Severity.Success => ConsoleColor.Green,
+                Severity.Warning => ConsoleColor.Yellow,
+                Severity.Error => ConsoleColor.Red,
+                _ => Console.ForegroundColor
+            };
+
+            Console.WriteLine(e);
+            Console.ResetColor();
+        };
+
+        ExceptionOccured += static (LogEvent e) => {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(e.Exception);
+            Console.ResetColor();
+        };
     }
 
+    /// <summary>
+    /// Triggers the <see cref="LogWritten"/> event handler and stores the <see langword="event"/>.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="severity"></param>
     public void Log(string message, Severity severity)
     {
         LogEvent logEvent = new(message, severity);
@@ -36,6 +60,11 @@ public class AppLogger
         LogEvents.Add(logEvent);
     }
 
+    /// <summary>
+    /// Triggers the <see cref="EventOccured"/> event handler and stores the <see langword="event"/>.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="severity"></param>
     public void LogEvent(string message, Severity severity)
     {
         LogEvent logEvent = new(message, severity);
@@ -43,6 +72,10 @@ public class AppLogger
         LogEvents.Add(logEvent);
     }
 
+    /// <summary>
+    /// Triggers the <see cref="ExceptionOccured"/> event handler and stores the <see langword="event"/>.
+    /// </summary>
+    /// <param name="ex"></param>
     public void LogError(Exception ex)
     {
         LogEvent logEvent = new(ex.Message, Severity.Error, ex);
