@@ -15,6 +15,7 @@ public delegate void LogEventHandler(LogEvent e);
 public class AppLogger
 {
     public event LogEventHandler? LogWritten;
+    public event LogEventHandler? EventOccured;
     public event LogEventHandler? ExceptionOccured;
 
     public IList<LogEvent> LogEvents { get; } = [];
@@ -32,6 +33,13 @@ public class AppLogger
     {
         LogEvent logEvent = new(message, severity);
         LogWritten?.Invoke(logEvent);
+        LogEvents.Add(logEvent);
+    }
+
+    public void LogEvent(string message, Severity severity)
+    {
+        LogEvent logEvent = new(message, severity);
+        EventOccured?.Invoke(logEvent);
         LogEvents.Add(logEvent);
     }
 
