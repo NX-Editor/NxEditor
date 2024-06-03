@@ -26,7 +26,11 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) {
+#if RELEASE
             throw Exceptions.TargetPlatformNotSupported;
+#else
+            return;
+#endif
         }
 
         BindingPlugins.DataValidators.RemoveAt(0);

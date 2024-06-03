@@ -15,11 +15,13 @@ public static class StringResources
 
     internal static LocalizationResources LoadResources()
     {
+#if RELEASE
         string configuredLocalizationFilePath = Path.Combine(_localizationsFolderPath, $"{NXE.Config.CultureName}.json");
         if (File.Exists(configuredLocalizationFilePath)) {
             using FileStream configuredLocalizationFileStream = File.OpenRead(configuredLocalizationFilePath);
             return JsonSerializer.Deserialize<LocalizationResources>(configuredLocalizationFileStream) ?? [];
         }
+#endif
 
         string defaultLocalizationFilePath = Path.Combine(_localizationsFolderPath, "en-US.json");
         using FileStream defaultLocalizationFileStream = File.OpenRead(defaultLocalizationFilePath);
