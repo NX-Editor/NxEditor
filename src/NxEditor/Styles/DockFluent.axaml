@@ -1,0 +1,68 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:core="using:Dock.Model.Core"
+        xmlns:dock="using:Dock.Avalonia.Controls"
+        xmlns:sys="clr-namespace:System;assembly=netstandard">
+    <Style>
+        <Style.Resources>
+            <SolidColorBrush x:Key="DockApplicationAccentBrushLow" Color="{DynamicResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="DockApplicationAccentBrushMed" Color="{DynamicResource SystemAccentColorLight1}" />
+            <SolidColorBrush x:Key="DockApplicationAccentBrushHigh" Color="{DynamicResource SystemAccentColorLight2}" />
+            <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush" Color="{DynamicResource TextFillColorPrimary}" />
+            <SolidColorBrush x:Key="DockApplicationAccentBrushIndicator"
+                             Opacity="0.7"
+                             Color="{DynamicResource SystemAccentColorDark1}" />
+
+            <SolidColorBrush x:Key="DockThemeBorderLowBrush" Color="{DynamicResource ControlStrokeColorDefault}" />
+            <SolidColorBrush x:Key="DockThemeBackgroundBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="DockThemeAccentBrush" Color="{DynamicResource SystemAccentColor}" />
+            <SolidColorBrush x:Key="DockThemeForegroundBrush" Color="{DynamicResource TextFillColorPrimary}" />
+            <SolidColorBrush x:Key="DockThemeControlBackgroundBrush" Color="{DynamicResource ControlFillColorDefault}" />
+            <sys:Double x:Key="DockFontSizeNormal">12</sys:Double>
+        </Style.Resources>
+    </Style>
+
+    <Style Selector="dock|DocumentTabStripItem">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiary}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondary}" />
+
+        <Style Selector="^ /template/ Path#PART_ClosePath">
+            <Setter Property="Fill" Value="{DynamicResource TextFillColorTertiary}" />
+        </Style>
+
+        <Style Selector="^:not(:selected):pointerover /template/ Path#PART_ClosePath">
+            <Setter Property="Fill" Value="{DynamicResource TextFillColorSecondary}" />
+        </Style>
+
+        <Style Selector="^:selected /template/ Path#PART_ClosePath">
+            <Setter Property="Fill" Value="{DynamicResource DockThemeForegroundBrush}" />
+        </Style>
+
+        <Style Selector="^:active:selected">
+            <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
+            <Setter Property="(TextElement.FontWeight)" Value="Bold" />
+        </Style>
+
+        <Style Selector="^:not(:selected):pointerover">
+            <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondary}" />
+        </Style>
+    </Style>
+
+    <Style Selector="dock|ToolTabStripItem">
+        <Setter Property="Padding" Value="4,-2" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondary}" />
+
+        <Style Selector="^:selected">
+            <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
+            <Setter Property="Padding" Value="4,-1,4,-2" />
+        </Style>
+
+        <Style Selector="^:not(:selected):pointerover">
+            <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource DockThemeBorderLowBrush}" />
+        </Style>
+    </Style>
+</Styles>
+

@@ -12,7 +12,7 @@ public partial class ShellView : AppWindow
         InitializeComponent();
 
         TitleBar.ExtendsContentIntoTitleBar = true;
-        TitleBar.TitleBarHitTestType = TitleBarHitTestType.Simple;
+        TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
         TitleBar.SetDragRectangles([
             new Rect(0, 0, double.PositiveInfinity, 35)
         ]);
