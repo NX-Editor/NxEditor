@@ -2,6 +2,7 @@
 
 using Avalonia;
 using NxEditor.Components;
+using NxEditor.Core;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 
@@ -12,6 +13,8 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        NXE.Logger.LogToConsole();
+
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
