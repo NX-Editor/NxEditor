@@ -21,31 +21,24 @@ public class AppLogger
     public IList<LogEvent> LogEvents { get; } = [];
 
     /// <summary>
-    /// Enabled logging to the system console.
+    /// Register an <see cref="IAppLogger"/> implementation.
     /// </summary>
-    public void LogToConsole()
+    public AppLogger Register<T>() where T : IAppLogger, new()
     {
-        LogWritten += static (LogEvent e)
-            => Console.WriteLine(e);
+        T logger = new();
+        return Register(logger);
+    }
 
-        EventOccured += static (LogEvent e) => {
-            Console.ForegroundColor = e.Severity switch {
-                Severity.Info => ConsoleColor.Blue,
-                Severity.Success => ConsoleColor.Green,
-                Severity.Warning => ConsoleColor.Yellow,
-                Severity.Error => ConsoleColor.Red,
-                _ => Console.ForegroundColor
-            };
+    /// <summary>
+    /// Register an <see cref="IAppLogger"/> implementation.
+    /// </summary>
+    public AppLogger Register(IAppLogger logger)
+    {
+        LogWritten += logger.Log;
+        EventOccured += logger.LogEvent;
+        ExceptionOccured += logger.LogException;
 
-            Console.WriteLine(e);
-            Console.ResetColor();
-        };
-
-        ExceptionOccured += static (LogEvent e) => {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(e.Exception);
-            Console.ResetColor();
-        };
+        return this;
     }
 
     /// <summary>
