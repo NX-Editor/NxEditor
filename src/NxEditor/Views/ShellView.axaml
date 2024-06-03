@@ -4,7 +4,11 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:app="using:NxEditor"
+                     xmlns:core="using:NxEditor.Core"
+                     xmlns:dock="using:Dock.Avalonia.Controls"
                      xmlns:fa="using:Projektanker.Icons.Avalonia"
+                     xmlns:ui="using:FluentAvalonia.UI.Controls"
+                     xmlns:vm="using:NxEditor.ViewModels"
                      xmlns:windowing="using:FluentAvalonia.UI.Windowing"
                      Title="{x:Static app:App.Title}"
                      Width="1000"
@@ -13,6 +17,7 @@
                      MinHeight="450"
                      d:DesignHeight="450"
                      d:DesignWidth="800"
+                     x:DataType="vm:ShellViewModel"
                      mc:Ignorable="d">
     <Grid RowDefinitions="35,*,25">
         <Grid ColumnDefinitions="35,*">
@@ -26,9 +31,20 @@
                   VerticalAlignment="Center" />
         </Grid>
 
-        <Border Grid.Row="2" Background="{DynamicResource PrimaryAcentColor}">
+        <dock:DockControl Layout="{Binding Layout}" />
+
+        <Border Grid.Row="2" Background="{DynamicResource SystemAccentColor}">
             <Grid ColumnDefinitions="25,Auto,*,Auto">
-                <fa:Icon Value="fa-house" />
+                <fa:Icon Value="{Binding Icon, Source={x:Static core:NXE.Status}}" />
+                <ContentControl Grid.Column="1"
+                                Margin="3,0,0,0"
+                                VerticalContentAlignment="Center"
+                                FontFamily="{StaticResource UbuntuMono}">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="{Binding Status, Source={x:Static core:NXE.Status}}" />
+                        <TextBlock Text="{Binding Suffix, Source={x:Static core:NXE.Status}}" />
+                    </StackPanel>
+                </ContentControl>
             </Grid>
         </Border>
     </Grid>

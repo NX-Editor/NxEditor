@@ -9,4 +9,5 @@ public static class NXE
 
     public static readonly string SystemPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nxe");
     public static readonly AppConfig Config = new();
+    public static readonly AppStatus Status = new();
 }
