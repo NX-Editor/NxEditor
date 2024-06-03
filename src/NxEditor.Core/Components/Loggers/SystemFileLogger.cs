@@ -15,12 +15,13 @@ public class SystemFileLogger : IAppLogger, IDisposable
     public SystemFileLogger()
     {
         string[] existingLogFiles = Directory.GetFiles(_logsFolderPath);
-        if (existingLogFiles.Length > 10) {
+        if (existingLogFiles.Length > 9) {
             ClearOldestFiles(existingLogFiles);
         }
 
         string currentLogFile = Path.Combine(_logsFolderPath, $"{DateTime.UtcNow:yyyy-MM-dd-HH-mm}.log");
-        FileStream fs = File.Create(currentLogFile);
+        FileStream fs = File.Open(currentLogFile, FileMode.OpenOrCreate);
+        fs.Seek(fs.Length, SeekOrigin.Begin);
         _writer = new StreamWriter(fs);
     }
 
@@ -50,7 +51,7 @@ public class SystemFileLogger : IAppLogger, IDisposable
 
     private static void ClearOldestFiles(Span<string> existingLogFiles)
     {
-        foreach (string logFilePath in existingLogFiles[..^10]) {
+        foreach (string logFilePath in existingLogFiles[..^9]) {
             try {
                 File.Delete(logFilePath);
             }
