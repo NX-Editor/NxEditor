@@ -1,18 +1,19 @@
-﻿using Dock.Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
+using NxEditor.Components.Controls;
 
 namespace NxEditor.Components;
 
 public class ApplicationDockFactory : Factory
 {
+    private readonly Window _host;
+
     public const string ROOT = "__root__";
     public const string LAYOUT = "__layout__";
     public const string TOOLS = "__tools__";
     public const string DOCUMENTS = "__documents__";
-
-    public static readonly ApplicationDockFactory Instance = new();
 
     public IRootDock Root { get; }
 
@@ -29,8 +30,10 @@ public class ApplicationDockFactory : Factory
         Id = LAYOUT
     };
 
-    public ApplicationDockFactory()
+    public ApplicationDockFactory(Window host)
     {
+        _host = host;
+
         Root = CreateRootDock();
         Root.Id = ROOT;
     }
@@ -60,7 +63,7 @@ public class ApplicationDockFactory : Factory
         };
 
         HostWindowLocator = new() {
-            [nameof(IDockWindow)] = () => new HostWindow()
+            [nameof(IDockWindow)] = () => new FluentHostWindow(_host)
         };
 
         base.InitLayout(layout);

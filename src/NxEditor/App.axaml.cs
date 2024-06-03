@@ -36,9 +36,9 @@ public partial class App : Application
         BindingPlugins.DataValidators.RemoveAt(0);
         NXE.Config.AppThemeChanged += SetRequestedThemeVariant;
 
-        desktop.MainWindow = new ShellView {
-            DataContext = new ShellViewModel(ApplicationDockFactory.Instance)
-        };
+        desktop.MainWindow = new ShellView();
+        ApplicationDockFactory factory = new(desktop.MainWindow);
+        desktop.MainWindow.DataContext = new ShellViewModel(factory);
     }
 
     private void SetRequestedThemeVariant(object? _, AppTheme theme)
