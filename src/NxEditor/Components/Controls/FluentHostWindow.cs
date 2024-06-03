@@ -1,6 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Dock.Avalonia.Controls;
+using Dock.Model;
 using Dock.Model.Core;
 using FluentAvalonia.UI.Windowing;
 
@@ -18,10 +22,23 @@ internal class FluentHostWindow : AppWindow, IHostWindow
     public FluentHostWindow(Window parent)
     {
         _parent = parent;
+        DockManager = new DockManager();
+
+        TitleBar.ExtendsContentIntoTitleBar = true;
+        TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
+        TitleBar.SetDragRectangles([
+            new Rect(0, 0, double.PositiveInfinity, 35)
+        ]);
 
         const string AVARES_ICON_PATH = "avares://NxEditor/Assets/Icon.ico";
         Bitmap bitmap = new(AssetLoader.Open(new Uri(AVARES_ICON_PATH)));
         Icon = bitmap.CreateScaledBitmap(new(48, 48), BitmapInterpolationMode.HighQuality);
+
+        this.Bind(TitleProperty, new Binding("ActiveDockable.ActiveDockable.Title"));
+        Content = new DockControl {
+            Margin = new(5, 15, 5, 5),
+            [!DockControl.LayoutProperty] = this.GetObservable(DataContextProperty).ToBinding()
+        };
     }
 
     public void Exit()
