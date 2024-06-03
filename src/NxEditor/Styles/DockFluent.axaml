@@ -38,6 +38,10 @@
             <Setter Property="Fill" Value="{DynamicResource DockThemeForegroundBrush}" />
         </Style>
 
+        <Style Selector="^:not(:active):selected">
+            <Setter Property="(TextElement.FontWeight)" Value="Bold" />
+        </Style>
+
         <Style Selector="^:active:selected">
             <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
             <Setter Property="(TextElement.FontWeight)" Value="Bold" />
