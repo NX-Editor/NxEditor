@@ -18,7 +18,7 @@ public class AppLogger
     public event LogEventHandler? EventOccured;
     public event LogEventHandler? ExceptionOccured;
 
-    public IList<LogEvent> LogEvents { get; } = [];
+    public IList<LogEvent> Logs { get; } = [];
 
     /// <summary>
     /// Register an <see cref="IAppLogger"/> implementation.
@@ -50,7 +50,7 @@ public class AppLogger
     {
         LogEvent logEvent = new(message, severity);
         LogWritten?.Invoke(logEvent);
-        LogEvents.Add(logEvent);
+        Logs.Add(logEvent);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public class AppLogger
     {
         LogEvent logEvent = new(message, severity);
         EventOccured?.Invoke(logEvent);
-        LogEvents.Add(logEvent);
+        Logs.Add(logEvent);
     }
 
     /// <summary>
@@ -73,6 +73,6 @@ public class AppLogger
     {
         LogEvent logEvent = new(ex.Message, Severity.Error, ex);
         ExceptionOccured?.Invoke(logEvent);
-        LogEvents.Add(logEvent);
+        Logs.Add(logEvent);
     }
 }
