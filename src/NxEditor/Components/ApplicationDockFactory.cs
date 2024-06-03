@@ -9,11 +9,17 @@ public class ApplicationDockFactory : Factory
 {
     public const string ROOT = "__root__";
     public const string LAYOUT = "__layout__";
+    public const string TOOLS = "__tools__";
     public const string DOCUMENTS = "__documents__";
 
     public static readonly ApplicationDockFactory Instance = new();
 
     public IRootDock Root { get; }
+
+    public ToolDock Tools { get; } = new() {
+        Proportion = 0.25,
+        Id = TOOLS
+    };
 
     public DocumentDock Documents { get; } = new() {
         Id = DOCUMENTS
@@ -34,7 +40,9 @@ public class ApplicationDockFactory : Factory
         Documents.VisibleDockables = CreateList<IDockable>();
 
         Layout.ActiveDockable = Documents;
-        Layout.VisibleDockables = CreateList<IDockable>(Documents);
+        Layout.VisibleDockables = CreateList<IDockable>(
+            Tools, new ProportionalDockSplitter(), Documents
+        );
 
         Root.ActiveDockable = Layout;
         Root.DefaultDockable = Layout;
