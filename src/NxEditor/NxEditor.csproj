@@ -31,4 +31,9 @@
   <ItemGroup>
     <ProjectReference Include="..\NxEditor.Core\NxEditor.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+    <Using Include="Dock.Model.Mvvm" />
+  </ItemGroup>
 </Project>
