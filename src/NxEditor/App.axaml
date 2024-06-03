@@ -10,5 +10,26 @@
         <sty:FluentAvaloniaTheme PreferUserAccentColor="True"
                                  TextVerticalAlignmentOverrideBehavior="EnabledNonWindows"
                                  UseSystemFontOnWindows="True" />
+        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
+
+        <Style>
+            <Style.Resources>
+                <SolidColorBrush x:Key="DockApplicationAccentBrushLow"
+                                 Opacity="0.5"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentBrushMed"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemAccentColor}" />
+                <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="{DynamicResource SystemBaseHighColor}" />
+                <SolidColorBrush x:Key="DockThemeBorderLowBrush" Color="Red" />
+                <SolidColorBrush x:Key="DockThemeBackgroundBrush" Color="Blue" />
+                <SolidColorBrush x:Key="DockThemeAccentBrush" Color="Green" />
+                <SolidColorBrush x:Key="DockThemeForegroundBrush"
+                                 Opacity="0.7"
+                                 Color="Yellow" />
+            </Style.Resources>
+        </Style>
     </Application.Styles>
 </Application>
