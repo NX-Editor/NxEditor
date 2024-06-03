@@ -19,8 +19,13 @@ class Program
             .Register<SystemConsoleLogger>()
             .Register(systemFileLogger);
 
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        try {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex) {
+            NXE.Logger.LogError(ex);
+        }
     }
 
     public static AppBuilder BuildAvaloniaApp()
