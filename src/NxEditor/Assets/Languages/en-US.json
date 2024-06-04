@@ -1,5 +1,6 @@
 {
     "System": {
+        "Home": "Home",
         "VersionNotFound": "Version not found."
     },
     "Status": {
@@ -7,6 +8,7 @@
     },
     "Exception": {
         "AppThemeNotSupported": "The target app theme is not supported.",
-        "TargetPlatformNotSupported": "The target platform is not supported."
+        "TargetPlatformNotSupported": "The target platform is not supported.",
+        "UnexpectedViewType": "The requested View does not match the registered ViewModel."
     }
 }

@@ -11,4 +11,8 @@ public class StringResources_Exceptions
     public readonly NotSupportedException AppThemeNotSupported = new(
         GetStringResource(GROUP, nameof(AppThemeNotSupported))
     );
+
+    public readonly ArgumentException UnexpectedViewType = new(
+        GetStringResource(GROUP, nameof(UnexpectedViewType))
+    );
 }

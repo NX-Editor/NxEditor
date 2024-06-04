@@ -17,24 +17,6 @@ public partial class ShellViewModel : ObservableObject
         _layout = factory.CreateLayout();
         factory.InitLayout(_layout);
 
-        factory.AddDockable(factory.Documents, new Document {
-            Title = "Test A",
-            Id = "Test_A"
-        });
-
-        factory.AddDockable(factory.Documents, new Document {
-            Title = "Test B",
-            Id = "Test_B"
-        });
-
-        factory.AddDockable(factory.Tools, new Tool {
-            Title = "Test C",
-            Id = "Test_C"
-        });
-
-        factory.AddDockable(factory.Tools, new Tool {
-            Title = "Test D",
-            Id = "Test_D"
-        });
+        factory.AddDockable(factory.Documents, new HomeViewModel());
     }
 }

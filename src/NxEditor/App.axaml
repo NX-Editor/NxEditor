@@ -1,8 +1,14 @@
 <Application x:Class="NxEditor.App"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:comp="using:NxEditor.Components"
              xmlns:local="using:NxEditor"
-             xmlns:sty="using:FluentAvalonia.Styling">
+             xmlns:sty="using:FluentAvalonia.Styling"
+             xmlns:vm="using:NxEditor.ViewModels">
+    <Application.DataTemplates>
+        <comp:ViewLocator />
+    </Application.DataTemplates>
+
     <Application.Resources>
         <FontFamily x:Key="UbuntuMono">avares://NxEditor/Assets/Fonts/UbuntuMono/#Ubuntu Mono</FontFamily>
     </Application.Resources>
