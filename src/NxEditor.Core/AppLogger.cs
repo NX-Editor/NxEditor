@@ -69,7 +69,7 @@ public class AppLogger
     /// Triggers the <see cref="ExceptionOccured"/> event handler and stores the <see langword="event"/>.
     /// </summary>
     /// <param name="ex"></param>
-    public void LogError(Exception ex)
+    public void LogException(Exception ex)
     {
         LogEvent logEvent = new(ex.Message, Severity.Error, ex);
         ExceptionOccured?.Invoke(logEvent);

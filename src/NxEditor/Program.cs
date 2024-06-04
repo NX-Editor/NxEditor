@@ -2,7 +2,6 @@
 
 using Avalonia;
 using NxEditor.Components;
-using NxEditor.Core;
 using NxEditor.Core.Components.Loggers;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
@@ -24,7 +23,7 @@ class Program
                 .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex) {
-            NXE.Logger.LogError(ex);
+            NXE.Logger.LogException(ex);
         }
     }
 

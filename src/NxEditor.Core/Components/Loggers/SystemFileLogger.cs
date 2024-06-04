@@ -56,7 +56,7 @@ public class SystemFileLogger : IAppLogger, IDisposable
                 File.Delete(logFilePath);
             }
             catch (Exception ex) {
-                NXE.Logger.LogError(ex);
+                NXE.Logger.LogException(ex);
             }
         }
     }
