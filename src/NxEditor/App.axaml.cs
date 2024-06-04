@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using NxEditor.Components;
-using NxEditor.Core;
 using NxEditor.ViewModels;
 using NxEditor.Views;
 using System.Reflection;
@@ -13,6 +13,8 @@ namespace NxEditor;
 
 public partial class App : Application
 {
+    private ApplicationNotificationManager? _notificationManager;
+
     public static readonly string Title = "NX Editor";
     public static readonly string Version = typeof(App).Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
@@ -39,6 +41,19 @@ public partial class App : Application
         desktop.MainWindow = new ShellView();
         ApplicationDockFactory factory = new(desktop.MainWindow);
         desktop.MainWindow.DataContext = new ShellViewModel(factory);
+
+        // Register Notification Manager
+        desktop.MainWindow.Loaded += (s, e) => {
+            WindowNotificationManager windowNotificationManager = new((ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow) {
+                Position = NotificationPosition.BottomRight,
+                MaxItems = 3,
+                Margin = new(0, 0, 4, 0)
+            };
+
+            _notificationManager = new(windowNotificationManager);
+            NXE.Logger.EventOccured += _notificationManager.ShowLogEventNotification;
+            NXE.Logger.ExceptionOccured += _notificationManager.ShowLogEventNotification;
+        };
     }
 
     private void SetRequestedThemeVariant(object? _, AppTheme theme)
