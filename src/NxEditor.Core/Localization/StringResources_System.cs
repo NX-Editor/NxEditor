@@ -6,5 +6,6 @@ public class StringResources_System
 
     public string Title { get; } = GetStringResource(GROUP, nameof(Title));
     public string Home { get; } = GetStringResource(GROUP, nameof(Home));
+    public string HomeDragDropEdit { get; } = GetStringResource(GROUP, nameof(HomeDragDropEdit));
     public string VersionNotFound { get; } = GetStringResource(GROUP, nameof(VersionNotFound));
 }

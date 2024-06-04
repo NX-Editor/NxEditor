@@ -4,15 +4,23 @@ using NxEditor.Views;
 
 namespace NxEditor.ViewModels;
 
-public class HomeViewModel : Document
+public partial class HomeViewModel : Document
 {
     public const string ID = "__home__";
+    public const string DEFAULT_ICON = "fa-regular fa-copy";
+    public const string DROPPING_ICON = "fa-regular fa-file-circle-plus";
 
     public HomeView View => ViewRepository.Get<HomeView>(this);
 
+    [ObservableProperty]
+    private string _icon = DEFAULT_ICON;
+
     public HomeViewModel()
     {
-        Title = SystemMsg.Home;
         Id = ID;
+        Title = SystemMsg.Home;
+        CanClose = false;
+        CanPin = false;
+        CanFloat = false;
     }
 }

@@ -3,10 +3,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:app="using:NxEditor"
+             xmlns:fa="using:Projektanker.Icons.Avalonia"
+             xmlns:sr="using:NxEditor.Core.Localization"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:vm="using:NxEditor.ViewModels"
              d:DesignHeight="450"
              d:DesignWidth="800"
              x:DataType="vm:HomeViewModel"
+             DragDrop.AllowDrop="True"
              mc:Ignorable="d">
-    Welcome to Avalonia!
+    <Grid>
+        <Viewbox MaxWidth="800" MaxHeight="600">
+            <ContentControl HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Grid Width="600"
+                      Height="300"
+                      Margin="10"
+                      RowDefinitions="auto,*">
+                    <TextBlock Margin="5"
+                               FontSize="24"
+                               FontWeight="Medium"
+                               Foreground="{DynamicResource TextFillColorSecondary}"
+                               Text="{x:Static app:App.Title}" />
+                    <ui:HyperlinkButton Margin="5"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Content="{x:Static app:App.Version}" />
+                    <Rectangle Grid.Row="1"
+                               Margin="5"
+                               Stroke="{DynamicResource ControlStrokeColorDefault}"
+                               StrokeDashArray="7,7"
+                               StrokeThickness="2" />
+                    <Border Grid.Row="1" Margin="5">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <fa:Icon Margin="25"
+                                     Foreground="{DynamicResource TextFillColorSecondary}"
+                                     RenderTransform="scale(4)"
+                                     Value="{Binding Icon}" />
+                            <TextBlock Margin="5"
+                                       Padding="15"
+                                       FontStyle="Italic"
+                                       Foreground="{DynamicResource TextFillColorSecondary}"
+                                       Text="{Binding HomeDragDropEdit, Source={x:Static sr:StringResources.SystemMsg}}"
+                                       TextAlignment="Center"
+                                       TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ContentControl>
+        </Viewbox>
+
+        <Border Name="DragIndicatorMask"
+                Background="Black"
+                Opacity="0">
+            <Border.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                </Transitions>
+            </Border.Transitions>
+        </Border>
+    </Grid>
 </UserControl>

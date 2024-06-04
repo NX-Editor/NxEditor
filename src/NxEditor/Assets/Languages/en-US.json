@@ -2,6 +2,7 @@
     "System": {
         "Title": "NX Editor",
         "Home": "Home",
+        "HomeDragDropEdit": "Drag and drop a file or folder to begin editing.",
         "VersionNotFound": "Version not found."
     },
     "Status": {
