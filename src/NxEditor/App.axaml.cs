@@ -15,7 +15,7 @@ public partial class App : Application
 {
     private ApplicationNotificationManager? _notificationManager;
 
-    public static readonly string Title = "NX Editor";
+    public static readonly string Title = SystemMsg.Title;
     public static readonly string Version = typeof(App).Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
         .InformationalVersion.Split('+')[0] ?? SystemMsg.VersionNotFound;

@@ -4,6 +4,7 @@ public class StringResources_System
 {
     private const string GROUP = "System";
 
-    public readonly string Home = GetStringResource(GROUP, nameof(Home));
-    public readonly string VersionNotFound = GetStringResource(GROUP, nameof(VersionNotFound));
+    public string Title { get; } = GetStringResource(GROUP, nameof(Title));
+    public string Home { get; } = GetStringResource(GROUP, nameof(Home));
+    public string VersionNotFound { get; } = GetStringResource(GROUP, nameof(VersionNotFound));
 }
