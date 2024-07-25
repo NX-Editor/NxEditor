@@ -4,15 +4,15 @@ public class StringResources_Exceptions
 {
     private const string GROUP = "Exception";
 
-    public readonly PlatformNotSupportedException TargetPlatformNotSupported = new(
+    public PlatformNotSupportedException TargetPlatformNotSupported { get; } = new(
         GetStringResource(GROUP, nameof(TargetPlatformNotSupported))
     );
 
-    public readonly NotSupportedException AppThemeNotSupported = new(
+    public NotSupportedException AppThemeNotSupported { get; } = new(
         GetStringResource(GROUP, nameof(AppThemeNotSupported))
     );
 
-    public readonly ArgumentException UnexpectedViewType = new(
+    public ArgumentException UnexpectedViewType { get; } = new(
         GetStringResource(GROUP, nameof(UnexpectedViewType))
     );
 }
