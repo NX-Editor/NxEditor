@@ -19,19 +19,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
-    <PackageReference Include="Avalonia" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
     
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.10" />
-    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.10" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
+    <PackageReference Include="Dock.Avalonia" Version="11.1.0.1" />
+    <PackageReference Include="Dock.Model.Mvvm" Version="11.1.0.1" />
     <PackageReference Include="FluentAvaloniaUI" Version="2.0.5" />
     <PackageReference Include="Humanizer" Version="2.14.1" />
-    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.3.0" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.3.0" />
+    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.4.0" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.4.0" />
   </ItemGroup>
 
   <ItemGroup>
