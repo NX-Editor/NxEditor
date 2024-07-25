@@ -33,6 +33,18 @@ public class DataProcessorService
     }
 
     /// <summary>
+    /// Remove all processing from the provided <paramref name="payload"/>.
+    /// </summary>
+    /// <param name="payload"></param>
+    /// <param name="appliedDataProcessors">The list of processors applied to the <paramref name="payload"/></param>
+    public static void RemoveProcessing(FilePayload payload)
+    {
+        foreach (IDataProcessor processor in GetDataProcessors(payload)) {
+            processor.RemoveProcessing(payload);
+        }
+    }
+
+    /// <summary>
     /// Recursively retrieve all processors applied to the <paramref name="payload"/> until all processing is removed or no processors can be found.
     /// </summary>
     /// <param name="payload"></param>
