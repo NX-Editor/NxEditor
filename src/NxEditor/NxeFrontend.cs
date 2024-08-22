@@ -28,11 +28,14 @@ public class NxeFrontend(Visual xamlRoot) : INxeFrontend
 
         for (int i = 0; i < valueArray.Length; i++) {
             T value = valueArray[i];
-            targets[i] = new() {
+            RadioButton target = targets[i] = new() {
                 IsChecked = i == 0,
+                Content = value?.ToString(),
                 GroupName = nameof(valueArray),
                 Tag = value,
             };
+
+            content.Children.Add(target);
         }
 
         TaskDialog dialog = new() {
@@ -45,7 +48,7 @@ public class NxeFrontend(Visual xamlRoot) : INxeFrontend
             XamlRoot = XamlRoot
         };
 
-        if (await dialog.ShowAsync() is true) {
+        if (await dialog.ShowAsync() is TaskDialogStandardResult.OK) {
             return (T?)targets
                 .Select(x => (Target: x, x.Tag))
                 .FirstOrDefault(x => x.Target.IsChecked is true)
