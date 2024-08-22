@@ -1,16 +1,16 @@
 ﻿using NxEditor.Core.Models;
 
-namespace NxEditor.Core.IO.Services;
+namespace NxEditor.Core.Components.Services;
 
-public class DataProcessorService
+public static class NxProcessorManager
 {
-    private static readonly List<IDataProcessor> _dataProcessors = [];
+    private static readonly List<INxProcessor> _dataProcessors = [];
 
     /// <summary>
-    /// Add a new <see cref="IDataProcessor"/> to the collection of data processors.
+    /// Add a new <see cref="INxProcessor"/> to the collection of data processors.
     /// </summary>
     /// <param name="dataProcessor"></param>
-    public static void Register(IDataProcessor dataProcessor)
+    public static void Register(INxProcessor dataProcessor)
     {
         _dataProcessors.Add(dataProcessor);
     }
@@ -20,11 +20,11 @@ public class DataProcessorService
     /// </summary>
     /// <param name="payload"></param>
     /// <param name="appliedDataProcessors">The list of processors applied to the <paramref name="payload"/></param>
-    public static void RemoveProcessing(FilePayload payload, out List<IDataProcessor> appliedDataProcessors)
+    public static void RemoveProcessing(FilePayload payload, out List<INxProcessor> appliedDataProcessors)
     {
         appliedDataProcessors = [];
 
-        foreach (IDataProcessor processor in GetDataProcessors(payload)) {
+        foreach (INxProcessor processor in GetDataProcessors(payload)) {
             processor.RemoveProcessing(payload);
             appliedDataProcessors.Add(processor);
         }
@@ -36,10 +36,9 @@ public class DataProcessorService
     /// Remove all processing from the provided <paramref name="payload"/>.
     /// </summary>
     /// <param name="payload"></param>
-    /// <param name="appliedDataProcessors">The list of processors applied to the <paramref name="payload"/></param>
     public static void RemoveProcessing(FilePayload payload)
     {
-        foreach (IDataProcessor processor in GetDataProcessors(payload)) {
+        foreach (INxProcessor processor in GetDataProcessors(payload)) {
             processor.RemoveProcessing(payload);
         }
     }
@@ -49,10 +48,10 @@ public class DataProcessorService
     /// </summary>
     /// <param name="payload"></param>
     /// <returns></returns>
-    public static IEnumerable<IDataProcessor> GetDataProcessors(FilePayload payload)
+    public static IEnumerable<INxProcessor> GetDataProcessors(FilePayload payload)
     {
     ResetLoop:
-        foreach (IDataProcessor processor in _dataProcessors) {
+        foreach (INxProcessor processor in _dataProcessors) {
             if (processor.IsProcessingApplied(payload)) {
                 yield return processor;
                 goto ResetLoop;

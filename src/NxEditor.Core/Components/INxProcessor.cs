@@ -1,8 +1,8 @@
 ﻿using NxEditor.Core.Models;
 
-namespace NxEditor.Core.IO;
+namespace NxEditor.Core.Components;
 
-public interface IDataProcessor
+public interface INxProcessor
 {
     /// <summary>
     /// Remove any processing applied to the <paramref name="payload"/>.
@@ -17,9 +17,9 @@ public interface IDataProcessor
     void ApplyProcessing(FilePayload payload);
 
     /// <summary>
-    /// Determines if the <paramref name="payload"/> is processed by this <see cref="IDataProcessor"/>
+    /// Determines if the <paramref name="payload"/> is processed by this <see cref="INxProcessor"/>
     /// </summary>
     /// <param name="payload"></param>
-    /// <returns><see langword="true"/> if the <paramref name="payload"/> is processed by this <see cref="IDataProcessor"/></returns>
+    /// <returns><see langword="true"/> if the <paramref name="payload"/> is processed by this <see cref="INxProcessor"/></returns>
     bool IsProcessingApplied(FilePayload payload);
 }

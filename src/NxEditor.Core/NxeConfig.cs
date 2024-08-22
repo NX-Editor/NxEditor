@@ -11,7 +11,7 @@ public enum AppTheme
     Light,
 }
 
-public partial class AppConfig : ObservableValidator
+public partial class NxeConfig : ObservableValidator
 {
     private static readonly string _appConfigFilePath = Path.Combine(NXE.SystemPath, "AppConfig.json");
 
@@ -29,14 +29,14 @@ public partial class AppConfig : ObservableValidator
         JsonSerializer.Serialize(fs, this);
     }
 
-    internal static AppConfig LoadFromDisk()
+    internal static NxeConfig LoadFromDisk()
     {
         if (!File.Exists(_appConfigFilePath)) {
             return new();
         }
 
         using FileStream fs = File.OpenRead(_appConfigFilePath);
-        return JsonSerializer.Deserialize<AppConfig>(fs)
+        return JsonSerializer.Deserialize<NxeConfig>(fs)
             ?? new();
     }
 

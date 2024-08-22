@@ -8,7 +8,7 @@ public enum StatusType
     Working
 }
 
-public partial class AppStatus : ObservableObject
+public partial class NxeStatus : ObservableObject
 {
     private const string DOT = ".";
     private readonly Timer _timer;
@@ -25,7 +25,7 @@ public partial class AppStatus : ObservableObject
     [ObservableProperty]
     private StatusType _type = StatusType.Static;
 
-    public AppStatus()
+    public NxeStatus()
     {
         _timer = new(UpdateLoadingStatus);
         _timer.Change(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0.3));

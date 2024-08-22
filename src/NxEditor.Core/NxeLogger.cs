@@ -12,7 +12,7 @@ public enum Severity
 
 public delegate void LogEventHandler(LogEvent e);
 
-public class AppLogger
+public class NxeLogger
 {
     public event LogEventHandler? LogWritten;
     public event LogEventHandler? EventOccured;
@@ -23,7 +23,7 @@ public class AppLogger
     /// <summary>
     /// Register an <see cref="IAppLogger"/> implementation.
     /// </summary>
-    public AppLogger Register<T>() where T : IAppLogger, new()
+    public NxeLogger Register<T>() where T : IAppLogger, new()
     {
         T logger = new();
         return Register(logger);
@@ -32,7 +32,7 @@ public class AppLogger
     /// <summary>
     /// Register an <see cref="IAppLogger"/> implementation.
     /// </summary>
-    public AppLogger Register(IAppLogger logger)
+    public NxeLogger Register(IAppLogger logger)
     {
         LogWritten += logger.Log;
         EventOccured += logger.LogEvent;
