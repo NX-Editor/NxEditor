@@ -54,6 +54,10 @@ public partial class App : Application
             NXE.Logger.EventOccured += _notificationManager.ShowLogEventNotification;
             NXE.Logger.ExceptionOccured += _notificationManager.ShowLogEventNotification;
         };
+
+        NXE.RegisterFrontend(new NxeFrontend(
+            desktop.MainWindow
+        ));
     }
 
     private void SetRequestedThemeVariant(object? _, AppTheme theme)

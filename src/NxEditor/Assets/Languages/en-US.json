@@ -3,7 +3,8 @@
         "Title": "NX Editor",
         "Home": "Home",
         "HomeDragDropEdit": "Drag and drop a file or folder to begin editing.",
-        "VersionNotFound": "Version not found."
+        "VersionNotFound": "Version not found.",
+        "PickOneDialogTitle": "How do you want to open this file?"
     },
     "Status": {
         "Ready": "Ready"

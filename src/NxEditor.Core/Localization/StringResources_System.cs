@@ -8,4 +8,5 @@ public class StringResources_System
     public string Home { get; } = GetStringResource(GROUP, nameof(Home));
     public string HomeDragDropEdit { get; } = GetStringResource(GROUP, nameof(HomeDragDropEdit));
     public string VersionNotFound { get; } = GetStringResource(GROUP, nameof(VersionNotFound));
+    public string PickOneDialogTitle { get; } = GetStringResource(GROUP, nameof(PickOneDialogTitle));
 }
