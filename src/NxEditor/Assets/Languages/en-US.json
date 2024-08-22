@@ -11,6 +11,7 @@
     "Exception": {
         "AppThemeNotSupported": "The target app theme is not supported.",
         "TargetPlatformNotSupported": "The target platform is not supported.",
-        "UnexpectedViewType": "The requested View does not match the registered ViewModel."
+        "UnexpectedViewType": "The requested View does not match the registered ViewModel.",
+        "NoFrontendException": "No frontend (user-interface layer) is registered."
     }
 }

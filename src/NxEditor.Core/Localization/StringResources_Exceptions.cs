@@ -15,4 +15,8 @@ public class StringResources_Exceptions
     public ArgumentException UnexpectedViewType { get; } = new(
         GetStringResource(GROUP, nameof(UnexpectedViewType))
     );
+
+    public Exception NoFrontendException { get; } = new(
+        GetStringResource(GROUP, nameof(NoFrontendException))
+    );
 }

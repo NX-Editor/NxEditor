@@ -12,10 +12,19 @@ public static class NXE
         Directory.CreateDirectory(SystemPath);
     }
 
+    private static INxeFrontend? _frontend;
+
     public static readonly string SystemPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nxe");
     public static readonly NxeConfig Config = new();
     public static readonly NxeStatus Status = new();
     public static readonly NxeLogger Logger = new();
+    public static INxeFrontend Frontend => _frontend
+        ?? throw Exceptions.NoFrontendException;
+
+    public static void RegisterFrontend(INxeFrontend frontend)
+    {
+        _frontend = frontend;
+    }
 
     public static async ValueTask<T?> OpenFile<T>(string filePath) where T : class, INxDocument
     {
@@ -29,8 +38,8 @@ public static class NXE
 
         NxProcessorManager.RemoveProcessing(payload);
 
-        await foreach (var provider in NxDocumentManager.GetProviders(payload)) {
-            return await provider.GetDocument(payload);
+        if (await Frontend.PickOneAsync(NxDocumentManager.GetProviders(payload)) is NxDocumentProvider documentProvider) {
+            return await documentProvider.GetDocument(payload);
         }
 
         return null;
