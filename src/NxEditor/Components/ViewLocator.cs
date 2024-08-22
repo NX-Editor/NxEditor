@@ -5,9 +5,9 @@ namespace NxEditor.Components;
 
 public class ViewLocator : IDataTemplate
 {
-    public Control? Build(object? param)
+    public Control? Build(object? target)
     {
-        return param switch {
+        return target switch {
             ObservableObject vm => ViewRepository.Get<Control>(vm),
             _ => null
         };
