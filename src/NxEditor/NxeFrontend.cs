@@ -2,12 +2,15 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using NxEditor.Components;
+using NxEditor.Core.Components;
 
 namespace NxEditor;
 
 public class NxeFrontend(Visual xamlRoot) : INxeFrontend
 {
     public Visual XamlRoot { get; } = xamlRoot;
+    public IMenuFactory MenuFactory { get; } = new MenuFactory();
 
     public async ValueTask<T?> PickOneAsync<T>(IAsyncEnumerable<T> values, string? footerContent = null)
     {

@@ -2,24 +2,26 @@
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.Core.Attributes;
+using NxEditor.Core.Components;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using Icon = Projektanker.Icons.Avalonia.Icon;
 
 namespace NxEditor.Components;
 
-public class MenuFactory
+public class MenuFactory : IMenuFactory
 {
     private const string MENU_ITEM_STYLE = "MenuFactory-MenuItem";
     private const string TOP_LEVEL_MENU_ITEM_STYLE = "MenuFactory-TopLevel";
 
-    private static readonly Dictionary<string, List<MenuItem>> _groups = [];
-    private static readonly Dictionary<string, MenuItem> _cache = [];
-    private static readonly ObservableCollection<MenuItem> _items = [];
+    private readonly Dictionary<string, List<MenuItem>> _groups = [];
+    private readonly Dictionary<string, MenuItem> _cache = [];
+    private readonly ObservableCollection<MenuItem> _items = [];
 
-    public static ObservableCollection<MenuItem> Items => _items;
+    public IEnumerable Items => _items;
 
-    public static void Append<T>(string key, object? source = null)
+    public void AddMenuGroup<T>(string groupId, object? source = null)
     {
         Type type = typeof(T);
 
@@ -28,8 +30,8 @@ public class MenuFactory
             .Select(x => (MethodInfo: x, Attribute: x.GetCustomAttribute<MenuAttribute>()!))
             .Where(x => x.MethodInfo is not null && x.Attribute is not null);
 
-        if (!_groups.TryGetValue(key, out List<MenuItem>? groupItems)) {
-            _groups[key] = groupItems = [];
+        if (!_groups.TryGetValue(groupId, out List<MenuItem>? groupItems)) {
+            _groups[groupId] = groupItems = [];
         }
 
         foreach (var (info, attribute) in attributes) {
@@ -39,9 +41,9 @@ public class MenuFactory
         }
     }
 
-    public static bool Remove(string key)
+    public bool RemoveMenuGroup(string groupId)
     {
-        if (!_groups.TryGetValue(key, out List<MenuItem>? items)) {
+        if (!_groups.TryGetValue(groupId, out List<MenuItem>? items)) {
             return false;
         }
 
@@ -62,7 +64,7 @@ public class MenuFactory
         return true;
     }
 
-    private static MenuItem BuildMenuItemFromAttribute(MethodInfo info, MenuAttribute attribute, object? source)
+    private MenuItem BuildMenuItemFromAttribute(MethodInfo info, MenuAttribute attribute, object? source)
     {
         if (info.GetParameters().Length > 0) {
             throw Exceptions.TooManyMenuMethodParameters(info.Name);
@@ -113,7 +115,7 @@ public class MenuFactory
         return result;
     }
 
-    private static MenuItem? BuildMenuItemPath(string path)
+    private MenuItem? BuildMenuItemPath(string path)
     {
         IEnumerable<PathPart> parts = path
             .Split('/')

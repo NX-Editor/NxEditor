@@ -1,7 +1,11 @@
-﻿namespace NxEditor.Core;
+﻿using NxEditor.Core.Components;
+
+namespace NxEditor.Core;
 
 public interface INxeFrontend
 {
+    public IMenuFactory MenuFactory { get; }
+
     /// <summary>
     /// Prompt the user interface to pick one of <typeparamref name="T"/> from the provided <paramref name="values"/>.
     /// </summary>

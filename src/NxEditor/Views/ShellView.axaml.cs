@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using FluentAvalonia.UI.Windowing;
-using NxEditor.Components;
 
 namespace NxEditor.Views;
 
@@ -23,6 +22,6 @@ public partial class ShellView : AppWindow
         Icon = bitmap.CreateScaledBitmap(new(48, 48), BitmapInterpolationMode.HighQuality);
         IconHost.Source = Icon;
 
-        Menu.ItemsSource = MenuFactory.Items;
+        Menu.ItemsSource = NXE.Frontend.MenuFactory.Items;
     }
 }
