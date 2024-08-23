@@ -25,12 +25,19 @@ public partial class HomeView : UserControl
 
     private void DragDropEvent(object? sender, DragEventArgs e)
     {
+        ResetDropIndicatorIcon();
+        // Open File
         ReleaseDropIndicator();
     }
 
     private void DragLeaveEvent(object? sender, DragEventArgs e)
     {
         ReleaseDropIndicator();
+    }
+
+    private void ResetDropIndicatorIcon()
+    {
+        ViewModel.Icon = HomeViewModel.DEFAULT_ICON;
     }
 
     private void ReleaseDropIndicator()
