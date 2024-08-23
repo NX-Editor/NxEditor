@@ -10,5 +10,5 @@ public interface INxeFrontend
     /// <returns>
     /// <typeparamref name="T"/> or <see langword="null"/> if no values are provided and/or the user cancelled the operation.
     /// </returns>
-    ValueTask<T?> PickOneAsync<T>(IAsyncEnumerable<T> values);
+    ValueTask<T?> PickOneAsync<T>(IAsyncEnumerable<T> values, string? footerContent = null);
 }

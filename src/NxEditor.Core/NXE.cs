@@ -38,7 +38,7 @@ public static class NXE
 
         NxProcessorManager.RemoveProcessing(payload);
 
-        if (await Frontend.PickOneAsync(NxDocumentManager.GetProviders(payload)) is NxDocumentProvider documentProvider) {
+        if (await Frontend.PickOneAsync(NxDocumentManager.GetProviders(payload), payload.FilePath) is NxDocumentProvider documentProvider) {
             return await documentProvider.GetDocument(payload);
         }
 

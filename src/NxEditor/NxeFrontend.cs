@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 
 namespace NxEditor;
@@ -8,7 +9,7 @@ public class NxeFrontend(Visual xamlRoot) : INxeFrontend
 {
     public Visual XamlRoot { get; } = xamlRoot;
 
-    public async ValueTask<T?> PickOneAsync<T>(IAsyncEnumerable<T> values)
+    public async ValueTask<T?> PickOneAsync<T>(IAsyncEnumerable<T> values, string? footerContent = null)
     {
         T[] valueArray = await values.ToArrayAsync();
         
@@ -44,6 +45,15 @@ public class NxeFrontend(Visual xamlRoot) : INxeFrontend
             Buttons = {
                 TaskDialogButton.OKButton,
                 TaskDialogButton.CancelButton
+            },
+            Footer = new TextBlock {
+                Text = footerContent,
+                FontSize = 12,
+                TextWrapping = TextWrapping.WrapWithOverflow
+            },
+            FooterVisibility = footerContent switch {
+                null => TaskDialogFooterVisibility.Never,
+                _ => TaskDialogFooterVisibility.Always
             },
             XamlRoot = XamlRoot
         };
