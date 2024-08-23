@@ -19,4 +19,14 @@ public class StringResources_Exceptions
     public Exception NoFrontendException { get; } = new(
         GetStringResource(GROUP, nameof(NoFrontendException))
     );
+
+    private readonly string _tooManyMenuMethodParameters = GetStringResource(GROUP, nameof(TooManyMenuMethodParameters));
+    public Exception TooManyMenuMethodParameters(string targetMethodName) => new(
+        string.Format(_tooManyMenuMethodParameters, targetMethodName)
+    );
+
+    private readonly string _invalidMenuMethodReturnType = GetStringResource(GROUP, nameof(InvalidMenuMethodReturnType));
+    public Exception InvalidMenuMethodReturnType(string targetMethodName) => new(
+        string.Format(_invalidMenuMethodReturnType, targetMethodName)
+    );
 }
