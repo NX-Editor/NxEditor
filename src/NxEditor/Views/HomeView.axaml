@@ -26,11 +26,11 @@
                                FontWeight="Medium"
                                Foreground="{DynamicResource TextFillColorSecondary}"
                                Text="{x:Static app:App.Title}" />
-                    <ui:HyperlinkButton Margin="5"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Content="{x:Static app:App.Version}"
-                                        NavigateUri="https://github.com/NX-Editor/NxEditor/releases/latest" />
+                    <HyperlinkButton Margin="5"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Content="{x:Static app:App.Version}"
+                                     NavigateUri="https://github.com/NX-Editor/NxEditor/releases/latest" />
                     <Rectangle Grid.Row="1"
                                Margin="5"
                                Stroke="{DynamicResource ControlStrokeColorDefault}"
