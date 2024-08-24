@@ -4,7 +4,7 @@ namespace NxEditor.Core.Components.Loggers;
 
 public class SystemFileLogger : IAppLogger, IDisposable
 {
-    private static readonly string _logsFolderPath = Path.Combine(NXE.SystemPath, "logs");
+    private static readonly string _logsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nxe", "logs");
     private readonly StreamWriter _writer;
 
     static SystemFileLogger()
@@ -19,7 +19,7 @@ public class SystemFileLogger : IAppLogger, IDisposable
             ClearOldestFiles(existingLogFiles);
         }
 
-        string currentLogFile = Path.Combine(_logsFolderPath, $"{DateTime.UtcNow:yyyy-MM-dd-HH-mm}.log");
+        string currentLogFile = Path.Combine(_logsFolderPath, $"{DateTime.UtcNow:yyyy-MM-dd-HH-mm-ss}.log");
         FileStream fs = File.Open(currentLogFile, FileMode.OpenOrCreate);
         fs.Seek(fs.Length, SeekOrigin.Begin);
         _writer = new StreamWriter(fs);
@@ -28,25 +28,16 @@ public class SystemFileLogger : IAppLogger, IDisposable
     public void Log(LogEvent e)
     {
         _writer.WriteLine(e);
-        _writer.Flush();
     }
 
     public void LogEvent(LogEvent e)
     {
-        _writer.WriteLine($"[{DateTime.UtcNow:u}] " + e);
-        _writer.Flush();
+        _writer.WriteLine($"[{DateTime.UtcNow:u}] {e}");
     }
 
     public void LogException(LogEvent e)
     {
         _writer.WriteLine(e.Exception);
-        _writer.Flush();
-    }
-
-    public void Dispose()
-    {
-        _writer.Dispose();
-        GC.SuppressFinalize(this);
     }
 
     private static void ClearOldestFiles(Span<string> existingLogFiles)
@@ -59,5 +50,16 @@ public class SystemFileLogger : IAppLogger, IDisposable
                 NXE.Logger.LogException(ex);
             }
         }
+    }
+
+    public void Flush()
+    {
+        _writer.Flush();
+    }
+
+    public void Dispose()
+    {
+        _writer.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

@@ -6,7 +6,7 @@ using NxEditor.Core.Components.Loggers;
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.FontAwesome;
 
-namespace NxEditor.Desktop;
+namespace NxEditor;
 
 class Program
 {
@@ -24,6 +24,9 @@ class Program
         }
         catch (Exception ex) {
             NXE.Logger.LogException(ex);
+        }
+        finally {
+            systemFileLogger.Flush();
         }
     }
 
