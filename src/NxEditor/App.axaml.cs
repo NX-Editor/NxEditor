@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
@@ -38,9 +39,14 @@ public partial class App : Application
         BindingPlugins.DataValidators.RemoveAt(0);
         NXE.Config.AppThemeChanged += SetRequestedThemeVariant;
 
-        desktop.MainWindow = new ShellView();
+        ShellView view = new();
+        desktop.MainWindow = view;
         ApplicationDockFactory factory = new(desktop.MainWindow);
         desktop.MainWindow.DataContext = new ShellViewModel(factory);
+
+        NXE.RegisterFrontend(
+            new NxeFrontend(desktop.MainWindow));
+        view.Menu.ItemsSource = NXE.Frontend.MenuFactory.Items;
 
         // Register Notification Manager
         desktop.MainWindow.Loaded += (s, e) => {
@@ -54,10 +60,6 @@ public partial class App : Application
             NXE.Logger.EventOccured += _notificationManager.ShowLogEventNotification;
             NXE.Logger.ExceptionOccured += _notificationManager.ShowLogEventNotification;
         };
-
-        NXE.RegisterFrontend(new NxeFrontend(
-            desktop.MainWindow
-        ));
     }
 
     private void SetRequestedThemeVariant(object? _, AppTheme theme)
