@@ -71,7 +71,7 @@ public class MenuFactory : IMenuFactory
         }
 
         if (info.ReturnType.IsAssignableTo(typeof(ValueTask<>))) {
-            throw Exceptions.TooManyMenuMethodParameters(info.Name);
+            throw Exceptions.InvalidMenuMethodReturnType(info.Name);
         }
 
         AsyncRelayCommand command = new(async () => {
