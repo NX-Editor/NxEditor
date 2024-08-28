@@ -20,7 +20,7 @@ public partial class NxeStatus : ObservableObject
     private string _suffix = string.Empty;
 
     [ObservableProperty]
-    private string _icon = Icons.READY;
+    private string _icon = NxeIcons.READY;
 
     [ObservableProperty]
     private StatusType _type = StatusType.Static;
@@ -36,7 +36,7 @@ public partial class NxeStatus : ObservableObject
     /// </summary>
     public void Reset()
     {
-        Set(StatusMsg.Ready, Icons.READY, StatusType.Static);
+        Set(StatusMsg.Ready, NxeIcons.READY, StatusType.Static);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public partial class NxeStatus : ObservableObject
     /// </summary>
     /// <param name="status"></param>
     /// <param name="icon"></param>
-    public void SetTemporaryShort(string status, string icon = Icons.READY, StatusType type = StatusType.Static)
+    public void SetTemporaryShort(string status, string icon = NxeIcons.READY, StatusType type = StatusType.Static)
     {
         Set(status, icon, type, duration: 1.5);
     }
@@ -54,7 +54,7 @@ public partial class NxeStatus : ObservableObject
     /// </summary>
     /// <param name="status"></param>
     /// <param name="icon"></param>
-    public void SetTemporaryLong(string status, string icon = Icons.READY, StatusType type = StatusType.Static)
+    public void SetTemporaryLong(string status, string icon = NxeIcons.READY, StatusType type = StatusType.Static)
     {
         Set(status, icon, type, duration: 3);
     }
@@ -65,7 +65,7 @@ public partial class NxeStatus : ObservableObject
     /// <param name="status"></param>
     /// <param name="icon"></param>
     /// <param name="type"></param>
-    public void Set(string status, string icon = Icons.READY, StatusType type = StatusType.Static)
+    public void Set(string status, string icon = NxeIcons.READY, StatusType type = StatusType.Static)
     {
         Status = status;
         Icon = icon;
@@ -79,7 +79,7 @@ public partial class NxeStatus : ObservableObject
     /// <param name="icon"></param>
     /// <param name="type"></param>
     /// <param name="duration">The duration of the status in seconds</param>
-    public void Set(string status, string icon = Icons.READY, StatusType type = StatusType.Static, double duration = double.NaN)
+    public void Set(string status, string icon = NxeIcons.READY, StatusType type = StatusType.Static, double duration = double.NaN)
     {
         Set(status, icon, type);
         _ = Task.Run(async () => {
