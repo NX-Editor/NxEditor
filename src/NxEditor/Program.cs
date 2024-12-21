@@ -8,7 +8,7 @@ using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace NxEditor;
 
-class Program
+internal class Program
 {
     [STAThread]
     public static void Main(string[] args)

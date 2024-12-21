@@ -5,7 +5,7 @@ namespace NxEditor.Core.IO;
 public class StreamDataProvider : IDataProvider
 {
     private readonly Stream _stream;
-    private readonly byte[] _rented = [];
+    private readonly byte[] _rented;
     private readonly int _size;
     private bool _isBufferFilled = false;
 
@@ -31,7 +31,7 @@ public class StreamDataProvider : IDataProvider
             return result;
         }
 
-        _stream.Read(result);
+        _stream.ReadExactly(result);
         _isBufferFilled = true;
         return result;
     }
