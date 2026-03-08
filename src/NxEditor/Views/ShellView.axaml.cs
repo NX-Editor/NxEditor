@@ -60,7 +60,7 @@ public partial class ShellView : Window
 
     public void DragDropEvent(object? sender, DragEventArgs e)
     {
-        if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
+        if (e.DataTransfer.TryGetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (string? path in paths.Select(x => x.Path.LocalPath)) {
                 _ = EditorManager.Shared.TryLoadEditor(EditorFile.FromFile(path));
             }
@@ -74,7 +74,7 @@ public partial class ShellView : Window
         DragFadeMaskInfo.Children.Clear();
         DragFadeMask.IsVisible = true;
 
-        if (e.Data.GetFiles() is IEnumerable<IStorageItem> paths) {
+        if (e.DataTransfer.TryGetFiles() is IEnumerable<IStorageItem> paths) {
             foreach (string? path in paths.Select(x => x.Path.LocalPath)) {
                 DragFadeMaskInfo.Children.Add(new TextBlock {
                     Text = Path.GetFileName(path),

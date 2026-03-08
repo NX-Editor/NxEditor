@@ -8,45 +8,46 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <TrimeMode>link</TrimeMode>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets\**"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\icon.ico" />
+    <Content Include="Assets\icon.ico"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.10" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
-    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.10" />
-    <PackageReference Include="Dock.Serializer" Version="11.0.10" />
-    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.3.0" />
-    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.3.0" />
+    <PackageReference Include="Avalonia" Version="11.3.12" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.4.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.12" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12" />
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.4.1" />
+    <PackageReference Include="Dock.Avalonia" Version="11.3.11.17" />
+    <PackageReference Include="Dock.Avalonia.Themes.Fluent" Version="11.3.11.17" />
+    <PackageReference Include="Dock.Serializer" Version="11.3.0.12" />
+    <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
+    <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.6.2" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NxEditor.Core\NxEditor.Core.csproj" />
+    <ProjectReference Include="..\NxEditor.Core\NxEditor.Core.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="CommunityToolkit.Mvvm.ComponentModel" />
-    <Using Include="NxEditor.Components" />
-    <Using Include="NxEditor.Core" />
-    <Using Include="NxEditor.PluginBase.Components" />
-    <Using Include="NxEditor.ViewModels" />
-    <Using Include="NxEditor.Views" />
+    <Using Include="CommunityToolkit.Mvvm.ComponentModel"/>
+    <Using Include="NxEditor.Components"/>
+    <Using Include="NxEditor.Core"/>
+    <Using Include="NxEditor.PluginBase.Components"/>
+    <Using Include="NxEditor.ViewModels"/>
+    <Using Include="NxEditor.Views"/>
   </ItemGroup>
 </Project>
