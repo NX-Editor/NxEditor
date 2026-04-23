@@ -38,14 +38,13 @@ public partial class App : Application
         Frontend.Register<IEditorManager>(EditorManager.Shared);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            BindingPlugins.DataValidators.RemoveAt(0);
             ShellViewModel.Shared.InitDock();
             Config.SetTheme(Config.Shared.Theme);
 
             desktop.MainWindow = ShellViewModel.Shared.View;
             DialogBox.SetViewRoot(ShellViewModel.Shared.View.DropClient);
 
-            TopLevel? visualRoot = desktop.MainWindow.GetVisualRoot() as TopLevel;
+            TopLevel? visualRoot = desktop.MainWindow;
             MenuFactory menu = new(visualRoot);
             FooterFactory footer = new();
 

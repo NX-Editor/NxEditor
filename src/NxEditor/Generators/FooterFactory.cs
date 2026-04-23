@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using NxEditor.PluginBase.Attributes;
-using Projektanker.Icons.Avalonia;
-using System.Collections.ObjectModel;
-using System.Reflection;
+using Optris.Icons.Avalonia;
 
 namespace NxEditor.Generators;
 

@@ -6,7 +6,7 @@
         xmlns:app="using:NxEditor"
         xmlns:idc="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
         xmlns:local="using:NxEditor.ViewModels"
-        xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+        xmlns:pi="using:Optris.Icons.Avalonia"
         xmlns:plugin="clr-namespace:NxEditor.PluginBase;assembly=NxEditor.PluginBase"
         Title="{x:Static app:App.Title}"
         Width="850"
@@ -17,10 +17,9 @@
         d:DesignWidth="800"
         x:DataType="local:ShellViewModel"
         Background="{DynamicResource SystemChromeLowColor}"
-        ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/icon.ico"
-        SystemDecorations="BorderOnly"
+        WindowDecorations="BorderOnly"
         mc:Ignorable="d">
     <Grid Name="PointerClient" RowDefinitions="30,*,25">
 

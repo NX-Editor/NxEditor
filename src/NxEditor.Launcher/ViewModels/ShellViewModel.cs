@@ -147,10 +147,10 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     private static async Task ShowHelp()
     {
-        using Stream stream = AssetLoader.Open(new("avares://NxEditor.Launcher/Assets/Readme.md"));
+        await using var stream = AssetLoader.Open(new("avares://NxEditor.Launcher/Assets/Readme.md"));
         int strlen = (int)stream.Length;
         byte[] buffer = ArrayPool<byte>.Shared.Rent(strlen);
-        stream.Read(buffer, 0, buffer.Length);
+        await stream.ReadExactlyAsync(buffer, 0, strlen);
         string markdown = Encoding.UTF8.GetString(buffer[..strlen]);
         ArrayPool<byte>.Shared.Return(buffer);
 

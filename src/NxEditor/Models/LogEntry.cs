@@ -1,4 +1,6 @@
-﻿namespace NxEditor.Models;
+﻿using Avalonia.Input.Platform;
+
+namespace NxEditor.Models;
 
 public partial class LogEntry(string meta, string message) : ObservableObject
 {

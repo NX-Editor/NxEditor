@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:app="using:NxEditor.Launcher"
         xmlns:local="using:NxEditor.Launcher.ViewModels"
-        xmlns:pi="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+        xmlns:pi="using:Optris.Icons.Avalonia"
         Title="NX Editor Launcher"
         Width="650"
         Height="400"
@@ -14,10 +14,9 @@
         x:CompileBindings="True"
         x:DataType="local:ShellViewModel"
         CanResize="False"
-        ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/icon.ico"
-        SystemDecorations="BorderOnly"
+        WindowDecorations="BorderOnly"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
     <Grid Name="Client" Background="Transparent">

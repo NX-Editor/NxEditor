@@ -2,8 +2,8 @@ using Avalonia;
 using Avalonia.Threading;
 using NxEditor.Core.Components;
 using NxEditor.PluginBase.Models;
-using Projektanker.Icons.Avalonia;
-using Projektanker.Icons.Avalonia.FontAwesome;
+using Optris.Icons.Avalonia;
+using Optris.Icons.Avalonia.FontAwesome;
 
 namespace NxEditor;
 

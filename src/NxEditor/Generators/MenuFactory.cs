@@ -88,7 +88,7 @@ public class MenuFactory(TopLevel? topLevel) : IMenuFactory
 
         MenuItem item = new() {
             Header = attribute.Name,
-            Icon = new Projektanker.Icons.Avalonia.Icon {
+            Icon = new Optris.Icons.Avalonia.Icon {
                 Value = attribute.Icon ?? "fa-solid fa-crow"
             },
             Classes = {
