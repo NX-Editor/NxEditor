@@ -6,7 +6,7 @@ A general editor for editing first-party Nintendo formats. Primarily aimed at su
 
 ## Setup
 
-1. Install the [.NET 8 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) ([Windows x64 direct download]([https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)))
+1. Install the [.NET 10 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) ([Windows x64 direct download]([https://dotnet.microsoft.com/en-us/download/dotnet/10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)))
 2. Download the [latest release](https://github.com/NX-Editor/NxEditor/releases/latest) (Launcher), extract the zip, and run the exe
 3. Toggle the plugins you would like to install
 4. Click **Install NX Editor** and wait for the installation to complete
